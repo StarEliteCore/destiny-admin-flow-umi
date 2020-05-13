@@ -1,0 +1,5 @@
+/lambda/
+/scripts
+!.eslintrc.js
+!.prettierrc.js
+!.stylelintrc.js

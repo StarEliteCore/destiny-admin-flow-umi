@@ -1,0 +1,42 @@
+{
+  "name": "smart-buildings",
+  "version": "1.8",
+  "private": true,
+  "description": "智慧楼宇后台管理系统",
+  "scripts": {
+    "build": "umi build",
+    "start": "cross-env PORT=8848 umi dev",
+    "plugin": "umi plugin list --key",
+    "postinstall": "umi g tmp",
+    "analyze": "cross-env ANALYZE=1 umi build"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.1.0",
+    "@ant-design/pro-layout": "^5.0.12",
+    "@nivo/bar": "^0.61.1",
+    "@nivo/line": "^0.61.1",
+    "@nivo/pie": "^0.61.1",
+    "antd": "^4.2.2",
+    "classnames": "^2.2.6",
+    "dayjs": "^1.8.26",
+    "path-to-regexp": "^6.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet-async": "^1.0.6",
+    "umi": "^3.1.4"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/history": "^4.7.5",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@umijs/fabric": "^2.0.8",
+    "@umijs/preset-ant-design-pro": "^1.2.2",
+    "@umijs/preset-react": "^1.4.22",
+    "cross-env": "^7.0.2",
+    "cross-port-killer": "^1.2.1"
+  },
+  "engines": {
+    "node": ">=13.5.0"
+  }
+}
