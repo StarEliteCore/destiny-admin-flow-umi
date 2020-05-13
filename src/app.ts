@@ -13,7 +13,6 @@ export const request: RequestConfig = {
     errorPage: '1'
   },
   method: 'POST',
-  requestType: 'form',
   credentials: 'include',
   middlewares: [],
   requestInterceptors: [

@@ -39,28 +39,6 @@ export const getRouteAuthority = (path: string, routeData: Route[]) => {
 };
 
 /**
- * 获取图片数据
- * @param url 图片Url
- */
-export const getImageInfo = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    img.src = url;
-    // 如果图片被缓存，则直接返回缓存数据
-    if (img.complete) resolve(img);
-    else {
-      img.addEventListener('load', () => {
-        resolve(img);
-      });
-      img.addEventListener('error', (err) => {
-        reject(err);
-      });
-    }
-  });
-
-export const userAccount: string | null = localStorage.getItem('phone');
-
-/**
  * 统一处理表格表头样式.
  * @param name 表头名称
  */
