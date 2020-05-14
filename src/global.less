@@ -19,20 +19,6 @@ body,
   border-radius: 7px !important;
 }
 
-.ant-layout-footer {
-  background: none !important;
-}
-
-.ant-pro-setting-drawer-handle {
-  width: 32px !important;
-  height: 32px !important;
-  top: 300px !important;
-}
-
-.ant-pro-basicLayout {
-  height: 100vh;
-}
-
 canvas {
   display: block;
 }
@@ -62,5 +48,29 @@ ol {
         }
       }
     }
+  }
+}
+
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}
+
+// mixins for clearfix
+// ------------------------
+.clearfix() {
+  zoom: 1;
+  &::before,
+  &::after {
+    display: table;
+    content: ' ';
+  }
+  &::after {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    visibility: hidden;
   }
 }

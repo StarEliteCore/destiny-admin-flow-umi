@@ -2,8 +2,6 @@
 .umi
 .umi-production
 /dist
-/produce
-/demonstrate
 .dockerignore
 .DS_Store
 .eslintignore
@@ -18,3 +16,6 @@ LICENSE
 .eslintcache
 *.lock
 yarn-error.log
+.history
+CNAME
+/build

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "produce",
+    "outDir": "build/dist",
     "module": "esnext",
     "target": "esnext",
     "lib": ["esnext", "dom"],

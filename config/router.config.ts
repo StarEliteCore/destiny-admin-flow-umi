@@ -2,60 +2,49 @@ import { IRoute } from 'umi';
 
 export const routerConfig: IRoute[] = [
   {
-    path: '/login',
-    component: '../layouts/UserLayout',
+    path: '/user',
+    layout: false,
     routes: [
       {
-        name: '登录',
-        path: '/login',
-        component: './login'
+        name: 'login',
+        path: '/user/login',
+        component: './user/login'
+      }
+    ]
+  },
+
+  {
+    path: '/welcome',
+    name: 'welcome',
+    icon: 'smile',
+    component: './Welcome'
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    icon: 'crown',
+    access: 'canAdmin',
+    component: './Admin',
+    routes: [
+      {
+        path: '/admin/sub-page',
+        name: 'sub-page',
+        icon: 'smile',
+        component: './Welcome'
       }
     ]
   },
   {
+    name: 'list.table-list',
+    icon: 'table',
+    path: '/list',
+    component: './ListTableList'
+  },
+  {
     path: '/',
-    component: '../layouts/SecurityLayout',
-    routes: [
-      {
-        path: '/',
-        component: '../layouts/BasicLayout',
-        routes: [
-          {
-            name: '异常页面',
-            path: '/exception',
-            icon: 'bug',
-            hideInMenu: true,
-            routes: [
-              {
-                name: '403',
-                path: '/exception/403',
-                component: './exception/403'
-              },
-              {
-                name: '404',
-                path: '/exception/404',
-                component: './exception/404'
-              },
-              {
-                name: '500',
-                path: '/exception/500',
-                component: './exception/500'
-              }
-            ]
-          },
-          {
-            path: '/',
-            redirect: '/dashboard'
-          },
-          {
-            name: '数据看板',
-            path: '/dashboard',
-            icon: 'pie-chart',
-            component: './dashboard'
-            // authority: ['数据看板']
-          }
-        ]
-      }
-    ]
+    redirect: '/welcome'
+  },
+  {
+    component: './404'
   }
 ];

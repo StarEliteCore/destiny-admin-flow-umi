@@ -3,20 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="description" content="🐕威威的前端项目" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   </head>
-
-  <body onselectstart="return false">
+  <body>
     <noscript>Out-of-the-box mid-stage front/design solution!</noscript>
     <div id="root">
       <style>
+        html,
+        body,
+        #root {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        #root {
+          background-image: url('/home_bg.png');
+          background-repeat: no-repeat;
+          background-size: 100% auto;
+        }
         .page-loading-warp {
-          padding: 120px;
+          padding: 98px;
           display: flex;
           justify-content: center;
           align-items: center;
         }
-
         .ant-spin {
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -151,14 +163,10 @@
           }
         }
       </style>
+
       <div class="page-loading-warp">
         <div class="ant-spin ant-spin-lg ant-spin-spinning">
-          <span class="ant-spin-dot ant-spin-dot-spin">
-            <i class="ant-spin-dot-item"></i>
-            <i class="ant-spin-dot-item"></i>
-            <i class="ant-spin-dot-item"></i>
-            <i class="ant-spin-dot-item"></i>
-          </span>
+          <span class="ant-spin-dot ant-spin-dot-spin"><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i><i class="ant-spin-dot-item"></i></span>
         </div>
       </div>
     </div>

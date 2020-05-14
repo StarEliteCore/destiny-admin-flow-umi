@@ -5,15 +5,15 @@ type DefaultSettings = ProSettings & {
 };
 
 const proSettings: DefaultSettings = {
-  navTheme: 'dark',
+  navTheme: 'light',
   primaryColor: '#F5222D',
-  layout: 'sidemenu',
+  layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: false,
   colorWeak: false,
-  menu: { locale: false },
-  title: '重庆与展微电子',
+  menu: { locale: true },
+  title: 'Destiny Admin Flow',
   pwa: false,
   iconfontUrl: ''
 };
