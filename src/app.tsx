@@ -50,6 +50,7 @@ export const request: RequestConfig = {
     },
     errorPage: '1'
   },
+  prefix: 'http://localhost:50003/api/',
   credentials: 'include',
   middlewares: [],
   requestInterceptors: [
