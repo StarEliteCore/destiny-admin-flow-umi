@@ -8,9 +8,6 @@
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
   "editor.suggestSelection": "first",
-  "editor.tokenColorCustomizations": {
-    "semanticHighlighting": true
-  },
   "extensions.closeExtensionDetailsOnViewChange": true,
   "extensions.showRecommendationsOnlyOnDemand": true,
   "files.autoSave": "onFocusChange",
