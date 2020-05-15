@@ -10,6 +10,7 @@ export class OrderCondition {
   public SortDirection!: SortDirection;
   public SortField!: string;
 }
+
 export enum SortDirection {
   Ascending = 0,
   Descending = 1
