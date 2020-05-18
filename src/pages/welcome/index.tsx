@@ -2,7 +2,7 @@ import { Alert, Card, Typography } from 'antd';
 
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React from 'react';
-import styles from './Welcome.less';
+import styles from './index.less';
 
 const CodePreview: React.FC<{}> = ({ children }) => (
   <pre className={styles.pre}>

@@ -13,19 +13,14 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "@ant-design/pro-layout": "6.0.0-1",
-    "@ant-design/pro-table": "^2.2.8",
     "antd": "^4.2.4",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
     "guid-typescript": "^1.0.9",
-    "inversify": "^5.0.1",
     "omit.js": "^1.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-helmet-async": "^1.0.6",
-    "reflect-metadata": "^0.1.13",
-    "umi": "^3.1.4",
-    "use-merge-value": "^1.0.1"
+    "umi": "^3.1.4"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

@@ -1,12 +1,11 @@
 import { Avatar, Menu, Spin } from 'antd';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { history, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '../HeaderDropdown';
+import { LogoutOutlined } from '@ant-design/icons';
 import { getPageQuery } from '@/utils/utils';
-import { outLogin } from '@/pages/login/node_modules/@/apis/login';
 import { stringify } from 'querystring';
 import styles from './index.less';
 
@@ -18,12 +17,12 @@ export interface GlobalHeaderRightProps {
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
-  await outLogin();
+  // logout();
   const { redirect } = getPageQuery();
   // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
+  if (window.location.pathname !== '/login' && !redirect) {
     history.replace({
-      pathname: '/user/login',
+      pathname: '/login',
       search: stringify({
         redirect: window.location.href
       })
@@ -31,7 +30,7 @@ const loginOut = async () => {
   }
 };
 
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const onMenuClick = useCallback((event: ClickParam) => {
@@ -41,7 +40,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       loginOut();
       return;
     }
-    history.push(`/account/${key}`);
+    // history.push(`/account/${key}`);
   }, []);
 
   const loading = (
@@ -68,20 +67,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      {menu && (
-        <Menu.Item key="center">
-          <UserOutlined />
-          个人中心
-        </Menu.Item>
-      )}
-      {menu && (
-        <Menu.Item key="settings">
-          <SettingOutlined />
-          个人设置
-        </Menu.Item>
-      )}
-      {menu && <Menu.Divider />}
-
       <Menu.Item key="logout">
         <LogoutOutlined />
         退出登录

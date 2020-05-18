@@ -4,12 +4,16 @@ import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layou
 import { RequestConfig, history, useModel } from 'umi';
 
 import Footer from '@/components/Footer';
-import { MainManager } from './ioc/manager/main-manager';
 import React from 'react';
 import RightContent from '@/components/RightContent';
+import { UserService } from '@/services/Services';
 import { UserTable } from './dto/userdto';
 import avatar from '@/assets/avatar.svg';
 import defaultSettings from '../config/default.config';
+
+// const {
+//   auth: { userId, accessToken }
+// } = useModel('useAuthModel');
 
 export async function getInitialState(): Promise<{
   currentUser?: API.CurrentUser;
@@ -18,9 +22,10 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      const userInfo: UserTable = await MainManager.Instance().UserService.LoadUser({ id: useModel('useAuthModel').auth.userId });
+      const user_service = new UserService();
+      const userInfo: UserTable = await user_service.LoadUser({ id: useModel('useAuthModel').auth.userId });
       const { userName, id } = userInfo;
-      let currentUser: API.CurrentUser = { name: userName, userid: id, avatar };
+      let currentUser: API.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
@@ -103,7 +108,7 @@ export const request: RequestConfig = {
     (url: string, options) => {
       // localStorage.setItem('date', Date.now().toString());
       // const token = localStorage.getItem('userToken');
-      // options.headers = { Authorization: token ? token : '' };
+      options.headers = { Authorization: `Bearer ${useModel('useAuthModel').auth.accessToken}` };
       return { url, options };
     }
   ],
