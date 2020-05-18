@@ -13,8 +13,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "@ant-design/pro-layout": "6.0.0-1",
-    "@ant-design/pro-table": "^2.2.7",
-    "antd": "^4.2.2",
+    "@ant-design/pro-table": "^2.2.8",
+    "antd": "^4.2.3",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
     "guid-typescript": "^1.0.9",
@@ -34,7 +34,7 @@
     "@types/react-dom": "^16.9.8",
     "@umijs/fabric": "^2.0.8",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "@umijs/preset-react": "^1.4.23",
+    "@umijs/preset-react": "^1.4.24",
     "cross-env": "^7.0.2",
     "cross-port-killer": "^1.2.1"
   },
