@@ -1,11 +1,14 @@
 import { useCallback, useState } from 'react';
 
-export default function useAuthModel() {
-  const [user, setUser] = useState(null);
+import { AuthDto } from '@/dto/authdto/authDto';
+import { MainManager } from '@/ioc/manager/main-manager';
 
-  const login = useCallback((account, password) => {
-    // login implementation
-    // setUser(user from login API)
+export default function useAuthModel() {
+  const [auth, setAuth] = useState(new AuthDto());
+
+  const login = useCallback(async (account, password) => {
+    let response: AuthDto = await MainManager.Instance().AuthService.Login({ userName: account, password });
+    setAuth(response);
   }, []);
 
   const logout = useCallback(() => {
@@ -14,7 +17,7 @@ export default function useAuthModel() {
   }, []);
 
   return {
-    user,
+    auth,
     login,
     logout
   };

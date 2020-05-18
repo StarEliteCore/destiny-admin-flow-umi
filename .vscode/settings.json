@@ -67,6 +67,8 @@
     "appuser",
     "appusermanage",
     "areaid",
+    "authdto",
+    "authservice",
     "backimage",
     "bizcharts",
     "browserslist",

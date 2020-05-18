@@ -6,7 +6,7 @@ import { history, useModel } from 'umi';
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '../HeaderDropdown';
 import { getPageQuery } from '@/utils/utils';
-import { outLogin } from '@/apis/login';
+import { outLogin } from '@/pages/login/node_modules/@/apis/login';
 import { stringify } from 'querystring';
 import styles from './index.less';
 

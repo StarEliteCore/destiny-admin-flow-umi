@@ -5,7 +5,8 @@ import { UserTable } from '@/dto/userdto';
 
 export interface IUserService {
   GetPage(_query: Pagination): Promise<IServicerReturn<Array<UserTable>>>;
-  LoadUser(param: any): Promise<AjaxResult>;
+
+  LoadUser(param: any): Promise<UserTable>;
 
   GetSelectRole(): Promise<AjaxResult>;
 

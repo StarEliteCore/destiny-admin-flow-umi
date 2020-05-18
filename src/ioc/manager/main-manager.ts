@@ -1,4 +1,4 @@
-import { IMenuService, IRoleService, IUserService } from '@/services/IServices';
+import { IAuthService, IMenuService, IRoleService, IUserService } from '@/services/IServices';
 
 import IocTypes from '@/ioc/config/ioc-types';
 import { MainService } from './main-services';
@@ -31,5 +31,9 @@ export class MainManager {
 
   public get MenuService(): IMenuService {
     return this.services.MenuServices;
+  }
+
+  public get AuthService(): IAuthService {
+    return this.services.AuthService;
   }
 }

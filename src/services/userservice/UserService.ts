@@ -12,7 +12,7 @@ import { injectable } from 'inversify';
 class UserService implements IUserService {
   GetPage = (_query: Pagination): Promise<PageData<UserTable>> => UserBaseApi.GetPage(_query);
 
-  LoadUser = (param: any): Promise<AjaxResult> => UserBaseApi.LoadUser(param);
+  LoadUser = async (param: any): Promise<UserTable> => (await UserBaseApi.LoadUser(param)).Data;
 
   GetSelectRole = (): Promise<AjaxResult> => UserBaseApi.GetSelectRole();
 

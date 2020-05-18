@@ -6,3 +6,5 @@ export { IMenuService } from './menuservice';
 export { IRoleService } from './roleservice';
 
 export { IUserService } from './userservice';
+
+export { IAuthService } from './authservice';

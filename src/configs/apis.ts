@@ -1,5 +1,7 @@
 //所有的API接口存放文件，每个业务模块顶定义一个const JSON对象 可以考虑像示例中那样写入注释信息
-
+export const AuthApi = {
+  Login: '/api/Identity/LoginAsync'
+};
 /**
  * 权限相关
  */
