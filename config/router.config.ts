@@ -1,3 +1,5 @@
+// 抽离Router的配置信息刀单独文件.
+
 import { IRoute } from 'umi';
 
 export const routerConfig: IRoute[] = [

@@ -1,3 +1,5 @@
+// 一个简单的颜色相关的处理工具
+
 /**
  * 加0补位
  */
@@ -5,10 +7,12 @@ const fAddZero = (v: string): string => {
   let newV = `00${v}`;
   return newV.substring(newV.length - 2, newV.length);
 };
+
 /**
  * rgb转hex
  */
 const fColorToHex = (r: number, g: number, b: number): string => `#${fAddZero(r.toString(16))}${fAddZero(g.toString(16))}${fAddZero(b.toString(16))}`;
+
 /**
  * 解析rgb格式
  */
@@ -20,6 +24,7 @@ const fAnalysisRGB = (temp: string): Array<number> => {
   colors.push(parseInt(colorTemp.substring(4, 6), 16));
   return colors;
 };
+
 /**
  * @description
  * 颜色渐变

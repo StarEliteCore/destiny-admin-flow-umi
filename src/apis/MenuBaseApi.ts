@@ -16,4 +16,5 @@ class MenuBaseApi {
       method: 'GET'
     });
 }
+
 export default MenuBaseApi;

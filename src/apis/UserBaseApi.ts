@@ -36,4 +36,5 @@ class UserBaseApi {
       method: 'DELETE'
     });
 }
+
 export default UserBaseApi;

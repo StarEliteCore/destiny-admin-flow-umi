@@ -1,3 +1,5 @@
+// Ant Design Pro的主题相关配置信息.具体信息参考文档
+
 import { Settings as ProSettings } from '@ant-design/pro-layout';
 
 type DefaultSettings = ProSettings & {

@@ -1,3 +1,5 @@
+// 工具函数文件,用于导出一些工具函数,或者统一处理的相关React组件.所以文件名需要写成tsx并且导入React.
+
 import { LoadingOutlined, createFromIconfontCN } from '@ant-design/icons';
 import React, { ReactNode } from 'react';
 

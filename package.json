@@ -34,7 +34,7 @@
     "@types/react-dom": "^16.9.8",
     "@umijs/fabric": "^2.0.8",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "@umijs/preset-react": "^1.4.22",
+    "@umijs/preset-react": "^1.4.23",
     "cross-env": "^7.0.2",
     "cross-port-killer": "^1.2.1"
   },
