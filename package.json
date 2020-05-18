@@ -25,7 +25,7 @@
     "react-helmet-async": "^1.0.6",
     "reflect-metadata": "^0.1.13",
     "umi": "^3.1.4",
-    "yarn": "^1.22.4"
+    "use-merge-value": "^1.0.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

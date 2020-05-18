@@ -1,20 +1,13 @@
-import { Space, Tag, Tooltip } from 'antd';
+import { SelectLang, useModel } from 'umi';
+import { Space, Tooltip } from 'antd';
 
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-import SelectLang from '../SelectLang';
 import styles from './index.less';
-import { useModel } from 'umi';
 
 export type SiderTheme = 'light' | 'dark';
-
-const ENVTagColor = {
-  dev: 'orange',
-  test: 'green',
-  pre: '#87d068'
-};
 
 const GlobalHeaderRight: React.FC<{}> = () => {
   const { initialState } = useModel('@@initialState');
@@ -65,11 +58,6 @@ const GlobalHeaderRight: React.FC<{}> = () => {
         </span>
       </Tooltip>
       <Avatar />
-      {REACT_APP_ENV && (
-        <span>
-          <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
-        </span>
-      )}
       <SelectLang className={styles.action} />
     </Space>
   );

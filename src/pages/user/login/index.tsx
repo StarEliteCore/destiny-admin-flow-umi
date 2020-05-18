@@ -1,11 +1,10 @@
 import { Alert, Checkbox, message } from 'antd';
 import { AlipayCircleOutlined, TaobaoCircleOutlined, WeiboCircleOutlined } from '@ant-design/icons';
-import { Link, history, useModel } from 'umi';
+import { Link, SelectLang, history, useModel } from 'umi';
 import { LoginParamsType, fakeAccountLogin } from '@/apis/login';
 import React, { useState } from 'react';
 
 import LoginFrom from './components/Login';
-import SelectLang from '@/components/SelectLang';
 import { getPageQuery } from '@/utils/utils';
 import logo from '@/assets/logo.svg';
 import styles from './style.less';

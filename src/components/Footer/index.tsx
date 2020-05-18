@@ -4,7 +4,7 @@ import React from 'react';
 
 export default () => (
   <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
+    copyright="2020 威威大佬体验技术部出品"
     links={[
       {
         key: 'Ant Design Pro',
@@ -15,7 +15,7 @@ export default () => (
       {
         key: 'github',
         title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
+        href: 'https://github.com/joesdu/destiny-admin-flow-umi',
         blankTarget: true
       },
       {
