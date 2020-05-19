@@ -1,10 +1,7 @@
 /**
  * 统一接口导出
  */
-export { IMenuService } from './menuservice';
 
-export { IRoleService } from './roleservice';
+export { IUserService } from './user';
 
-export { IUserService } from './userservice';
-
-export { IAuthService } from './authservice';
+export { IAuthService } from './auth';

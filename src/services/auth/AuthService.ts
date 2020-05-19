@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 
 import { AuthBaseApi } from '@/apis';
-import { AuthDto } from '@/dto/authdto/authDto';
+import { AuthDto } from '@/dto/authdto';
 import { IAuthService } from './IAuthService';
-import { injectable } from 'inversify';
+import { injectable } from 'react-inversify';
 
 @injectable()
 class AuthService implements IAuthService {

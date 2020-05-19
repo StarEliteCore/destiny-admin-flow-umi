@@ -1,10 +1,17 @@
 import { useCallback, useState } from 'react';
 
-import { AuthDto } from '@/dto/authdto/authDto';
+import { AuthDto } from '@/dto/authdto';
+import { Guid } from 'guid-typescript';
 import { MainManager } from '@/ioc/manager/manager';
 
 export default function useAuthModel() {
-  const [auth, setAuth] = useState(new AuthDto());
+  let temp: AuthDto = {
+    accessExpires: 0,
+    accessToken: '',
+    nickName: '',
+    userId: Guid.createEmpty()
+  };
+  const [auth, setAuth] = useState(temp);
   const [loading, setLoading] = useState(false);
 
   const login = useCallback(async (account, password): Promise<void> => {

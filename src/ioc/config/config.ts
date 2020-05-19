@@ -1,7 +1,7 @@
 import { AuthService, MenuService, RoleService, UserService } from '@/services/Services';
 import { IAuthService, IMenuService, IRoleService, IUserService } from '@/services/IServices';
 
-import { Container } from 'inversify'; //挂载前端IOC容器
+import { Container } from 'react-inversify'; //挂载前端IOC容器
 import IocTypes from './types';
 import { MainService } from '@/ioc/manager/services';
 

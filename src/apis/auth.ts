@@ -1,4 +1,4 @@
-import { AjaxResult } from '@/dto/operationdto';
+import { AjaxResult } from '@/dto/ajaxdto';
 import { AuthApi } from '@/configs/apis';
 import { request } from 'umi';
 

@@ -1,9 +1,9 @@
 // https://umijs.org/config/
 // Umi框架级配置文件,用于配置Umi框架的一些东东.
 
-import defaultSettings from './default.config';
+import defaultSettings from './default';
 import { defineConfig } from 'umi';
-import { routerConfig } from './router.config';
+import { routerConfig } from './router';
 
 export default defineConfig({
   hash: true,

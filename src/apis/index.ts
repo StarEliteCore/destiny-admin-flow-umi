@@ -1,8 +1,6 @@
 // 统一导出API类
 
-import AuthBaseApi from './AuthBaseApi';
-import MenuBaseApi from './MenuBaseApi';
-import RoleBaseApi from './RoleBaseApi';
-import UserBaseApi from './UserBaseApi';
+import AuthBaseApi from './auth';
+import UserBaseApi from './user';
 
-export { MenuBaseApi, RoleBaseApi, UserBaseApi, AuthBaseApi };
+export { UserBaseApi, AuthBaseApi };

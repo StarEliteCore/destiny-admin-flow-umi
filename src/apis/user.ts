@@ -1,14 +1,11 @@
 import { RoleApi, UserApi } from '@/configs/apis';
 
-import { AjaxResult } from '@/dto/operationdto';
-import { PageData } from '@/dto/pagedto';
-import { Pagination } from '@/dto/pagequerydto';
-import { UserTable } from '@/dto/userdto';
+import { AjaxResult } from '@/dto/ajaxdto';
 import { request } from 'umi';
 
 class UserBaseApi {
-  static GetPage = (param: Pagination): Promise<PageData<UserTable>> =>
-    request<PageData<UserTable>>(UserApi.GetPageUser, {
+  static GetPage = (param: any): Promise<AjaxResult> =>
+    request<AjaxResult>(UserApi.GetPageUser, {
       data: param,
       method: 'POST'
     });
@@ -25,13 +22,13 @@ class UserBaseApi {
     });
 
   static UserSubmit = (param: any): Promise<AjaxResult> =>
-    request(UserApi.AddOrUpdate, {
+    request<AjaxResult>(UserApi.AddOrUpdate, {
       data: param,
       method: 'POST'
     });
 
   static DeleteUser = (id: string): Promise<AjaxResult> =>
-    request(UserApi.DeleteUser, {
+    request<AjaxResult>(UserApi.DeleteUser, {
       data: id,
       method: 'DELETE'
     });

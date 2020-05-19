@@ -2,9 +2,7 @@
  * 统一服务导出
  */
 
-import { AuthService } from './authservice';
-import { MenuService } from './menuservice';
-import { RoleService } from './roleservice';
-import { UserService } from './userservice';
+import { AuthService } from './auth';
+import { UserService } from './user';
 
-export { MenuService, RoleService, UserService, AuthService };
+export { UserService, AuthService };

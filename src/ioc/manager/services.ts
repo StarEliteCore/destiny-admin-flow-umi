@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from 'react-inversify';
 import IocTypes from '@/ioc/config/types';
 import 'reflect-metadata';
 import { IRoleService, IUserService, IMenuService, IAuthService } from '@/services/IServices';
