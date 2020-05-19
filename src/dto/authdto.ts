@@ -1,8 +1,8 @@
 import { Guid } from 'guid-typescript';
 
-export type AuthDto = {
+export interface AuthDto {
   accessToken: string;
   nickName: string;
   userId: Guid;
   accessExpires: number;
-};
+}

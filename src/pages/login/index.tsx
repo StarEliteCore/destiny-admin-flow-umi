@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Modal, message } from 'antd';
+import { Button, Card, Form, Input, Modal } from 'antd';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { SelectLang, history, useModel } from 'umi';
 
@@ -34,13 +34,10 @@ const Login: React.FC<{}> = () => {
 
   const handleSubmit = async (values: any) => {
     const { account, password } = values;
-    login(account, password)
-      .then(() => {
-        message.success('登陆成功！');
-        replaceGoto();
-        setTimeout(() => refresh(), 0);
-      })
-      .catch(() => message.error('登陆失败，请重试！'));
+    login(account, password).then(() => {
+      replaceGoto();
+      setTimeout(() => refresh(), 0);
+    });
   };
 
   const showModal = () => Modal.confirm({ title: '忘记密码?', centered: true, icon: <QuestionCircleOutlined />, content: '暂不支持在线更改密码,请联系管理员修改密码' });

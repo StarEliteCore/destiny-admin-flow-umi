@@ -1,10 +1,8 @@
 // 工具函数文件,用于导出一些工具函数,或者统一处理的相关React组件.所以文件名需要写成tsx并且导入React.
 
-import { LoadingOutlined, createFromIconfontCN } from '@ant-design/icons';
-import React, { ReactNode } from 'react';
-
-import { IconBaseProps } from '@ant-design/icons/lib/components/Icon';
+import { LoadingOutlined } from '@ant-design/icons';
 import { PaginationProps } from 'antd/lib/pagination';
+import React from 'react';
 import { parse } from 'querystring';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
@@ -13,12 +11,6 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 export const isUrl = (path: string): boolean => reg.test(path);
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
-
-/**
- * 统一处理表格表头样式.
- * @param name 表头名称
- */
-export const getTitle = (name: string): ReactNode => <div style={{ fontWeight: 'bold' }}>{name}</div>;
 
 /**
  * 统一处理表格分页器
@@ -37,16 +29,6 @@ export const getPaginationProps = (pagination: { current: number; total: number;
   onShowSizeChange,
   onChange,
   showTotal: () => `共 ${pagination.total} 条 第 ${pagination.current} / ${pagination.pageCount} 页`
-});
-
-interface IconFontProps extends IconBaseProps {
-  type: string;
-}
-/**
- * 使用IconFont字体图标
- */
-export const IconFont: React.FC<IconFontProps> = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1709014_wl3qyrmbhuo.js'
 });
 
 /**

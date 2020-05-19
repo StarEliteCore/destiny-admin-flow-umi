@@ -1,4 +1,4 @@
-export type UserTable = {
+export interface UserTable {
   id: string;
   userName: string;
   nickName: string;
@@ -8,4 +8,4 @@ export type UserTable = {
   isDeleted: boolean;
   description: string;
   sex: number;
-};
+}

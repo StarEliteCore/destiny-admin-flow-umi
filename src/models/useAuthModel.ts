@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 
+import { AjaxResult } from '@/dto/ajaxdto';
 import { AuthDto } from '@/dto/authdto';
-import { AuthService } from '@/services/Services';
 import { Guid } from 'guid-typescript';
+import { Login } from '@/services/auth';
 
 export default function useAuthModel() {
   let temp: AuthDto = {
@@ -16,10 +17,9 @@ export default function useAuthModel() {
 
   const login = useCallback(async (account, password) => {
     setLoading(true);
-    await new AuthService()
-      .Login({ userName: account, password })
-      .then((response: AuthDto) => {
-        setAuth(response);
+    await Login({ userName: account, password })
+      .then((response: AjaxResult) => {
+        setAuth(response.data);
         setLoading(false);
       })
       .catch(() => {
