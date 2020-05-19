@@ -3,17 +3,20 @@
 import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layout';
 import { RequestConfig, history, useModel } from 'umi';
 
+import { AjaxResult } from '@/dto/ajaxdto';
 import Footer from '@/components/Footer';
+import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
-import { UserService } from './services/Services';
-import { UserTable } from './dto/userdto';
+import { UserTable } from '@/dto/userdto';
 import avatar from '@/assets/avatar.svg';
 import defaultSettings from '../config/default';
+import errorHandler from '@/utils/requesterror';
 import logo from '@/assets/logo.svg';
 
-// import errorHandler from '@/utils/requesterror';
-
+/**
+ * 权限相关必须要用的东西,自己去改函数名
+ */
 export async function getInitialState(): Promise<{
   currentUser?: API.CurrentUser;
   settings?: ProSettings;
@@ -22,7 +25,8 @@ export async function getInitialState(): Promise<{
   if (history.location.pathname !== '/login') {
     try {
       console.log();
-      const userInfo: UserTable = await new UserService().LoadUser({ id: useModel('useAuthModel').auth.userId });
+      const response: AjaxResult = await LoadUser({ id: useModel('useAuthModel').auth.userId });
+      const userInfo: UserTable = response.data;
       const { userName, id } = userInfo;
       let currentUser: API.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
       return {
@@ -30,15 +34,19 @@ export async function getInitialState(): Promise<{
         settings: defaultSettings
       };
     } catch (error) {
-      // history.push('/login');
+      history.push('/login');
     }
   }
   return { settings: defaultSettings };
 }
 
+/**
+ * 运行时Layout配置
+ * @param param
+ */
 export const layout = ({ initialState }: { initialState: { settings?: ProSettings } }): BasicLayoutProps => {
   return {
-    logo: logo,
+    logo,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
@@ -47,10 +55,13 @@ export const layout = ({ initialState }: { initialState: { settings?: ProSetting
   };
 };
 
+/**
+ * 运行时request配置
+ */
 export const request: RequestConfig = {
-  // timeout: 1000,
+  timeout: 10000,
   // 当接口规范时,采用配置errorHandler的方式来实现错误提示.按理说威威大佬的应该是 RESTful API,
-  // errorHandler,
+  errorHandler,
   // 当接口不规范时,采用配置errorConfig的方式来实现错误提示.谁特么知道威威大佬的不是标准的RESTful API,
   errorConfig: {
     adaptor: (res: any) => {
