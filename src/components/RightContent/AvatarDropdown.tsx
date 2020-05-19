@@ -6,7 +6,6 @@ import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '../HeaderDropdown';
 import { LogoutOutlined } from '@ant-design/icons';
 import { getPageQuery } from '@/utils/utils';
-import { stringify } from 'querystring';
 import styles from './index.less';
 
 export interface GlobalHeaderRightProps {
@@ -21,12 +20,7 @@ const loginOut = async () => {
   const { redirect } = getPageQuery();
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/login' && !redirect) {
-    history.replace({
-      pathname: '/login',
-      search: stringify({
-        redirect: window.location.href
-      })
-    });
+    history.replace({ pathname: '/login' });
   }
 };
 
