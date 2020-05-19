@@ -34,7 +34,7 @@ export async function getInitialState(): Promise<{
         settings: defaultSettings
       };
     } catch (error) {
-      history.push('/login');
+      // history.push('/login');
     }
   }
   return { settings: defaultSettings };
