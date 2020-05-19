@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { AuthDto } from '@/dto/authdto';
+import { AuthService } from '@/services/Services';
 import { Guid } from 'guid-typescript';
-import { MainManager } from '@/ioc/manager/manager';
 
 export default function useAuthModel() {
   let temp: AuthDto = {
@@ -14,11 +14,17 @@ export default function useAuthModel() {
   const [auth, setAuth] = useState(temp);
   const [loading, setLoading] = useState(false);
 
-  const login = useCallback(async (account, password): Promise<void> => {
+  const login = useCallback(async (account, password) => {
     setLoading(true);
-    let response: AuthDto = await MainManager.Instance().AuthService.Login({ userName: account, password });
-    setAuth(response);
-    setLoading(false);
+    await new AuthService()
+      .Login({ userName: account, password })
+      .then((response: AuthDto) => {
+        setAuth(response);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
   const logout = useCallback(() => {

@@ -2,7 +2,7 @@
   "name": "destiny-admin-flow",
   "version": "1.8",
   "private": true,
-  "description": "🐕威威的前端项目",
+  "description": "Destiny Flow",
   "scripts": {
     "build": "umi build",
     "start": "cross-env PORT=8848 umi dev",
@@ -17,11 +17,9 @@
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
     "guid-typescript": "^1.0.9",
-    "react-inversify": "^2.0.1",
     "omit.js": "^1.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "reflect-metadata": "^0.1.13",
     "umi": "^3.2.0"
   },
   "devDependencies": {

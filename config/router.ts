@@ -4,7 +4,6 @@ import { IRoute } from 'umi';
 
 export const routerConfig: IRoute[] = [
   {
-    name: '登陆',
     layout: false,
     component: './login',
     path: '/login'
