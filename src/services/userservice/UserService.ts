@@ -1,10 +1,14 @@
+import 'reflect-metadata';
+
 import { AjaxResult } from '@/dto/operationdto';
 import { IUserService } from './IUserService';
 import { PageData } from '@/dto/pagedto';
 import { Pagination } from '@/dto/pagequerydto';
 import { UserBaseApi } from '@/apis';
 import { UserTable } from '@/dto/userdto';
+import { injectable } from 'inversify';
 
+@injectable()
 class UserService implements IUserService {
   GetPage = (_query: Pagination): Promise<PageData<UserTable>> => UserBaseApi.GetPage(_query);
 

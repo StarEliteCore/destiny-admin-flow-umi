@@ -7,7 +7,6 @@
     "sourceMap": true,
     "baseUrl": ".",
     "jsx": "react",
-    "types": ["reflect-metadata"],
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",

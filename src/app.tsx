@@ -4,9 +4,9 @@ import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layou
 import { RequestConfig, history, useModel } from 'umi';
 
 import Footer from '@/components/Footer';
+import { MainManager } from './ioc/manager/manager';
 import React from 'react';
 import RightContent from '@/components/RightContent';
-import { UserService } from '@/services/Services';
 import { UserTable } from './dto/userdto';
 import avatar from '@/assets/avatar.svg';
 import defaultSettings from '../config/default.config';
@@ -15,27 +15,26 @@ import defaultSettings from '../config/default.config';
 //   auth: { userId, accessToken }
 // } = useModel('useAuthModel');
 
-export async function getInitialState(): Promise<{
-  currentUser?: API.CurrentUser;
-  settings?: ProSettings;
-}> {
-  // 如果是登录页面，不执行
-  if (history.location.pathname !== '/login') {
-    try {
-      const user_service = new UserService();
-      const userInfo: UserTable = await user_service.LoadUser({ id: useModel('useAuthModel').auth.userId });
-      const { userName, id } = userInfo;
-      let currentUser: API.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
-      return {
-        currentUser,
-        settings: defaultSettings
-      };
-    } catch (error) {
-      history.push('/login');
-    }
-  }
-  return { settings: defaultSettings };
-}
+// export async function getInitialState(): Promise<{
+//   currentUser?: API.CurrentUser;
+//   settings?: ProSettings;
+// }> {
+//   // 如果是登录页面，不执行
+//   if (history.location.pathname !== '/login') {
+//     try {
+//       const userInfo: UserTable = await MainManager.Instance().UserService.LoadUser({ id: useModel('useAuthModel').auth.userId });
+//       const { userName, id } = userInfo;
+//       let currentUser: API.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
+//       return {
+//         currentUser,
+//         settings: defaultSettings
+//       };
+//     } catch (error) {
+//       history.push('/login');
+//     }
+//   }
+//   return { settings: defaultSettings };
+// }
 
 export const layout = ({ initialState }: { initialState: { settings?: ProSettings } }): BasicLayoutProps => {
   return {

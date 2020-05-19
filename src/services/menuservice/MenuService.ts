@@ -1,9 +1,13 @@
+import 'reflect-metadata';
+
 import { IMenuService } from './IMenuService';
 import { IServicerTreeReturn } from '@/dto/pagequerydto';
 import { MenuBaseApi } from '@/apis';
 import { MenuPageDto } from '@/dto/menudto';
 import { PageData } from '@/dto/pagedto';
+import { injectable } from 'inversify';
 
+@injectable()
 class MenuService implements IMenuService {
   /**
    * 获取菜单权限分配时

@@ -1,9 +1,13 @@
+import 'reflect-metadata';
+
 import { AjaxResult } from '@/dto/operationdto';
 import { IRoleService } from './IRoleService';
 import { Pagination } from '@/dto/pagequerydto';
 import { RoleAddDto } from '@/dto/roledto';
 import { RoleBaseApi } from '@/apis';
+import { injectable } from 'inversify';
 
+@injectable()
 class RoleService implements IRoleService {
   /**
    * 分页查询

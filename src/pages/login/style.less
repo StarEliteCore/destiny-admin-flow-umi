@@ -36,71 +36,29 @@
   }
 }
 
-.top {
-  text-align: center;
+.cardStyle {
+  width: 350px;
+  float: right;
+  margin-right: 20% !important;
+  margin-top: 15% !important;
 }
 
-.header {
-  height: 44px;
-  line-height: 44px;
-  a {
-    text-decoration: none;
-  }
+.loginForm {
+  max-width: 300px;
 }
 
-.logo {
-  height: 44px;
-  margin-right: 16px;
-  vertical-align: top;
+.loginFormForgot {
+  float: right;
+  color: #b2b2b2;
 }
 
-.title {
-  position: relative;
-  top: 2px;
-  color: @heading-color;
-  font-weight: 600;
-  font-size: 33px;
-  font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+.loginFormButton {
+  width: 100%;
 }
 
-.desc {
-  margin-top: 12px;
-  margin-bottom: 40px;
-  color: @text-color-secondary;
-  font-size: @font-size-base;
-}
-
-.main {
-  width: 368px;
-  margin: 0 auto;
-  @media screen and (max-width: @screen-sm) {
-    width: 95%;
-  }
-
-  .cardStyle {
-    width: 350px;
-    float: right;
-    margin-right: 20% !important;
-    margin-top: 15% !important;
-  }
-
-  .loginForm {
-    max-width: 300px;
-  }
-
-  .loginFormForgot {
-    float: right;
-    color: #b2b2b2;
-  }
-
-  .loginFormButton {
+:global {
+  .antd-pro-login-submit {
     width: 100%;
-  }
-
-  :global {
-    .antd-pro-login-submit {
-      width: 100%;
-      margin-top: 24px;
-    }
+    margin-top: 24px;
   }
 }
