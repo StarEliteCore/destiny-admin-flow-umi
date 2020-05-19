@@ -10,6 +10,7 @@ import { UserService } from './services/Services';
 import { UserTable } from './dto/userdto';
 import avatar from '@/assets/avatar.svg';
 import defaultSettings from '../config/default';
+import logo from '@/assets/logo.svg';
 
 // import errorHandler from '@/utils/requesterror';
 
@@ -37,6 +38,7 @@ export async function getInitialState(): Promise<{
 
 export const layout = ({ initialState }: { initialState: { settings?: ProSettings } }): BasicLayoutProps => {
   return {
+    logo: logo,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
