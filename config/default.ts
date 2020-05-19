@@ -15,7 +15,7 @@ const proSettings: DefaultSettings = {
   fixSiderbar: false,
   colorWeak: false,
   menu: { locale: true },
-  title: 'Destiny Admin Flow',
+  title: 'Destiny Flow',
   pwa: false,
   iconfontUrl: ''
 };
