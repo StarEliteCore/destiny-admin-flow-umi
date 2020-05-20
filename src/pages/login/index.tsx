@@ -2,6 +2,7 @@ import { Button, Card, Form, Input, Modal } from 'antd';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { SelectLang, history, useModel } from 'umi';
 
+import Footer from '@/components/Footer';
 import React from 'react';
 import { getPageQuery } from '@/utils/utils';
 import styles from './style.less';
@@ -48,7 +49,7 @@ const Login: React.FC<{}> = () => {
         <SelectLang />
       </div>
       <div className={styles.content}>
-        <Card className={styles.cardStyle} title="后台管理系统" headStyle={{ textAlign: 'center', height: 40, fontSize: 16, fontWeight: 'bold', borderBottom: 'none' }}>
+        <Card className={styles.cardStyle} title="Destiny Flow" headStyle={{ textAlign: 'center', height: 40, fontSize: 16, fontWeight: 'bold', borderBottom: 'none' }}>
           <Form onFinish={handleSubmit} className={styles.loginForm}>
             <Form.Item name="account" rules={[{ required: true, message: '请输入用户名!' }]}>
               <Input prefix={<UserOutlined />} allowClear placeholder="请输入用户名" />
@@ -69,6 +70,7 @@ const Login: React.FC<{}> = () => {
           </Form>
         </Card>
       </div>
+      <Footer />
     </div>
   );
 };
