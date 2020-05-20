@@ -1,7 +1,7 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
 import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layout';
-import { RequestConfig, history, useModel } from 'umi';
+import { RequestConfig, history } from 'umi';
 
 import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
@@ -10,8 +10,8 @@ import RightContent from '@/components/RightContent';
 import avatar from '@/assets/avatar.svg';
 import cookie from 'react-cookies';
 import defaultSettings from '../config/default';
-import errorHandler from '@/utils/requesterror';
 import logo from '@/assets/logo.svg';
+import { notification } from 'antd';
 
 /**
  * 权限相关必须要用的东西,自己去改函数名
@@ -23,7 +23,7 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      const response: Types.AjaxResult = await LoadUser({ id: useModel('useAuthModel').auth.userId });
+      const response: Types.AjaxResult = await LoadUser({ id: cookie.load('userId') });
       const userInfo: Types.UserTable = response.data;
       const { userName, id } = userInfo;
       let currentUser: Types.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
@@ -51,6 +51,48 @@ export const layout = ({ initialState }: { initialState: { settings?: ProSetting
     menuHeaderRender: false,
     ...initialState?.settings
   };
+};
+
+/**
+ * CodeMessage
+ */
+const codeMessage = {
+  200: '服务器成功返回请求的数据。',
+  201: '新建或修改数据成功。',
+  202: '一个请求已经进入后台排队（异步任务）。',
+  204: '删除数据成功。',
+  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
+  401: '用户没有权限（令牌、用户名、密码错误）。',
+  403: '用户得到授权，但是访问是被禁止的。',
+  404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
+  406: '请求的格式不可得。',
+  410: '请求的资源被永久删除，且不会再得到的。',
+  422: '当创建一个对象时，发生一个验证错误。',
+  500: '服务器发生错误，请检查服务器。',
+  502: '网关错误。',
+  503: '服务不可用，服务器暂时过载或维护。',
+  504: '网关超时。'
+};
+
+/**
+ * 异常处理
+ */
+const errorHandler = (error: { response: Response }): Response => {
+  const { response } = error;
+  if (response && response.status) {
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText
+    });
+  } else if (!response) {
+    notification.error({
+      description: '您的网络发生异常，无法连接服务器',
+      message: '网络异常'
+    });
+  }
+  return response;
 };
 
 /**
