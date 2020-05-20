@@ -19,6 +19,6 @@ export const routerConfig: IRoute[] = [
     redirect: '/welcome'
   },
   {
-    component: './404'
+    component: './exception/404'
   }
 ];
