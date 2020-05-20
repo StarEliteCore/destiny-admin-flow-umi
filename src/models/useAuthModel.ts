@@ -1,16 +1,14 @@
 import { useCallback, useState } from 'react';
 
-import { AjaxResult } from '@/dto/ajaxdto';
-import { AuthDto } from '@/dto/authdto';
-import { Guid } from 'guid-typescript';
 import { Login } from '@/services/auth';
+import cookie from 'react-cookies';
 
 export default function useAuthModel() {
-  let temp: AuthDto = {
+  let temp: Types.AuthDto = {
     accessExpires: 0,
     accessToken: '',
     nickName: '',
-    userId: Guid.createEmpty()
+    userId: ''
   };
   const [auth, setAuth] = useState(temp);
   const [loading, setLoading] = useState(false);
@@ -18,8 +16,11 @@ export default function useAuthModel() {
   const login = useCallback(async (account, password) => {
     setLoading(true);
     await Login({ userName: account, password })
-      .then((response: AjaxResult) => {
-        setAuth(response.data);
+      .then((response: Types.AjaxResult) => {
+        let data: Types.AuthDto = response.data;
+        const { accessToken } = data;
+        cookie.save('accessToken', accessToken, { path: '/' });
+        setAuth(data);
         setLoading(false);
       })
       .catch(() => {

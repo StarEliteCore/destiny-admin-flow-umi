@@ -3,13 +3,12 @@
 import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layout';
 import { RequestConfig, history, useModel } from 'umi';
 
-import { AjaxResult } from '@/dto/ajaxdto';
 import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
-import { UserTable } from '@/dto/userdto';
 import avatar from '@/assets/avatar.svg';
+import cookie from 'react-cookies';
 import defaultSettings from '../config/default';
 import errorHandler from '@/utils/requesterror';
 import logo from '@/assets/logo.svg';
@@ -18,23 +17,22 @@ import logo from '@/assets/logo.svg';
  * 权限相关必须要用的东西,自己去改函数名
  */
 export async function getInitialState(): Promise<{
-  currentUser?: API.CurrentUser;
+  currentUser?: Types.CurrentUser;
   settings?: ProSettings;
 }> {
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      console.log();
-      const response: AjaxResult = await LoadUser({ id: useModel('useAuthModel').auth.userId });
-      const userInfo: UserTable = response.data;
+      const response: Types.AjaxResult = await LoadUser({ id: useModel('useAuthModel').auth.userId });
+      const userInfo: Types.UserTable = response.data;
       const { userName, id } = userInfo;
-      let currentUser: API.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
+      let currentUser: Types.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
       };
     } catch (error) {
-      history.push('/login');
+      // history.push('/login');
     }
   }
   return { settings: defaultSettings };
@@ -78,9 +76,7 @@ export const request: RequestConfig = {
   middlewares: [],
   requestInterceptors: [
     (url: string, options) => {
-      // localStorage.setItem('date', Date.now().toString());
-      // const token = localStorage.getItem('userToken');
-      // options.headers = { Authorization: `Bearer ${''}` };
+      options.headers = { Authorization: `Bearer ${cookie.load('accessToken')}` };
       return { url, options };
     }
   ],

@@ -16,9 +16,9 @@
     "antd": "^4.2.4",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
-    "guid-typescript": "^1.0.9",
     "omit.js": "^1.0.2",
     "react": "^16.13.1",
+    "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
     "umi": "^3.2.1"
   },
@@ -26,10 +26,11 @@
     "@types/classnames": "^2.2.10",
     "@types/history": "^4.7.6",
     "@types/react": "^16.9.35",
+    "@types/react-cookies": "^0.1.0",
     "@types/react-dom": "^16.9.8",
     "@umijs/fabric": "^2.0.8",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "@umijs/preset-react": "^1.5.1",
+    "@umijs/preset-react": "^1.5.2",
     "cross-env": "^7.0.2",
     "cross-port-killer": "^1.2.1"
   },

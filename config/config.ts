@@ -28,7 +28,7 @@ export default defineConfig({
   favicon: './favicon.svg',
   // 忽略 moment 全球化内容
   ignoreMomentLocale: true,
-  history: { type: 'hash' },
+  // history: { type: 'hash' },
   // 输出目录
   outputPath: './dist',
   manifest: { basePath: '/' }
