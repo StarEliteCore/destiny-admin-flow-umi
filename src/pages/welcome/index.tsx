@@ -12,11 +12,6 @@ export default (): React.ReactNode => (
           基于 block 开发，快速构建标准页面
         </a>
       </Typography.Text>
-      <Typography.Text strong style={{ marginBottom: 12 }}>
-        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/available-script#npm-run-fetchblocks">
-          获取全部区块
-        </a>
-      </Typography.Text>
     </Card>
   </PageHeaderWrapper>
 );
