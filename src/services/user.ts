@@ -1,4 +1,4 @@
-import { UserApi } from '@/apis/user';
+import { UserApi } from '@/apis';
 import { request } from 'umi';
 
 export const GetPage = (param: any): Promise<Types.AjaxResult> =>
