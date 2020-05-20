@@ -1,6 +1,6 @@
 # apis 文件夹
 
-里边存放每个 API 的声明,如:
+index 里边存放每个 API 的声明,如:
 
 ```typescript
 /**

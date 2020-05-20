@@ -1,4 +1,4 @@
-import { AuthApi } from '@/apis/auth';
+import { AuthApi } from '@/apis';
 import { request } from 'umi';
 
 export const Login = (param: { userName: string; password: string }): Promise<Types.AjaxResult> =>

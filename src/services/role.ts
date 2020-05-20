@@ -1,4 +1,4 @@
-import { RoleApi } from '@/apis/role';
+import { RoleApi } from '@/apis';
 import { request } from 'umi';
 
 export const GetSelectRole = (): Promise<Types.AjaxResult> =>

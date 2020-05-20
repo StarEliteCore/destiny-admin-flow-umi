@@ -1,5 +1,5 @@
 {
-  "name": "destiny-admin-flow",
+  "name": "destiny-flow",
   "version": "1.8",
   "private": true,
   "description": "Destiny Flow",
@@ -16,12 +16,10 @@
     "antd": "^4.2.4",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
-    "omit.js": "^1.0.2",
     "react": "^16.13.1",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
-    "umi": "^3.2.1",
-    "umi-plugin-setting-drawer": "^1.0.3"
+    "umi": "^3.2.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
@@ -32,8 +30,7 @@
     "@umijs/fabric": "^2.0.8",
     "@umijs/preset-ant-design-pro": "^1.2.2",
     "@umijs/preset-react": "^1.5.2",
-    "cross-env": "^7.0.2",
-    "cross-port-killer": "^1.2.1"
+    "cross-env": "^7.0.2"
   },
   "engines": {
     "node": ">=13.5.0"
