@@ -18,8 +18,9 @@ export default function useAuthModel() {
     await Login({ userName: account, password })
       .then((response: Types.AjaxResult) => {
         let data: Types.AuthDto = response.data;
-        const { accessToken } = data;
+        const { accessToken, userId } = data;
         cookie.save('accessToken', accessToken, { path: '/' });
+        cookie.save('userId', userId, { path: '/' });
         setAuth(data);
         setLoading(false);
       })

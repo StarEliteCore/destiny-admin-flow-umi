@@ -1,10 +1,10 @@
 import { Alert, Card, Typography } from 'antd';
 
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
 
 export default (): React.ReactNode => (
-  <PageHeaderWrapper>
+  <PageContainer>
     <Card>
       <Alert message="umi ui 现已发布，点击右下角 umi 图标即可使用" type="success" showIcon banner style={{ margin: -12, marginBottom: 24 }} />
       <Typography.Text strong>
@@ -13,5 +13,5 @@ export default (): React.ReactNode => (
         </a>
       </Typography.Text>
     </Card>
-  </PageHeaderWrapper>
+  </PageContainer>
 );

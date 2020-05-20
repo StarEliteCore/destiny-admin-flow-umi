@@ -20,7 +20,8 @@
     "react": "^16.13.1",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
-    "umi": "^3.2.1"
+    "umi": "^3.2.1",
+    "umi-plugin-setting-drawer": "^1.0.3"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
