@@ -4,7 +4,7 @@ import React from 'react';
 
 export default () => (
   <DefaultFooter
-    copyright="2020 威威大佬体验技术部出品"
+    copyright="2020  微微大佬体验技术部出品"
     links={[
       {
         key: 'Ant Design Pro',

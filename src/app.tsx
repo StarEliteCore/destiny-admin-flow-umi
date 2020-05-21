@@ -1,14 +1,14 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { RequestConfig, history } from 'umi';
+import { Link, RequestConfig, history } from 'umi';
 
 import Cookies from 'js-cookie';
 import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
-import avatar from '@/assets/avatar.svg';
+import avatar from '@/assets/avatar.gif';
 import defaultSettings from '../config/default';
 import logo from '@/assets/logo.png';
 import { notification } from 'antd';
@@ -44,13 +44,26 @@ export async function getInitialState(): Promise<{
  * 运行时Layout配置
  * @param param
  */
+
 export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
   return {
     logo,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
-    menuHeaderRender: undefined,
+    menuHeaderRender: (logoDom, titleDom) => (
+      <Link to="/" style={{ justifyContent: 'center', textAlign: 'center' }}>
+        {logoDom}
+        {titleDom}
+      </Link>
+    ),
+    // breadcrumbRender: (routers = []) => [
+    //   {
+    //     path: '/',
+    //     breadcrumbName: '首页'
+    //   },
+    //   ...routers
+    // ],
     ...initialState?.settings
   };
 };
