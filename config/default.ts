@@ -1,6 +1,6 @@
 // Ant Design Pro的主题相关配置信息.具体信息参考文档
 
-import { Settings as ProSettings } from '@ant-design/pro-layout';
+import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 export default {
   navTheme: 'light',
@@ -15,4 +15,6 @@ export default {
   title: 'Destiny Flow',
   pwa: false,
   iconfontUrl: ''
-} as ProSettings;
+} as LayoutSettings & {
+  pwa: boolean;
+};

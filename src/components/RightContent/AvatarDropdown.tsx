@@ -4,7 +4,7 @@ import { history, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '../HeaderDropdown';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getPageQuery } from '@/utils/utils';
 import styles from './index.less';
 
@@ -40,6 +40,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin
+        indicator={<LoadingOutlined spin />}
         size="small"
         style={{
           marginLeft: 8,

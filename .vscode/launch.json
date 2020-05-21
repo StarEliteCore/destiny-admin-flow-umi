@@ -10,7 +10,7 @@
       "request": "launch",
       "version": "canary",
       "url": "http://localhost:8848",
-      "webRoot": "${workspaceFolder}/"
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
