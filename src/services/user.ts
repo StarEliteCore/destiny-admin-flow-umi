@@ -7,9 +7,9 @@ export const GetPage = (param: any): Promise<Types.AjaxResult> =>
     method: 'POST'
   });
 
-export const LoadUser = (param: any): Promise<Types.AjaxResult> =>
+export const LoadUser = (param: { id: string }): Promise<Types.AjaxResult> =>
   request<Types.AjaxResult>(UserApi.loadUser, {
-    data: param,
+    params: param,
     method: 'GET'
   });
 
@@ -19,8 +19,8 @@ export const UserSubmit = (param: any): Promise<Types.AjaxResult> =>
     method: 'POST'
   });
 
-export const DeleteUser = (id: string): Promise<Types.AjaxResult> =>
+export const DeleteUser = (param: { id: string }): Promise<Types.AjaxResult> =>
   request<Types.AjaxResult>(UserApi.deleteUser, {
-    data: id,
+    params: param,
     method: 'DELETE'
   });

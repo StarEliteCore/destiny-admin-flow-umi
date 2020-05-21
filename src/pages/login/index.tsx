@@ -34,8 +34,7 @@ const Login: React.FC<{}> = () => {
   const { loading, login } = useModel('useAuthModel');
 
   const handleSubmit = async (values: any) => {
-    const { account, password } = values;
-    login(account, password).then(() => {
+    login(values).then(() => {
       replaceGoto();
       setTimeout(() => refresh(), 0);
     });

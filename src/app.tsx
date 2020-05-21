@@ -1,16 +1,16 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
-import { BasicLayoutProps, Settings as ProSettings } from '@ant-design/pro-layout';
+import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { RequestConfig, history } from 'umi';
 
+import Cookies from 'js-cookie';
 import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import avatar from '@/assets/avatar.svg';
-import cookie from 'react-cookies';
 import defaultSettings from '../config/default';
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/logo.png';
 import { notification } from 'antd';
 
 /**
@@ -18,21 +18,23 @@ import { notification } from 'antd';
  */
 export async function getInitialState(): Promise<{
   currentUser?: Types.CurrentUser;
-  settings?: ProSettings;
+  settings?: LayoutSettings;
 }> {
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      const response: Types.AjaxResult = await LoadUser({ id: cookie.load('userId') });
+      let userId: string = Cookies.get('userId') ? Cookies.get('userId')! : '';
+      const response: Types.AjaxResult = await LoadUser({ id: userId });
       const userInfo: Types.UserTable = response.data;
-      const { userName, id } = userInfo;
-      let currentUser: Types.CurrentUser = { name: userName, userid: id, avatar, access: 'admin' };
+      const { userName } = userInfo;
+      let currentUser: Types.CurrentUser = { name: userName ? userName : '默认用户名', userid: Cookies.get('userId'), avatar, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
       };
     } catch (error) {
-      // history.push('/login');
+      console.log('getInitialState:', error);
+      history.push('/login');
     }
   }
   return { settings: defaultSettings };
@@ -42,13 +44,13 @@ export async function getInitialState(): Promise<{
  * 运行时Layout配置
  * @param param
  */
-export const layout = ({ initialState }: { initialState: { settings?: ProSettings } }): BasicLayoutProps => {
+export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
   return {
     logo,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
-    menuHeaderRender: false,
+    menuHeaderRender: undefined,
     ...initialState?.settings
   };
 };
@@ -75,52 +77,44 @@ const codeMessage = {
 };
 
 /**
- * 异常处理
- */
-const errorHandler = (error: { response: Response }): Response => {
-  const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText
-    });
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常'
-    });
-  }
-  return response;
-};
-
-/**
  * 运行时request配置
  */
 export const request: RequestConfig = {
   timeout: 10000,
-  // 当接口规范时,采用配置errorHandler的方式来实现错误提示.按理说威威大佬的应该是 RESTful API,
-  errorHandler,
-  // 当接口不规范时,采用配置errorConfig的方式来实现错误提示.谁特么知道威威大佬的不是标准的RESTful API,
+  // 当接口规范时,采用配置errorHandler的方式来实现错误提示.
+  errorHandler: (error: { response: Response }) => {
+    const { response } = error;
+    if (response && response.status) {
+      const errorText = codeMessage[response.status] || response.statusText;
+      const { status, url } = response;
+      notification.error({ message: `请求错误 ${status}: ${url}`, description: errorText });
+    }
+    if (!response) {
+      notification.error({ description: '您的网络发生异常，无法连接服务器', message: '网络异常' });
+    }
+    throw error;
+  },
+  // 当接口不规范时,采用配置errorConfig的方式来实现错误提示.
   errorConfig: {
     adaptor: (res: any) => {
       return {
         ...res,
-        success: res.ok || res.Success || res.success, //  resData.ok || resData.code === 1000
+        success: res.ok || res.Success || res.success,
         errorMessage: res.message || res.msg || res.Message
       };
     },
     errorPage: '1'
   },
   prefix: 'http://localhost:50003/api/',
-  credentials: 'include',
+  // 中间件
   middlewares: [],
+  // 请求拦截器
   requestInterceptors: [
     (url: string, options) => {
-      options.headers = { Authorization: `Bearer ${cookie.load('accessToken')}` };
+      options.headers = { Authorization: `Bearer ${Cookies.get('accessToken')}` };
       return { url, options };
     }
   ],
+  // 响应拦截器
   responseInterceptors: []
 };
