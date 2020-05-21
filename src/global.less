@@ -12,24 +12,20 @@ body,
   filter: invert(80%);
 }
 
-.ant-layout {
-  min-height: 100vh;
-}
+// .ant-layout {
+//   min-height: 100vh;
+// }
 
 .ant-card {
   margin-top: 10px !important;
-  border-radius: 7px !important;
+  border-radius: 8px !important;
 }
 
-.ant-pro-setting-drawer-handle {
-  width: 32px !important;
-  height: 32px !important;
-  top: 300px !important;
-}
-
-.ant-layout-sider-children {
-  height: 0 !important;
-}
+// .ant-pro-setting-drawer-handle {
+//   width: 32px !important;
+//   height: 32px !important;
+//   top: 310px !important;
+// }
 
 canvas {
   display: block;
@@ -67,22 +63,5 @@ ol {
 @media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
   body .ant-design-pro > .ant-layout {
     min-height: 100vh;
-  }
-}
-
-// mixins for clearfix
-// ------------------------
-.clearfix() {
-  zoom: 1;
-  &::before,
-  &::after {
-    display: table;
-    content: ' ';
-  }
-  &::after {
-    clear: both;
-    height: 0;
-    font-size: 0;
-    visibility: hidden;
   }
 }

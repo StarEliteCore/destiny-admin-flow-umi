@@ -1,3 +1,4 @@
+//#region AuthApi
 /**
  * 验证功能相关
  */
@@ -7,7 +8,9 @@ export const AuthApi = {
    */
   login: 'Identity/LoginAsync'
 };
+//#endregion
 
+//#region MenuApi
 /**
  * 菜单相关
  */
@@ -27,7 +30,9 @@ export const MenuApi = {
    */
   deleteUser: 'User/Delete'
 };
+//#endregion
 
+//#region RoleApi
 /**
  * 权限相关
  */
@@ -38,7 +43,9 @@ export const RoleApi = {
   deleteRole: 'Role/Delete',
   selectRole: 'Role/GetRoleSelectListAsync'
 };
+//#endregion
 
+//#region UserApi
 /**
  * 用户相关
  */
@@ -49,3 +56,4 @@ export const UserApi = {
   deleteUser: 'User/DeleteAsync',
   loadUser: 'User/LoadAsync'
 };
+//#endregion
