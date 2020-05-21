@@ -5,7 +5,7 @@ import { SelectLang, history, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import React from 'react';
 import { getPageQuery } from '@/utils/utils';
-import styles from './style.less';
+import styles from './index.less';
 
 /**
  * 此方法会跳转到 redirect 参数所在的位置

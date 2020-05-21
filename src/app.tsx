@@ -1,5 +1,6 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
+import { AvatarGif, LogoPng } from '@/assets';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { RequestConfig, history } from 'umi';
 
@@ -8,11 +9,10 @@ import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
-import avatar from '@/assets/avatar.svg';
 import defaultSettings from '../config/default';
-import logo from '@/assets/logo.png';
 import { notification } from 'antd';
 
+//#region InitialState
 /**
  * 权限相关必须要用的东西,自己去改函数名
  */
@@ -27,7 +27,7 @@ export async function getInitialState(): Promise<{
       const response: Types.AjaxResult = await LoadUser({ id: userId });
       const userInfo: Types.UserTable = response.data;
       const { userName } = userInfo;
-      let currentUser: Types.CurrentUser = { name: userName ? userName : '默认用户名', userid: Cookies.get('userId'), avatar, access: 'admin' };
+      let currentUser: Types.CurrentUser = { name: userName ? userName : '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
@@ -39,22 +39,33 @@ export async function getInitialState(): Promise<{
   }
   return { settings: defaultSettings };
 }
+//#endregion
 
+//#region Layout配置
 /**
  * 运行时Layout配置
  * @param param
  */
 export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
   return {
-    logo,
+    logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
     menuHeaderRender: undefined,
+    // breadcrumbRender: (routers = []) => [
+    //   {
+    //     path: '/',
+    //     breadcrumbName: '首页'
+    //   },
+    //   ...routers
+    // ],
     ...initialState?.settings
   };
 };
+//#endregion
 
+//#region Request配置
 /**
  * CodeMessage
  */
@@ -105,7 +116,7 @@ export const request: RequestConfig = {
     },
     errorPage: '1'
   },
-  prefix: 'http://localhost:50003/api/',
+  prefix: 'http://localhost:5000/api/',
   // 中间件
   middlewares: [],
   // 请求拦截器
@@ -118,3 +129,4 @@ export const request: RequestConfig = {
   // 响应拦截器
   responseInterceptors: []
 };
+//#endregion
