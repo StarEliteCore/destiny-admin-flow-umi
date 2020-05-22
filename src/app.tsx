@@ -23,11 +23,11 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      let userId: string = Cookies.get('userId') ? Cookies.get('userId')! : '';
+      let userId: string = Cookies.get('userId') ?? '';
       const response: Types.AjaxResult = await LoadUser({ id: userId });
       const userInfo: Types.UserTable = response.data;
       const { userName } = userInfo;
-      let currentUser: Types.CurrentUser = { name: userName ? userName : '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
+      let currentUser: Types.CurrentUser = { name: userName ?? '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
@@ -123,7 +123,7 @@ export const request: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (url: string, options) => {
-      options.headers = { Authorization: `Bearer ${Cookies.get('accessToken')}` };
+      options.headers = { Authorization: `Bearer ${Cookies.get('accessToken') ?? ''}` };
       return { url, options };
     }
   ],
