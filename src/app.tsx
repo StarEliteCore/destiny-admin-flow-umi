@@ -23,11 +23,11 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
-      let userId: string = Cookies.get('userId') ? Cookies.get('userId')! : '';
+      let userId: string = Cookies.get('userId') ?? '';
       const response: Types.AjaxResult = await LoadUser({ id: userId });
       const userInfo: Types.UserTable = response.data;
       const { userName } = userInfo;
-      let currentUser: Types.CurrentUser = { name: userName ? userName : '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
+      let currentUser: Types.CurrentUser = { name: userName ?? '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
       return {
         currentUser,
         settings: defaultSettings
@@ -78,6 +78,7 @@ const codeMessage = {
   401: '用户没有权限（令牌、用户名、密码错误）。',
   403: '用户得到授权，但是访问是被禁止的。',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
+  405: '请求方法不被允许。',
   406: '请求的格式不可得。',
   410: '请求的资源被永久删除，且不会再得到的。',
   422: '当创建一个对象时，发生一个验证错误。',
@@ -122,7 +123,7 @@ export const request: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (url: string, options) => {
-      options.headers = { Authorization: `Bearer ${Cookies.get('accessToken')}` };
+      options.headers = { Authorization: `Bearer ${Cookies.get('accessToken') ?? ''}` };
       return { url, options };
     }
   ],
