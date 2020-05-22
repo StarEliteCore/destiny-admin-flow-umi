@@ -1,10 +1,10 @@
 import { Avatar, Menu, Spin } from 'antd';
+import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 import { history, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '../HeaderDropdown';
-import { LogoutOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getPageQuery } from '@/utils/utils';
 import styles from './index.less';
 
@@ -71,7 +71,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+        <Avatar size="default" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
         <span className={`${styles.name} anticon`}>{currentUser.name}</span>
       </span>
     </HeaderDropdown>
