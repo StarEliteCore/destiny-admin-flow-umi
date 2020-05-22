@@ -9,8 +9,15 @@ export default defineConfig({
   // Ant Design相关配置设置暗黑主题或者紧凑主题
   // antd: { dark: false },
   // Ant Design Pro Layout相关配置
-  layout: { locale: true },
-  locale: { default: 'zh-CN', antd: true, baseNavigator: true },
+  layout: {
+    locale: true,
+    siderWidth: 208
+  },
+  locale: {
+    default: 'zh-CN',
+    antd: true,
+    baseNavigator: true
+  },
   dynamicImport: { loading: '@/components/PageLoading' },
   targets: { ie: 11 },
   // umi routes: https://umijs.org/docs/routing
