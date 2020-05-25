@@ -13,7 +13,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "@ant-design/pro-layout": "6.0.0-2",
-    "antd": "^4.2.5-alpha.0",
+    "antd": "^4.2.5",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.27",
     "js-cookie": "^2.2.1",

@@ -117,7 +117,7 @@ export const request: RequestConfig = {
     },
     errorPage: '1'
   },
-  prefix: 'http://localhost:5000/api/',
+  prefix: 'http://localhost:50003/api/',
   // 中间件
   middlewares: [],
   // 请求拦截器
