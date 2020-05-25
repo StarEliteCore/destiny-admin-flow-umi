@@ -15,20 +15,6 @@ export const routerConfig: IRoute[] = [
     component: './welcome'
   },
   {
-    path: '/user',
-    name: '用户',
-    icon: 'smile',
-    // component: './welcome',
-    routes: [
-      {
-        path: '/user/usermgr',
-        name: 'usermgr',
-        icon: 'smile',
-        component: './user',
-      }
-    ]
-  },
-  {
     path: '/',
     redirect: '/welcome'
   },
