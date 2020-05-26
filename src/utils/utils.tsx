@@ -87,3 +87,12 @@ export const getRandomNum = (Min: number, Max: number): number => {
   let Rand = Math.random();
   return Min + Math.round(Rand * Range);
 };
+
+/**
+ * 小数四舍五入
+ * @param number 数
+ * @param precision 保留位数,默认2位
+ */
+//same as:
+//return Number(Math.round(+number + 'e' + precision) + 'e-' + precision);
+export const DecimalRound = (number: number, precision = 2): number => Math.round(Number(+number + 'e' + precision)) / Math.pow(10, precision);
