@@ -2,7 +2,7 @@
 
 import { IRoute } from 'umi';
 
-export const routerConfig: IRoute[] = [
+const Route: IRoute[] = [
   {
     layout: false,
     component: './login',
@@ -22,3 +22,5 @@ export const routerConfig: IRoute[] = [
     component: './exception/404'
   }
 ];
+
+export default Route;

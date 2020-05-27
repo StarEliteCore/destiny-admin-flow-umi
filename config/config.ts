@@ -1,8 +1,8 @@
 // https://umijs.org/config/
 // Umi框架级配置文件,用于配置Umi框架的一些东东.
 
+import Route from './router';
 import { defineConfig } from 'umi';
-import { routerConfig } from './router';
 
 export default defineConfig({
   hash: true,
@@ -18,16 +18,22 @@ export default defineConfig({
     antd: true,
     baseNavigator: true
   },
-  dynamicImport: { loading: '@/components/PageLoading' },
-  targets: { ie: 11 },
+  dynamicImport: {
+    loading: '@/components/PageLoading'
+  },
+  targets: {
+    ie: 11
+  },
   // umi routes: https://umijs.org/docs/routing
-  routes: routerConfig,
+  routes: Route,
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   // 浏览器标签页图标配置,会生成HTML内容插入到页面中
   favicon: './favicon.svg',
   // 忽略 moment 全球化内容
-  history: { type: 'memory' },
-  // 输出目录
-  outputPath: './dist',
-  manifest: { basePath: '/' }
+  history: {
+    type: 'memory'
+  },
+  manifest: {
+    basePath: '/'
+  }
 });

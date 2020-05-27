@@ -13,23 +13,14 @@ export const isUrl = (path: string): boolean => reg.test(path);
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 /**
- * 统一处理表格分页器
- * @param pagination 分页数据
- * @param onShowSizeChange 显示数量发生变化
- * @param onChange 切换页数
+ * 统一处理表格分页器默认属性
  */
-export const getPaginationProps = (pagination: { current: number; total: number; pageSize: number; pageCount: number }, onShowSizeChange: (current: number, size: number) => void, onChange: (page: number, pageSize?: number | undefined) => void): PaginationProps => ({
+export const tacitPagingProps: PaginationProps = {
   style: { padding: '10px 0 0', textAlign: 'center', float: 'none', marginBottom: '10px' },
-  current: pagination.current,
-  total: pagination.total,
-  defaultCurrent: 1,
-  pageSize: pagination.pageSize,
   showSizeChanger: true,
   showQuickJumper: true,
-  onShowSizeChange,
-  onChange,
-  showTotal: () => `共 ${pagination.total} 条 第 ${pagination.current} / ${pagination.pageCount} 页`
-});
+  showTotal: (total, range) => `共 ${total} 条 第 ${range[0]}-${range[1]} 条`
+};
 
 /**
  * 获取统一的表格loading对象
@@ -94,5 +85,5 @@ export const getRandomNum = (Min: number, Max: number): number => {
  * @param precision 保留位数,默认2位
  */
 //same as:
-//return Number(Math.round(+number + 'e' + precision) + 'e-' + precision);
+//return Number(Math.round(Number(+number + 'e' + precision)) + 'e-' + precision);
 export const DecimalRound = (number: number, precision = 2): number => Math.round(Number(+number + 'e' + precision)) / Math.pow(10, precision);
