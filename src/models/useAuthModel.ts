@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import Cookies from 'js-cookie';
 import { Login } from '@/services/auth';
+import { history } from 'umi';
 
 export default function useAuthModel() {
   let temp: Types.AuthDto = {
@@ -10,7 +11,9 @@ export default function useAuthModel() {
     nickName: '',
     userId: ''
   };
+
   const [auth, setAuth] = useState(temp);
+
   const [loading, setLoading] = useState(false);
 
   const login = useCallback(async ({ account, password }: { account: string; password: string }) => {
@@ -24,14 +27,12 @@ export default function useAuthModel() {
         setAuth(data);
         setLoading(false);
       })
-      .catch(() => {
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
   const logout = useCallback(() => {
-    // logout implementation
-    // setUser(null)
+    // TODO 调用退出登录的API
+    history.replace('/');
   }, []);
 
   return { auth, loading, login, logout };

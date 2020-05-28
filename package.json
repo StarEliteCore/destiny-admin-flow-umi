@@ -19,24 +19,20 @@
     "@ant-design/icons": "^4.1.0",
     "@ant-design/pro-layout": "6.0.0-4",
     "antd": "^4.2.5",
-    "classnames": "^2.2.6",
-    "dayjs": "^1.8.27",
+    "dayjs": "^1.8.28",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "umi": "^3.2.2",
-    "umi-plugin-antd-theme": "^2.1.2",
-    "umi-plugin-setting-drawer": "^1.0.3"
+    "umi": "^3.2.3"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.10",
     "@types/history": "^4.7.6",
     "@types/js-cookie": "^2.2.6",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@umijs/fabric": "^2.0.8",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "@umijs/preset-react": "^1.5.3",
+    "@umijs/preset-react": "^1.5.5",
     "cross-env": "^7.0.2"
   },
   "engines": {

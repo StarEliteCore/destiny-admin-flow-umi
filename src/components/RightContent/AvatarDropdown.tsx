@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { history, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
-import HeaderDropdown from '../HeaderDropdown';
+import HeaderDropdown from '@/components/HeaderDropdown';
 import { getPageQuery } from '@/utils/utils';
 import styles from './index.less';
 
