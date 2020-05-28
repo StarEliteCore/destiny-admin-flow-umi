@@ -1,7 +1,7 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
 import { AvatarGif, LogoPng } from '@/assets';
-import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { BasicLayoutProps, Settings as LayoutSettings, SettingDrawerProps } from '@ant-design/pro-layout';
 import { RequestConfig, history } from 'umi';
 
 import Cookies from 'js-cookie';
@@ -19,10 +19,15 @@ import { notification } from 'antd';
 export async function getInitialState(): Promise<{
   currentUser?: Types.CurrentUser;
   settings?: LayoutSettings;
+  settingDrawer?: SettingDrawerProps;
 }> {
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     try {
+      let settingDrawer: SettingDrawerProps = {
+        hideHintAlert: true,
+        hideCopyButton: true
+      };
       let userId: string = Cookies.get('userId') ?? '';
       const response: Types.AjaxResult = await LoadUser({ id: userId });
       const userInfo: Types.UserTable = response.data;
@@ -30,7 +35,8 @@ export async function getInitialState(): Promise<{
       let currentUser: Types.CurrentUser = { name: userName ?? '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
       return {
         currentUser,
-        settings: defaultSettings
+        settings: defaultSettings,
+        settingDrawer
       };
     } catch (error) {
       console.log('getInitialState:', error);
@@ -50,7 +56,7 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
     rightContentRender: () => <RightContent />,
-    disableContentMargin: false,
+    disableContentMargin: true,
     footerRender: () => <Footer />,
     menuHeaderRender: undefined,
     // breadcrumbRender: (routers = []) => [

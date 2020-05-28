@@ -11,7 +11,9 @@ export default {
   autoHideHeader: false,
   fixSiderbar: false,
   colorWeak: false,
-  menu: { locale: true },
+  menu: {
+    locale: true
+  },
   title: 'Destiny Flow',
   pwa: false,
   iconfontUrl: ''

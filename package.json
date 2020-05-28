@@ -3,6 +3,11 @@
   "version": "1.8",
   "private": true,
   "description": "Destiny Flow",
+  "repository": {
+    "type": "GitHub",
+    "directory": "",
+    "url": "https://github.com/joesdu/destiny-admin-flow-umi.git"
+  },
   "scripts": {
     "build": "umi build",
     "start": "cross-env PORT=8848 umi dev",
