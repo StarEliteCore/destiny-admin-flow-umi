@@ -3,6 +3,11 @@
   "version": "1.8",
   "private": true,
   "description": "Destiny Flow",
+  "repository": {
+    "type": "GitHub",
+    "directory": "",
+    "url": "https://github.com/joesdu/destiny-admin-flow-umi.git"
+  },
   "scripts": {
     "build": "umi build",
     "start": "cross-env PORT=8848 umi dev",
@@ -19,7 +24,9 @@
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "umi": "^3.2.2"
+    "umi": "^3.2.2",
+    "umi-plugin-antd-theme": "^2.1.2",
+    "umi-plugin-setting-drawer": "^1.0.3"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
