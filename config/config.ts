@@ -1,6 +1,7 @@
 // https://umijs.org/config/
 // Umi框架级配置文件,用于配置Umi框架的一些东东.
 
+import Default from './default';
 import Route from './router';
 import { defineConfig } from 'umi';
 
@@ -26,6 +27,9 @@ export default defineConfig({
   },
   // umi routes: https://umijs.org/docs/routing
   routes: Route,
+  theme: {
+    'primary-color': Default.primaryColor
+  },
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   // 浏览器标签页图标配置,会生成HTML内容插入到页面中
   favicon: './favicon.svg',
