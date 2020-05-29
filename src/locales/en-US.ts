@@ -1,5 +1,8 @@
 import component from './en-US/component';
+import components from './en-US/components';
+import exception from './en-US/exception';
 import globalHeader from './en-US/globalHeader';
+import login from './en-US/login';
 import menu from './en-US/menu';
 import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
@@ -18,5 +21,8 @@ export default {
   ...settingDrawer,
   ...settings,
   ...pwa,
-  ...component
+  ...component,
+  ...exception,
+  ...login,
+  ...components
 };

@@ -1,18 +1,23 @@
 import { Button, Result } from 'antd';
+import { Link, useIntl } from 'umi';
 
-import { Link } from 'umi';
 import React from 'react';
 
-export const ServerErrorPage: React.FC<{}> = () => (
-  <Result
-    status="500"
-    title="500"
-    style={{ marginTop: '5%' }}
-    subTitle="抱歉，服务器出错了"
-    extra={
-      <Link to="/">
-        <Button type="primary">返回首页</Button>
-      </Link>
-    }
-  />
-);
+const ServerErrorPage: React.FC<{}> = () => {
+  const intl = useIntl();
+  return (
+    <Result
+      status="500"
+      title="500"
+      style={{ marginTop: '15%' }}
+      subTitle={intl.formatMessage({ id: 'exception.500.subtitle' })}
+      extra={
+        <Link to="/">
+          <Button type="primary">{intl.formatMessage({ id: 'exception.back.home' })}</Button>
+        </Link>
+      }
+    />
+  );
+};
+
+export default ServerErrorPage;

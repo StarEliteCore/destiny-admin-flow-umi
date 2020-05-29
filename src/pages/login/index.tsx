@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Modal } from 'antd';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { SelectLang, history, useModel } from 'umi';
+import { SelectLang, history, useIntl, useModel } from 'umi';
 
 import Footer from '@/components/Footer';
 import React from 'react';
@@ -32,6 +32,7 @@ const replaceGoto = () => {
 const Login: React.FC<{}> = () => {
   const { refresh } = useModel('@@initialState');
   const { loading, login } = useModel('useAuthModel');
+  const intl = useIntl();
 
   const handleSubmit = async (values: any) => {
     login(values).then(() => {
@@ -40,7 +41,13 @@ const Login: React.FC<{}> = () => {
     });
   };
 
-  const showModal = () => Modal.confirm({ title: '忘记密码?', centered: true, icon: <QuestionCircleOutlined />, content: '暂不支持在线更改密码,请联系管理员修改密码' });
+  const showModal = () =>
+    Modal.confirm({
+      title: intl.formatMessage({ id: 'login.forget.password' }),
+      centered: true,
+      icon: <QuestionCircleOutlined />,
+      content: intl.formatMessage({ id: 'login.modal.content' })
+    });
 
   return (
     <div className={styles.container}>
@@ -48,22 +55,49 @@ const Login: React.FC<{}> = () => {
         <SelectLang />
       </div>
       <div className={styles.content}>
-        <Card style={{ width: 350 }} title="Destiny Flow" bordered={false} headStyle={{ textAlign: 'center', height: 40, fontSize: 16, fontWeight: 'bold', borderBottom: 'none' }}>
+        <Card
+          style={{ width: 350 }}
+          title={intl.formatMessage({ id: 'login.project.title' })}
+          bordered={false}
+          headStyle={{
+            textAlign: 'center',
+            height: 40,
+            fontSize: 16,
+            fontWeight: 'bold',
+            borderBottom: 'none'
+          }}
+        >
           <Form onFinish={handleSubmit} style={{ maxWidth: 350 }}>
-            <Form.Item name="account" rules={[{ required: true, message: '请输入用户名!' }]}>
-              <Input prefix={<UserOutlined />} allowClear placeholder="请输入用户名" />
+            <Form.Item
+              name="account"
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({ id: 'login.error.account' })
+                }
+              ]}
+            >
+              <Input prefix={<UserOutlined />} allowClear placeholder={intl.formatMessage({ id: 'login.input.account' })} />
             </Form.Item>
-            <Form.Item name="password" rules={[{ required: true, message: '请输入账户密码!' }]}>
-              <Input prefix={<LockOutlined />} allowClear type="password" placeholder="请输入密码" />
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({ id: 'login.error.password' })
+                }
+              ]}
+            >
+              <Input prefix={<LockOutlined />} allowClear type="password" placeholder={intl.formatMessage({ id: 'login.input.password' })} />
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
               <Button type="primary" size="large" htmlType="submit" loading={loading} shape="round" style={{ width: '100%', marginTop: 15 }}>
-                登陆
+                {intl.formatMessage({ id: 'login.submit.button' })}
               </Button>
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
-              <a style={{ float: 'right', color: '#b2b2b2' }} onClick={showModal}>
-                忘记密码?
+              <a style={{ float: 'right', color: '#b2b2b2', marginTop: 15 }} onClick={showModal}>
+                {intl.formatMessage({ id: 'login.forget.password' })}
               </a>
             </Form.Item>
           </Form>

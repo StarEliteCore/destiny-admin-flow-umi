@@ -1,7 +1,7 @@
 import { Avatar, Menu, Spin } from 'antd';
 import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '@/components/HeaderDropdown';
@@ -26,6 +26,7 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const intl = useIntl();
 
   const onMenuClick = useCallback((event: ClickParam) => {
     const { key } = event;
@@ -64,7 +65,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       <Menu.Item key="logout">
         <LogoutOutlined />
-        退出登录
+        {intl.formatMessage({ id: 'components.right.content.logout' })}
       </Menu.Item>
     </Menu>
   );

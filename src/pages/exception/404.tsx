@@ -1,18 +1,23 @@
 import { Button, Result } from 'antd';
+import { Link, useIntl } from 'umi';
 
 import React from 'react';
-import { history } from 'umi';
 
-export const NoFoundPage: React.FC<{}> = () => (
-  <Result
-    status="404"
-    title="404"
-    style={{ marginTop: '5%' }}
-    subTitle="抱歉，你访问的页面不存在"
-    extra={
-      <Button type="primary" onClick={() => history.push('/')}>
-        返回首页
-      </Button>
-    }
-  />
-);
+const NoFoundPage: React.FC<{}> = () => {
+  const intl = useIntl();
+  return (
+    <Result
+      status="404"
+      title="404"
+      style={{ marginTop: '15%' }}
+      subTitle={intl.formatMessage({ id: 'exception.404.subtitle' })}
+      extra={
+        <Link to="/">
+          <Button type="primary">{intl.formatMessage({ id: 'exception.back.home' })}</Button>
+        </Link>
+      }
+    />
+  );
+};
+
+export default NoFoundPage;

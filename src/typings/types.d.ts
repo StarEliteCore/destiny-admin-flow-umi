@@ -10,7 +10,7 @@ declare namespace Types {
       label: string;
     }[];
     userid?: string;
-    access?: 'user' | 'guest' | 'admin';
+    access?: any;
     unreadCount?: number;
   }
 
