@@ -5,6 +5,7 @@
   flex-direction: column;
   height: 100vh;
   overflow: auto;
+  align-items: center;
   background: @layout-body-background;
 }
 
@@ -23,6 +24,9 @@
 .content {
   flex: 1;
   padding: 32px 0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 @media (min-width: @screen-md-min) {
@@ -35,27 +39,6 @@
 
   .content {
     padding: 32px 0 24px;
-  }
-}
-
-.cardStyle {
-  width: 350px;
-  float: right;
-  margin-right: 20% !important;
-  margin-top: 13% !important;
-
-  .loginForm {
-    max-width: 300px;
-  }
-
-  .loginFormForgot {
-    float: right;
-    color: #b2b2b2;
-  }
-
-  .loginFormButton {
-    width: 100%;
-    margin-top: 15px;
   }
 }
 

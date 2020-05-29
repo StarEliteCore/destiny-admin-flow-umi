@@ -48,8 +48,8 @@ const Login: React.FC<{}> = () => {
         <SelectLang />
       </div>
       <div className={styles.content}>
-        <Card className={styles.cardStyle} title="Destiny Flow" headStyle={{ textAlign: 'center', height: 40, fontSize: 16, fontWeight: 'bold', borderBottom: 'none' }}>
-          <Form onFinish={handleSubmit} className={styles.loginForm}>
+        <Card style={{ width: 350 }} title="Destiny Flow" bordered={false} headStyle={{ textAlign: 'center', height: 40, fontSize: 16, fontWeight: 'bold', borderBottom: 'none' }}>
+          <Form onFinish={handleSubmit} style={{ maxWidth: 350 }}>
             <Form.Item name="account" rules={[{ required: true, message: '请输入用户名!' }]}>
               <Input prefix={<UserOutlined />} allowClear placeholder="请输入用户名" />
             </Form.Item>
@@ -57,12 +57,12 @@ const Login: React.FC<{}> = () => {
               <Input prefix={<LockOutlined />} allowClear type="password" placeholder="请输入密码" />
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
-              <Button type="primary" size="large" htmlType="submit" loading={loading} shape="round" className={styles.loginFormButton}>
+              <Button type="primary" size="large" htmlType="submit" loading={loading} shape="round" style={{ width: '100%', marginTop: 15 }}>
                 登陆
               </Button>
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
-              <a className={styles.loginFormForgot} onClick={showModal}>
+              <a style={{ float: 'right', color: '#b2b2b2' }} onClick={showModal}>
                 忘记密码?
               </a>
             </Form.Item>

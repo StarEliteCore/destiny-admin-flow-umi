@@ -1,7 +1,7 @@
 *.js linguist-language=JavaScript
 *.css linguist-language=CSS3
 *.html linguist-language=HTML5
-*.jsx linguist-language=React
-*.tsx linguist-language=TypeScript
+*.jsx linguist-language=JavaScript React
+*.tsx linguist-language=TypeScript React
 *.ts linguist-language=TypeScript
 *.less linguist-language=LESS
