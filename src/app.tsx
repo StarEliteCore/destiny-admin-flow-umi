@@ -23,24 +23,25 @@ export async function getInitialState(): Promise<{
 }> {
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
-    try {
-      let userId: string = Cookies.get('userId') ?? '';
-      const response: Types.AjaxResult = await LoadUser({ id: userId });
-      const userInfo: Types.UserTable = response.data;
-      const { userName } = userInfo;
-      let currentUser: Types.CurrentUser = { name: userName ?? '默认用户名', userid: Cookies.get('userId'), avatar: AvatarGif, access: 'admin' };
-      return {
-        currentUser,
-        settings: defaultSettings
-        // settingDrawer: {
-        //   hideHintAlert: true,
-        //   hideCopyButton: true
-        // }
-      };
-    } catch (error) {
-      console.log('getInitialState:', error);
-      history.push('/login');
-    }
+    let userid: string = Cookies.get('userId') ?? '';
+    const response: Types.AjaxResult = await LoadUser({ id: userid });
+    const userInfo: Types.UserTable = response.data;
+    const { userName } = userInfo;
+    return {
+      currentUser: { name: userName ?? '默认用户名', userid, avatar: AvatarGif, access: true },
+      settings: defaultSettings
+      // settingDrawer: {
+      //   hideHintAlert: true,
+      //   hideCopyButton: true
+      // }
+    };
+  } else {
+    //  const perDate: null | string = localStorage.getItem('date');
+    //  const isExpired = Date.now() - parseInt(perDate ?? '0') < ExpiredTime;
+    //  if (!isExpired) {
+    //    message.info('登陆信息已过期,请重新登陆.');
+    history.push('/login');
+    //  }
   }
   return { settings: defaultSettings };
 }

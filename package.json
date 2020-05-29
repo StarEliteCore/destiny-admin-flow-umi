@@ -5,7 +5,7 @@
   "description": "Destiny Flow",
   "repository": {
     "type": "GitHub",
-    "directory": "",
+    "directory": "U•ェ•*U",
     "url": "https://github.com/joesdu/destiny-admin-flow-umi.git"
   },
   "scripts": {
@@ -16,7 +16,7 @@
     "analyze": "cross-env ANALYZE=1 umi build"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.1.0",
+    "@ant-design/icons": "^4.2.0",
     "@ant-design/pro-layout": "6.0.0-4",
     "antd": "^4.2.5",
     "dayjs": "^1.8.28",

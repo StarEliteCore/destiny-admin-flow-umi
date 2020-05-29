@@ -1,5 +1,8 @@
 import component from './zh-CN/component';
+import components from './zh-CN/components';
+import exception from './zh-CN/exception';
 import globalHeader from './zh-CN/globalHeader';
+import login from './zh-CN/login';
 import menu from './zh-CN/menu';
 import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
@@ -18,5 +21,8 @@ export default {
   ...settingDrawer,
   ...settings,
   ...pwa,
-  ...component
+  ...component,
+  ...exception,
+  ...login,
+  ...components
 };
