@@ -169,7 +169,6 @@ const User: React.FC<{}> = () => {
     onChange: (page: number, pageSize?: number) => getUserList(page, pageSize ?? 10)
   };
 
-  console.log('test', itemList);
   return (
     <div className="global-container">
       <Card>
