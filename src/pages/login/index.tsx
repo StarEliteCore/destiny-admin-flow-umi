@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Modal } from 'antd';
+import { IntlShape, SelectLang, history, useIntl, useModel } from 'umi';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { SelectLang, history, useIntl, useModel } from 'umi';
 
 import Footer from '@/components/Footer';
 import React from 'react';
@@ -32,7 +32,7 @@ const replaceGoto = () => {
 const Login: React.FC<{}> = () => {
   const { refresh } = useModel('@@initialState');
   const { loading, login } = useModel('useAuthModel');
-  const intl = useIntl();
+  const intl: IntlShape = useIntl();
 
   const handleSubmit = async (values: any) => {
     login(values).then(() => {
@@ -88,7 +88,7 @@ const Login: React.FC<{}> = () => {
                 }
               ]}
             >
-              <Input prefix={<LockOutlined />} allowClear type="password" placeholder={intl.formatMessage({ id: 'login.input.password' })} />
+              <Input.Password prefix={<LockOutlined />} allowClear placeholder={intl.formatMessage({ id: 'login.input.password' })} />
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
               <Button type="primary" size="large" htmlType="submit" loading={loading} shape="round" style={{ width: '100%', marginTop: 15 }}>

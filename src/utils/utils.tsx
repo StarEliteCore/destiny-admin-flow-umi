@@ -23,6 +23,11 @@ export const tacitPagingProps: PaginationProps = {
 };
 
 /**
+ * 统一导出Modal中Form布局的布局参数
+ */
+export const modalFormLayout = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
+
+/**
  * 获取统一的表格loading对象
  * @param loading loading状态
  */

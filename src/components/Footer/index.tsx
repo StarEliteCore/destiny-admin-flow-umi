@@ -1,10 +1,11 @@
+import { IntlShape, useIntl } from 'umi';
+
 import { DefaultFooter } from '@ant-design/pro-layout';
 import { GithubOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useIntl } from 'umi';
 
-export default () => {
-  const intl = useIntl();
+const Footer: React.FC<{}> = () => {
+  const intl: IntlShape = useIntl();
   return (
     <DefaultFooter
       copyright={intl.formatMessage({ id: 'components.footer.copyright' })}
@@ -31,3 +32,5 @@ export default () => {
     />
   );
 };
+
+export default Footer;
