@@ -22,6 +22,8 @@ export const tacitPagingProps: PaginationProps = {
   showTotal: (total, range) => `共 ${total} 条 第 ${range[0]}-${range[1]} 条`
 };
 
+export const modalFormLayout = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
+
 /**
  * 获取统一的表格loading对象
  * @param loading loading状态

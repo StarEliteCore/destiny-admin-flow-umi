@@ -16,7 +16,7 @@
     "analyze": "cross-env ANALYZE=1 umi build"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.2.0",
+    "@ant-design/icons": "^4.2.1",
     "@ant-design/pro-layout": "6.0.0-4",
     "antd": "^4.2.5",
     "dayjs": "^1.8.28",

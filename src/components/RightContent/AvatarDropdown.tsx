@@ -1,7 +1,7 @@
 import { Avatar, Menu, Spin } from 'antd';
+import { IntlShape, history, useIntl, useModel } from 'umi';
 import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
-import { history, useIntl, useModel } from 'umi';
 
 import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '@/components/HeaderDropdown';
@@ -26,7 +26,7 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  const intl = useIntl();
+  const intl: IntlShape = useIntl();
 
   const onMenuClick = useCallback((event: ClickParam) => {
     const { key } = event;

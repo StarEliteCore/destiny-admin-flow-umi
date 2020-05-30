@@ -13,8 +13,14 @@ export const LoadUser = (param: { id: string }): Promise<Types.AjaxResult> =>
     method: 'GET'
   });
 
-export const UserSubmit = (param: any): Promise<Types.AjaxResult> =>
-  request<Types.AjaxResult>(UserApi.addOrUpdate, {
+export const AddUser = (param: any): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(UserApi.addUser, {
+    data: param,
+    method: 'POST'
+  });
+
+export const EditUser = (param: any): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(UserApi.editUser, {
     data: param,
     method: 'POST'
   });

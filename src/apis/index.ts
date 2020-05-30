@@ -51,8 +51,8 @@ export const RoleApi = {
  */
 export const UserApi = {
   getPageUser: 'User/GetUserPageAsync',
-  addOrUpdate: 'User/AddOrUpdateAsync',
-  editUser: '',
+  addUser: 'User/CreateAsync',
+  editUser: 'User/UpdateAsync',
   deleteUser: 'User/DeleteAsync',
   loadUser: 'User/LoadAsync'
 };
