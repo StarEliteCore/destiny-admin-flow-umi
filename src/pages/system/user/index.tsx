@@ -75,7 +75,7 @@ const User: React.FC<{}> = () => {
         message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
         getUserList(1, 10);
       })
-      .catch(() => message.error(intl.formatMessage({ id: 'user.function.delete.click.fail' })));
+      .catch((error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
 
   const onEditClick = (record: Types.UserTable) => {
@@ -121,8 +121,20 @@ const User: React.FC<{}> = () => {
   const onModalOK = () => {
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
-        console.log(values);
-        addUser(values)
+        const { username, nickname, sex, isSystem, password, roles, description } = values;
+        let passwordTemp = password ? { passwordHash: password } : {};
+        let args = {
+          userName: username,
+          nickName: nickname,
+          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          isSystem: isSystem,
+          description: description,
+          sex: sex,
+          roleIds: [roles],
+          ...passwordTemp
+        };
+        console.log(args);
+        addUser(args)
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
             getUserList(1, 10);
@@ -136,8 +148,20 @@ const User: React.FC<{}> = () => {
       });
     } else {
       modalForm.validateFields().then((values: Store) => {
-        console.log(values);
-        editUser({ ...values, id: itemData.id })
+        const { username, nickname, sex, isSystem, password, roles, description } = values;
+        let passwordTemp = password ? { passwordHash: password } : {};
+        let args = {
+          userName: username,
+          nickName: nickname,
+          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          isSystem: isSystem,
+          description: description,
+          sex: sex,
+          roleIds: [roles],
+          ...passwordTemp
+        };
+        console.log(args);
+        editUser({ ...args, id: itemData.id })
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
           })
@@ -149,6 +173,7 @@ const User: React.FC<{}> = () => {
           );
       });
     }
+    setModalShow(false);
   };
 
   const getUserList = (current: number, pageSize: number) => {
