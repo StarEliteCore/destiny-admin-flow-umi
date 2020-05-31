@@ -21,23 +21,27 @@ export const getInitialState = async (): Promise<{
   currentUser?: Types.CurrentUser;
   settings?: LayoutSettings;
 }> => {
-  // 如果是登录页面，不执行
-  if (history.location.pathname !== '/login') {
-    let userid: string = Cookies.get('userId') ?? '';
-    const response: Types.AjaxResult = await LoadUser({ id: userid });
-    const userInfo: Types.UserTable = response.data;
-    const { nickName } = userInfo;
-    return {
-      currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif },
-      settings: defaultSettings
-    };
-  } else {
-    const perDate: undefined | string = Cookies.get('date');
-    const isExpired = Date.now() - parseInt(perDate ?? '0') < ExpiredTime;
-    if (!isExpired) {
-      message.info('登陆信息已过期,请重新登陆.');
-      history.push('/login');
+  try {
+    // 如果是登录页面，不执行
+    if (history.location.pathname !== '/login') {
+      let userid: string = Cookies.get('userId') ?? '';
+      const response: Types.AjaxResult = await LoadUser({ id: userid });
+      const userInfo: Types.UserTable = response.data;
+      const { nickName } = userInfo;
+      return {
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif },
+        settings: defaultSettings
+      };
+    } else {
+      const perDate: undefined | string = Cookies.get('date');
+      const isExpired = Date.now() - parseInt(perDate ?? '0') < ExpiredTime;
+      if (!isExpired) {
+        message.info('登陆信息已过期,请重新登陆.');
+        history.push('/login');
+      }
     }
+  } catch (error) {
+    history.push('/login');
   }
   return { settings: defaultSettings };
 };
