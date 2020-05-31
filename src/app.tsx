@@ -100,7 +100,7 @@ export const request: RequestConfig = {
       notification.error({ message: `请求错误 ${status}: ${url}`, description: errorText });
     }
     if (!response) {
-      notification.error({ description: '您的网络发生异常，无法连接服务器', message: '网络异常' });
+      notification.error({ message: '网络异常', description: '您的网络发生异常，无法连接服务器' });
     }
     throw error;
   },

@@ -5,9 +5,9 @@ import login from './zh-CN/login';
 import system from './zh-CN/system';
 
 export default {
+  ...components,
   ...defaults,
   ...exception,
   ...login,
-  ...components,
   ...system
 };

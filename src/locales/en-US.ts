@@ -5,9 +5,9 @@ import login from './en-US/login';
 import system from './en-US/system';
 
 export default {
+  ...components,
   ...defaults,
   ...exception,
   ...login,
-  ...components,
   ...system
 };
