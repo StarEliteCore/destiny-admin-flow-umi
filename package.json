@@ -22,9 +22,7 @@
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "umi": "^3.2.3",
-    "umi-plugin-antd-theme": "^2.1.2",
-    "umi-plugin-setting-drawer": "^1.0.3"
+    "umi": "^3.2.3"
   },
   "devDependencies": {
     "@types/history": "^4.7.6",
