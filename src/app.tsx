@@ -2,7 +2,7 @@
 
 import { AvatarGif, LogoPng } from '@/assets';
 import { BaseUrl, ExpiredTime } from '@/configs';
-import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { BasicLayoutProps, Settings as LayoutSettings, SettingDrawerProps } from '@ant-design/pro-layout';
 import { RequestConfig, history } from 'umi';
 import { message, notification } from 'antd';
 
@@ -20,6 +20,7 @@ import defaultSettings from '../config/default';
 export const getInitialState = async (): Promise<{
   currentUser?: Types.CurrentUser;
   settings?: LayoutSettings;
+  settingDrawer?: SettingDrawerProps;
 }> => {
   try {
     // 如果是登录页面，不执行
@@ -30,7 +31,11 @@ export const getInitialState = async (): Promise<{
       const { nickName } = userInfo;
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif },
-        settings: defaultSettings
+        settings: defaultSettings,
+        settingDrawer: {
+          hideCopyButton: true,
+          hideHintAlert: true
+        }
       };
     } else {
       const perDate: undefined | string = Cookies.get('date');
