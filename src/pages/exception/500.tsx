@@ -7,7 +7,7 @@ const ServerErrorPage: React.FC<{}> = () => {
   const intl = useIntl();
   return (
     <Result
-      status="500"
+      status={500}
       title="500"
       style={{ marginTop: '15%' }}
       subTitle={intl.formatMessage({ id: 'exception.500.subtitle' })}

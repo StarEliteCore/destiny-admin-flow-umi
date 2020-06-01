@@ -1,7 +1,7 @@
+import { AntDesignOutlined, GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl } from 'umi';
 
 import { DefaultFooter } from '@ant-design/pro-layout';
-import { GithubOutlined } from '@ant-design/icons';
 import React from 'react';
 
 const Footer: React.FC<{}> = () => {
@@ -11,8 +11,8 @@ const Footer: React.FC<{}> = () => {
       copyright={intl.formatMessage({ id: 'components.footer.copyright' })}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
+          key: 'ali',
+          title: <AntDesignOutlined />,
           href: 'https://pro.ant.design',
           blankTarget: true
         },
@@ -23,9 +23,9 @@ const Footer: React.FC<{}> = () => {
           blankTarget: true
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'google',
+          title: <GoogleOutlined />,
+          href: 'https://cn.bing.com',
           blankTarget: true
         }
       ]}

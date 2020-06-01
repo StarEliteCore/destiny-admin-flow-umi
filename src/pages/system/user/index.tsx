@@ -17,13 +17,12 @@ const User: React.FC<{}> = () => {
   const [modalForm] = useForm();
 
   const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserTableModel');
-
   const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
-  const [itemData, setItemData] = useState<Types.UserEntry>({});
+  const [itemId, setItemId] = useState<string>('');
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   useEffect(() => {
@@ -81,15 +80,15 @@ const User: React.FC<{}> = () => {
   const onEditClick = (record: Types.UserTable) => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
-    setItemData({
-      userName: record.userName,
-      nickName: record.nickName,
+    setItemId(record.id!);
+    modalForm.setFieldsValue({
+      username: record.userName,
+      nickname: record.nickName,
       sex: record.sex,
       isSystem: record.isSystem,
-      passwordHash: '',
-      roleIds: [],
-      description: record.description,
-      id: record.id
+      password: '',
+      roles: '',
+      description: record.description
     });
     setModalShow(true);
   };
@@ -99,22 +98,21 @@ const User: React.FC<{}> = () => {
     handleSearch({});
   };
 
-  const handleSearch = (values: Store) => {
-    console.log(values);
-  };
+  const handleSearch = (values: Store) => {};
 
   const onCreateClick = () => {
     setModalModel('create');
     setModalTitle('user.modal.title.create');
-    setItemData({
-      userName: '',
-      nickName: '',
+    modalForm.setFieldsValue({
+      username: '',
+      nickname: '',
       sex: 0,
       isSystem: false,
-      passwordHash: '',
-      roleIds: [''],
+      password: '',
+      roles: '',
       description: ''
     });
+    setItemId('');
     setModalShow(true);
   };
 
@@ -133,7 +131,6 @@ const User: React.FC<{}> = () => {
           roleIds: [roles],
           ...passwordTemp
         };
-        console.log(args);
         addUser(args)
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
@@ -160,8 +157,7 @@ const User: React.FC<{}> = () => {
           roleIds: [roles],
           ...passwordTemp
         };
-        console.log(args);
-        editUser({ ...args, id: itemData.id })
+        editUser({ ...args, id: itemId })
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
           })
@@ -247,19 +243,7 @@ const User: React.FC<{}> = () => {
         onCancel={() => setModalShow(false)}
         onOk={onModalOK}
       >
-        <Form
-          {...modalFormLayout}
-          initialValues={{
-            username: itemData.userName,
-            nickname: itemData.nickName,
-            sex: itemData.sex,
-            isSystem: itemData.isSystem,
-            password: itemData.passwordHash,
-            roles: itemData.roleIds ? itemData.roleIds[0] : '',
-            description: itemData.description
-          }}
-          form={modalForm}
-        >
+        <Form {...modalFormLayout} form={modalForm}>
           <Form.Item
             name="username"
             rules={[

@@ -7,7 +7,7 @@ const NotAvailablePage: React.FC<{}> = () => {
   const intl = useIntl();
   return (
     <Result
-      status="403"
+      status={403}
       title="403"
       style={{ marginTop: '15%' }}
       subTitle={intl.formatMessage({ id: 'exception.403.subtitle' })}
