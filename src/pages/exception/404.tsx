@@ -7,7 +7,7 @@ const NoFoundPage: React.FC<{}> = () => {
   const intl = useIntl();
   return (
     <Result
-      status="404"
+      status={404}
       title="404"
       style={{ marginTop: '15%' }}
       subTitle={intl.formatMessage({ id: 'exception.404.subtitle' })}
