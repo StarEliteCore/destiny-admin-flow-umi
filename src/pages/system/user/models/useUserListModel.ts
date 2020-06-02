@@ -1,7 +1,7 @@
-import { AddUser, DeleteUser, EditUser, GetPage } from '@/services/user';
+import { AddUser, DeleteUser, EditUser, GetPage } from '../services';
 import { useCallback, useState } from 'react';
 
-export default function useUserTableModel() {
+export default function useUserListModel() {
   const [itemList, setItemList] = useState<Array<Types.UserTable>>([]);
 
   const [total, setTotal] = useState<number>(0);

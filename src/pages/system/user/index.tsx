@@ -16,7 +16,7 @@ const User: React.FC<{}> = () => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserTableModel');
+  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
   const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
 
   const [modalShow, setModalShow] = useState<boolean>(false);

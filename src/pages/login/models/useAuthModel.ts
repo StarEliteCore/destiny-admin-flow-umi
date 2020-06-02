@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import Cookies from 'js-cookie';
-import { Login } from '@/services/auth';
+import { Login } from '../services';
 import { history } from 'umi';
 
 export default function useAuthModel() {
