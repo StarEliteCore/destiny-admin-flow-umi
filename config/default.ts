@@ -1,10 +1,8 @@
-// Ant Design Pro的主题相关配置信息.具体信息参考文档
-
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 export default {
   navTheme: 'light',
-  primaryColor: '#1890ff',
+  primaryColor: '#F5222D',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
@@ -12,7 +10,8 @@ export default {
   fixSiderbar: false,
   colorWeak: false,
   menu: {
-    locale: true
+    locale: true,
+    defaultOpenAll: false
   },
   title: 'Destiny Flow',
   pwa: false,

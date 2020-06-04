@@ -9,7 +9,7 @@ export default (): React.ReactElement => {
     <Result
       status={403}
       title="403"
-      style={{ marginTop: '15%' }}
+      style={{ marginTop: '20%' }}
       subTitle={intl.formatMessage({ id: 'exception.403.subtitle' })}
       extra={
         <Link to="/">
