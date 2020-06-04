@@ -1,30 +1,25 @@
-// 一个简单的颜色相关的处理工具
-
 /**
  * 加0补位
  */
 const fAddZero = (v: string): string => {
-  let newV = `00${v}`;
+  let newV: string = `00${v}`;
   return newV.substring(newV.length - 2, newV.length);
 };
-
 /**
  * rgb转hex
  */
 const fColorToHex = (r: number, g: number, b: number): string => `#${fAddZero(r.toString(16))}${fAddZero(g.toString(16))}${fAddZero(b.toString(16))}`;
-
 /**
  * 解析rgb格式
  */
 const fAnalysisRGB = (temp: string): Array<number> => {
-  let colorTemp = temp.toLowerCase().substring(1, temp.length);
-  let colors = [];
+  let colorTemp: string = temp.toLowerCase().substring(1, temp.length);
+  let colors: Array<any> = [];
   colors.push(parseInt(colorTemp.substring(0, 2), 16));
   colors.push(parseInt(colorTemp.substring(2, 4), 16));
   colors.push(parseInt(colorTemp.substring(4, 6), 16));
   return colors;
 };
-
 /**
  * @description
  * 颜色渐变
@@ -34,8 +29,8 @@ const fAnalysisRGB = (temp: string): Array<number> => {
  * @returns {Array<string>} 产生的渐变色数组(16进制色值)
  */
 const fColorGradualChange = (startColor: string, endColor: string, num: number): Array<string> => {
-  let rgb = /^rgb|RGB\((([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5])),){2}([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\)$/; // rgb
-  let hex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i; // 16进制
+  let rgb: RegExp = /^rgb|RGB\((([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5])),){2}([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\)$/; // rgb
+  let hex: RegExp = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i; // 16进制
   // 颜色预处理
   let startRGB: number[] = [];
   let endRGB: number[] = [];
@@ -152,7 +147,7 @@ const rgbToHsl = (rgb: number[]): Array<number> => {
  * @returns {Array<number>} [H,S,L]
  */
 export const getHslColor = (value: number): Array<number> => {
-  let step = 10;
+  let step: number = 10;
   let colorZone: number = Math.floor(value / step);
   let index: number = value % step;
   let s: string[];
@@ -198,7 +193,7 @@ export const getHslColor = (value: number): Array<number> => {
  * @returns {string} 16进制Hex色值
  */
 export const getHexColor = (value: number): string => {
-  let step = 10;
+  let step: number = 10;
   let colorZone: number = Math.floor(value / step);
   let index: number = value % step;
   let s: string[];

@@ -3,7 +3,7 @@ import { Link, useIntl } from 'umi';
 
 import React from 'react';
 
-const ServerErrorPage: React.FC<{}> = () => {
+export default (): React.ReactNode => {
   const intl = useIntl();
   return (
     <Result
@@ -19,5 +19,3 @@ const ServerErrorPage: React.FC<{}> = () => {
     />
   );
 };
-
-export default ServerErrorPage;

@@ -6,7 +6,7 @@ import React from 'react';
 import { parse } from 'querystring';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
-const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+const reg: RegExp = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
@@ -18,8 +18,7 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 export const tacitPagingProps: PaginationProps = {
   style: { padding: '10px 0 0', textAlign: 'center', float: 'none', marginBottom: '10px' },
   showSizeChanger: true,
-  showQuickJumper: true,
-  showTotal: (total, range) => `共 ${total} 条 第 ${range[0]}-${range[1]} 条`
+  showQuickJumper: true
 };
 
 /**
@@ -47,7 +46,7 @@ export const LoadingObject = (
  * 获取一个自定义长度的随机字符串,默认16位长度
  */
 export const GetKey = (expect: number = 16): string => {
-  let str = Math.random().toString(36).substring(2);
+  let str: string = Math.random().toString(36).substring(2);
   while (str.length < expect) {
     str += Math.random().toString(36).substring(2);
   }
@@ -79,8 +78,8 @@ export const fixedLengthFormatString = (str: string, num: number): Array<string>
  * @returns {number} 最小值到最大值之前的整数随机数
  */
 export const getRandomNum = (Min: number, Max: number): number => {
-  let Range = Max - Min;
-  let Rand = Math.random();
+  let Range: number = Max - Min;
+  let Rand: number = Math.random();
   return Min + Math.round(Rand * Range);
 };
 
