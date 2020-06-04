@@ -6,12 +6,14 @@ import React, { useEffect, useState } from 'react';
 
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
+import IconFont from '@/components/IconFont';
+import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import dayjs from 'dayjs';
 import { useForm } from 'antd/lib/form/util';
 
-const User: React.FC<{}> = () => {
+export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
   const [searchForm] = useForm();
   const [modalForm] = useForm();
@@ -27,6 +29,9 @@ const User: React.FC<{}> = () => {
 
   useEffect(() => {
     getRoles();
+  }, []);
+
+  useEffect(() => {
     getUserTable({ pageIndex: 1, pageSize: 10 });
   }, []);
 
@@ -191,7 +196,7 @@ const User: React.FC<{}> = () => {
   };
 
   return (
-    <div className="global-container">
+    <PageContainer>
       <Card>
         <Collapse accordion>
           <Collapse.Panel header={intl.formatMessage({ id: 'user.collapse.panel_1.header' })} key="1">
@@ -270,8 +275,16 @@ const User: React.FC<{}> = () => {
           </Form.Item>
           <Form.Item name="sex" label={intl.formatMessage({ id: 'user.modal.form.item.sex.label' })}>
             <Radio.Group>
-              <Radio value={0}>{intl.formatMessage({ id: 'user.modal.form.item.sex.man' })}</Radio>
-              <Radio value={1}>{intl.formatMessage({ id: 'user.modal.form.item.sex.woman' })}</Radio>
+              <Radio value={0}>
+                <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.modal.form.item.sex.man' })}>
+                  <IconFont type="icon-man" />
+                </Tooltip>
+              </Radio>
+              <Radio value={1}>
+                <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.modal.form.item.sex.woman' })}>
+                  <IconFont type="icon-woman" />
+                </Tooltip>
+              </Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item name="isSystem" label={intl.formatMessage({ id: 'user.modal.form.item.is.system' })} valuePropName="checked">
@@ -303,8 +316,6 @@ const User: React.FC<{}> = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </PageContainer>
   );
 };
-
-export default User;

@@ -2,9 +2,14 @@ import { useCallback, useState } from 'react';
 
 import { GetSelectRole } from '@/services/role';
 
-export default function useRoleModel() {
-  const [roles, setRoles] = useState<Array<Types.Role>>();
+export interface RoleModelProps {
+  roles: Types.Role[] | undefined;
+  loading: boolean;
+  getRoles: () => Promise<Types.Role[]>;
+}
 
+const useRoleModel = (): RoleModelProps => {
+  const [roles, setRoles] = useState<Array<Types.Role>>();
   const [loading, setLoading] = useState(false);
 
   const getRoles = useCallback(
@@ -24,4 +29,6 @@ export default function useRoleModel() {
   );
 
   return { roles, loading, getRoles };
-}
+};
+
+export default useRoleModel;

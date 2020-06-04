@@ -1,11 +1,19 @@
 import { AddUser, DeleteUser, EditUser, GetPage } from '../services';
 import { useCallback, useState } from 'react';
 
-export default function useUserListModel() {
+export interface UserListModelProps {
+  itemList: Types.UserTable[];
+  loading: boolean;
+  total: number;
+  getUserTable: (param: any) => Promise<Types.UserTable[]>;
+  addUser: (param: any) => Promise<boolean>;
+  editUser: (param: any) => Promise<boolean>;
+  deleteUser: (id: string) => Promise<boolean>;
+}
+
+const useUserListModel = (): UserListModelProps => {
   const [itemList, setItemList] = useState<Array<Types.UserTable>>([]);
-
   const [total, setTotal] = useState<number>(0);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const getUserTable = useCallback(
@@ -63,4 +71,6 @@ export default function useUserListModel() {
   );
 
   return { itemList, loading, total, getUserTable, addUser, editUser, deleteUser };
-}
+};
+
+export default useUserListModel;

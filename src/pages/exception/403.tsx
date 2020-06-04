@@ -3,7 +3,7 @@ import { Link, useIntl } from 'umi';
 
 import React from 'react';
 
-const NotAvailablePage: React.FC<{}> = () => {
+export default (): React.ReactElement => {
   const intl = useIntl();
   return (
     <Result
@@ -19,5 +19,3 @@ const NotAvailablePage: React.FC<{}> = () => {
     />
   );
 };
-
-export default NotAvailablePage;

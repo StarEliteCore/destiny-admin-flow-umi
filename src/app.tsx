@@ -6,7 +6,6 @@ import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-la
 import { RequestConfig, history } from 'umi';
 
 import Cookies from 'js-cookie';
-import Footer from '@/components/Footer';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
@@ -61,8 +60,7 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
     rightContentRender: () => <RightContent />,
-    disableContentMargin: true,
-    footerRender: () => <Footer />,
+    disableContentMargin: false,
     ...initialState?.settings
   };
 };
@@ -96,6 +94,7 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
  */
 export const request: RequestConfig = {
   // timeout: 10000,
+  // 接口符合RESTful API的时候就可以用errorHandler来处理,若不是就注释掉吧!
   // errorHandler: (error: { response: Response }) => {
   //   const { response } = error;
   //   if (response && response.status) {
@@ -112,9 +111,10 @@ export const request: RequestConfig = {
   errorConfig: {
     adaptor: (res: any) => {
       return {
-        ...res,
+        data: res.data || res.result,
         success: res.ok || res.Success || res.success,
-        errorMessage: res.message || res.msg || res.Message
+        errorMessage: res.message || res.msg || res.Message,
+        errorCode: res.code || res.type
       };
     },
     errorPage: '1'
