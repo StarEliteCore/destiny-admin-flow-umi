@@ -1,4 +1,4 @@
-// 抽离Router的配置信息刀单独文件.
+// 抽离Router的配置信息到单独文件.
 
 import { IRoute } from 'umi';
 
