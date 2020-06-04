@@ -18,14 +18,13 @@ export default (): React.ReactNode => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
   const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
-  const [pageIndex, setPageIndex] = useState<number>(1);
 
   useEffect(() => {
     getRoles();
@@ -55,7 +54,7 @@ export default (): React.ReactNode => {
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
-      key: 'action',
+      key: 'operation',
       align: 'center',
       render: (_: string, record: Types.UserTable) => (
         <div>
@@ -178,7 +177,6 @@ export default (): React.ReactNode => {
   };
 
   const getUserList = (current: number, pageSize: number) => {
-    setPageIndex(current);
     getUserTable({ pageIndex: current, pageSize }).catch((error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
@@ -189,8 +187,9 @@ export default (): React.ReactNode => {
 
   const pagination: PaginationProps = {
     ...tacitPagingProps,
-    total: total,
-    current: pageIndex,
+    total,
+    current,
+    pageSize,
     onShowSizeChange: (current: number, pageSize: number) => getUserList(current, pageSize),
     onChange: (page: number, pageSize?: number) => getUserList(page, pageSize ?? 10)
   };

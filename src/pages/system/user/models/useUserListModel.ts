@@ -5,6 +5,8 @@ export interface UserListModelProps {
   itemList: Types.UserTable[];
   loading: boolean;
   total: number;
+  current: number;
+  pageSize: number;
   getUserTable: (param: any) => Promise<Types.UserTable[]>;
   addUser: (param: any) => Promise<boolean>;
   editUser: (param: any) => Promise<boolean>;
@@ -14,6 +16,8 @@ export interface UserListModelProps {
 const useUserListModel = (): UserListModelProps => {
   const [itemList, setItemList] = useState<Array<Types.UserTable>>([]);
   const [total, setTotal] = useState<number>(0);
+  const [current, setCurrent] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
   const getUserTable = useCallback(
@@ -26,9 +30,17 @@ const useUserListModel = (): UserListModelProps => {
             let total: number = response.total ?? 0;
             setItemList(data);
             setTotal(total);
+            setCurrent(param.pageIndex);
+            setPageSize(param.pageSize);
             resolve(data);
           })
-          .catch((error) => reject(error))
+          .catch((error) => {
+            setItemList([]);
+            setTotal(0);
+            setCurrent(1);
+            setPageSize(10);
+            reject(error);
+          })
           .finally(() => setLoading(false));
       }),
     []
@@ -70,7 +82,7 @@ const useUserListModel = (): UserListModelProps => {
     []
   );
 
-  return { itemList, loading, total, getUserTable, addUser, editUser, deleteUser };
+  return { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser };
 };
 
 export default useUserListModel;
