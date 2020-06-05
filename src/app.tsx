@@ -1,16 +1,15 @@
 // src/app.ts 运行时配置文件,属于约定文件,无法更改文件名.里边的内容也需要根据开发文档定义以及使用.
 
 import { AvatarGif, LogoPng } from '@/assets';
-import { BaseUrl, ExpiredTime } from '@/configs';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { RequestConfig, history } from 'umi';
 
+import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
 import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
-import { message } from 'antd';
 
 //#region InitialState
 /**
@@ -20,35 +19,31 @@ export const getInitialState = async (): Promise<{
   currentUser?: Types.CurrentUser;
   settings?: LayoutSettings;
   // settingDrawer?: SettingDrawerProps;
-}> => {
-  try {
-    // 如果是登录页面，不执行
+}> =>
+  await new Promise(async (resolve, reject) => {
     if (history.location.pathname !== '/login') {
       let userid: string = Cookies.get('userId') ?? '';
-      const response: Types.AjaxResult = await LoadUser({ id: userid });
-      const userInfo: Types.UserTable = response.data;
-      const { nickName } = userInfo;
-      return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif },
-        settings: defaultSettings
-        // settingDrawer: {
-        //   hideCopyButton: true,
-        //   hideHintAlert: true
-        // }
-      };
+      await LoadUser({ id: userid })
+        .then((response) => {
+          const userInfo: Types.UserTable = response.data;
+          const { nickName } = userInfo;
+          resolve({
+            currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: 'admin' },
+            settings: defaultSettings
+            // settingDrawer: {
+            //   hideCopyButton: true,
+            //   hideHintAlert: true
+            // }
+          });
+        })
+        .catch((error) => {
+          history.push('/login');
+          reject(error);
+        });
     } else {
-      const perDate: undefined | string = Cookies.get('date');
-      const isExpired = Date.now() - parseInt(perDate ?? '0') < ExpiredTime;
-      if (!isExpired) {
-        message.info('登陆信息已过期,请重新登陆.');
-        history.push('/login');
-      }
+      resolve({ settings: defaultSettings });
     }
-  } catch (error) {
-    history.push('/login');
-  }
-  return { settings: defaultSettings };
-};
+  });
 //#endregion
 
 //#region Layout配置
@@ -59,8 +54,11 @@ export const getInitialState = async (): Promise<{
 export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
+    siderWidth: 208,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
+    disableMobile: true,
+    menuHeaderRender: undefined,
     ...initialState?.settings
   };
 };

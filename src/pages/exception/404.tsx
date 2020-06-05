@@ -9,7 +9,7 @@ const NoFoundPage: React.FC<{}> = () => {
     <Result
       status={404}
       title="404"
-      style={{ marginTop: '15%' }}
+      style={{ marginTop: '20%' }}
       subTitle={intl.formatMessage({ id: 'exception.404.subtitle' })}
       extra={
         <Link to="/">

@@ -33,12 +33,16 @@ export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
 
   const { refresh } = useModel('@@initialState');
-  const { loading, login } = useModel('useAuthModel');
+  const { loading, login } = useModel('auth');
 
   const handleSubmit = async (values: any) => {
-    login(values).then(() => {
-      replaceGoto();
-      setTimeout(() => refresh(), 0);
+    await login(values).then(async () => {
+      await refresh().then(() => {
+        setTimeout(() => {
+          replaceGoto();
+          location.reload();
+        }, 200);
+      });
     });
   };
 

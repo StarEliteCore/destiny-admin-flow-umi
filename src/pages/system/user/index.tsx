@@ -18,14 +18,13 @@ export default (): React.ReactNode => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
-  const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser } = useModel('userList');
+  const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
-  const [pageIndex, setPageIndex] = useState<number>(1);
 
   useEffect(() => {
     getRoles();
@@ -55,7 +54,7 @@ export default (): React.ReactNode => {
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
-      key: 'action',
+      key: 'operation',
       align: 'center',
       render: (_: string, record: Types.UserTable) => (
         <div>
@@ -79,7 +78,7 @@ export default (): React.ReactNode => {
         message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
         getUserList(1, 10);
       })
-      .catch((error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
 
   const onEditClick = (record: Types.UserTable) => {
@@ -141,7 +140,7 @@ export default (): React.ReactNode => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
             getUserList(1, 10);
           })
-          .catch((error) =>
+          .catch((error: Error) =>
             notification.error({
               message: intl.formatMessage({ id: 'user.function.add.user.fail.message' }),
               description: `${intl.formatMessage({ id: 'user.function.add.user.fail.description' })} ${error}`
@@ -166,7 +165,7 @@ export default (): React.ReactNode => {
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
           })
-          .catch((error) =>
+          .catch((error: Error) =>
             notification.error({
               message: intl.formatMessage({ id: 'user.function.modify.user.fail.message' }),
               description: `${intl.formatMessage({ id: 'user.function.modify.user.fail.description' })} ${error}`
@@ -178,8 +177,7 @@ export default (): React.ReactNode => {
   };
 
   const getUserList = (current: number, pageSize: number) => {
-    setPageIndex(current);
-    getUserTable({ pageIndex: current, pageSize }).catch((error) => {
+    getUserTable({ pageIndex: current, pageSize }).catch((error: Error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
@@ -189,8 +187,9 @@ export default (): React.ReactNode => {
 
   const pagination: PaginationProps = {
     ...tacitPagingProps,
-    total: total,
-    current: pageIndex,
+    total,
+    current,
+    pageSize,
     onShowSizeChange: (current: number, pageSize: number) => getUserList(current, pageSize),
     onChange: (page: number, pageSize?: number) => getUserList(page, pageSize ?? 10)
   };

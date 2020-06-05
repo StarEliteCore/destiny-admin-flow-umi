@@ -31,6 +31,7 @@ const Route: IRoute[] = [
     component: './home'
   },
   {
+    access: 'canAdmin',
     path: '/system',
     name: 'systemmanage',
     icon: 'setting',
@@ -42,12 +43,14 @@ const Route: IRoute[] = [
         component: './system/role'
       },
       {
+        access: 'canAdmin',
         name: 'usermanage',
         icon: 'user',
         path: '/system/user',
         component: './system/user'
       },
       {
+        access: 'canAdmin',
         name: 'menumanage',
         icon: 'menu',
         path: '/system/menu',

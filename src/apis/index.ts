@@ -28,7 +28,11 @@ export const MenuApi = {
   /**
    * 删除用户
    */
-  deleteUser: 'User/Delete'
+  deleteUser: 'User/Delete',
+  /**
+   * 得到树
+   */
+  selectTreeMenu: 'Menu/GetMenuTreeAsync'
 };
 //#endregion
 
@@ -40,7 +44,7 @@ export const RoleApi = {
   getRolePage: 'Role/GetRolePageAsync',
   addRole: 'Role/CreateAsync',
   editRole: 'Role/UpdateAsync',
-  deleteRole: 'Role/Delete',
+  deleteRole: 'Role/DeleteAsync',
   selectRole: 'Role/GetRoleSelectListAsync'
 };
 //#endregion
