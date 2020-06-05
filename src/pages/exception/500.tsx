@@ -9,7 +9,7 @@ export default (): React.ReactNode => {
     <Result
       status={500}
       title="500"
-      style={{ marginTop: '15%' }}
+      style={{ marginTop: '20%' }}
       subTitle={intl.formatMessage({ id: 'exception.500.subtitle' })}
       extra={
         <Link to="/">

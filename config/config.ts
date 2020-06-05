@@ -11,8 +11,7 @@ export default defineConfig({
   antd: { dark: false },
   // Ant Design Pro Layout相关配置
   layout: {
-    locale: true,
-    siderWidth: 208
+    locale: true
   },
   locale: {
     default: 'zh-CN',

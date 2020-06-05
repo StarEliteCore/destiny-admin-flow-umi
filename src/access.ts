@@ -4,6 +4,6 @@
 export default function (initialState: { currentUser?: Types.CurrentUser | undefined }) {
   const { currentUser } = initialState || {};
   return {
-    canAdmin: currentUser?.access
+    canAdmin: currentUser?.access === 'admin'
   };
 }
