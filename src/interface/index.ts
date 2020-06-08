@@ -6,21 +6,21 @@ export interface OrderCondition {
 }
 
 export interface Filter {
-  filterConnect: FilterConnect;
-  conditions: Array<Conditions>;
-  filters?: Array<Filter>;
+  FilterConnect: FilterConnect;
+  Conditions: Array<Conditions>;
+  Filters?: Array<Filter>;
 }
 
 export interface Conditions {
-  field?: string;
-  value?: any;
-  operator?: FilterOperator; //过滤条件,
-  queryFilter?: '';
+  Field?: string;
+  Value?: any;
+  Operator?: FilterOperator; //过滤条件,
+  QueryFilter?: '';
 }
 
 export interface Operation {
-  pageIndex: number;
-  pageSize: number;
-  orderConditions?: Array<OrderCondition>;
-  filter?: Filter;
+  PageIndex: number;
+  PageSize: number;
+  OrderConditions?: Array<OrderCondition>;
+  Filter?: Filter;
 }
