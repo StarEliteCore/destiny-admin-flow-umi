@@ -2,7 +2,7 @@
 
 import { AvatarGif, LogoPng } from '@/assets';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { RequestConfig, history } from 'umi';
+import { ErrorShowType, RequestConfig, history } from 'umi';
 
 import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
@@ -115,7 +115,7 @@ export const request: RequestConfig = {
         errorCode: res.code || res.type
       };
     },
-    errorPage: '1'
+    errorPage: `${ErrorShowType.NOTIFICATION}`
   },
   prefix: BaseUrl,
   credentials: 'include',
