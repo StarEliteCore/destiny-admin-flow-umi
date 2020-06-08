@@ -11,6 +11,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import dayjs from 'dayjs';
+import { fixValue } from './operation';
 import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
@@ -99,10 +100,10 @@ export default (): React.ReactNode => {
 
   const handleReset = () => {
     searchForm.resetFields();
-    handleSearch({});
+    getUserList(1, 10);
   };
 
-  const handleSearch = (values: Store) => {};
+  const handleSearch = (values: Store) => getUserList(1, 10, values);
 
   const onCreateClick = () => {
     setModalModel('create');
@@ -176,8 +177,8 @@ export default (): React.ReactNode => {
     setModalShow(false);
   };
 
-  const getUserList = (current: number, pageSize: number) => {
-    getUserTable({ pageIndex: current, pageSize }).catch((error: Error) => {
+  const getUserList = (current: number, pageSize: number, args: any = {}) => {
+    getUserTable(fixValue({ pageIndex: current, pageSize, ...args })).catch((error: Error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
@@ -190,8 +191,14 @@ export default (): React.ReactNode => {
     total,
     current,
     pageSize,
-    onShowSizeChange: (current: number, pageSize: number) => getUserList(current, pageSize),
-    onChange: (page: number, pageSize?: number) => getUserList(page, pageSize ?? 10)
+    onShowSizeChange: (current: number, pageSize: number) => {
+      let args = searchForm.getFieldsValue(['username', 'nickname']);
+      getUserList(current, pageSize, args);
+    },
+    onChange: (page: number, pageSize?: number) => {
+      let args = searchForm.getFieldsValue(['username', 'nickname']);
+      getUserList(page, pageSize ?? 10, args);
+    }
   };
 
   return (
