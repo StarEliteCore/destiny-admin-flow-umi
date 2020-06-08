@@ -1,52 +1,33 @@
-import { FilterConnect } from '@/enumerate';
+import { Conditions, Operation } from '@/interface';
+import { FilterConnect, FilterOperator } from '@/enumerate';
 
-const operationProps = {
-  PageIndex: 1,
-  PageSize: 10,
-  OrderConditions: [
-    //   {
-    //     SortField: '',
-    //     SortDirection: '0 or 1'
-    //   }
-  ],
-  Filter: {
-    // 链接条件and、or
-    FilterConnect: FilterConnect.AND,
-    Conditions: [
-      {
-        Field: 'Name',
-        Value: '123',
-        Operator: '0 1 2 3 4 5 6 7' //过滤条件,
-        // QueryFilter: ''
-      }
-    ]
-    // Filters: [
-    //   {
-    //     FilterConnect: '0 1 ',
-    //     Conditions: [
-    //       {
-    //         Field: 'Name',
-    //         Value: '123',
-    //         Operator: '0 1 2 3 4 5 6 7', //过滤条件,
-    //         // QueryFilter: ''
-    //       }
-    //     ]
-    //   }
-    // ]
-  }
-};
-
-export const fixValue = (values: any) => {
+export const fixValue = (values: any): Operation => {
+  let operationProps: Operation = {
+    pageIndex: 1,
+    pageSize: 10,
+    filter: {
+      filterConnect: FilterConnect.AND,
+      conditions: []
+    }
+  };
   for (let key in values) {
-    let item;
     switch (key) {
       case 'pageIndex':
-        operationProps.PageIndex = values[key];
+      case 'PageIndex':
+        operationProps.pageIndex = values[key];
         break;
       case 'pageSize':
-        operationProps.PageSize = values[key];
+      case 'PageSize':
+        operationProps.pageSize = values[key];
         break;
       default:
+        let item: Conditions = {
+          field: key,
+          value: values[key],
+          operator: FilterOperator.LIKE
+        };
+        operationProps.filter?.conditions.push(item);
     }
   }
+  return operationProps;
 };
