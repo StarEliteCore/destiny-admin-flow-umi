@@ -192,11 +192,11 @@ export default (): React.ReactNode => {
     current,
     pageSize,
     onShowSizeChange: (current: number, pageSize: number) => {
-      let args = searchForm.getFieldsValue(['username', 'nickname']);
+      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
       getUserList(current, pageSize, args);
     },
     onChange: (page: number, pageSize?: number) => {
-      let args = searchForm.getFieldsValue(['username', 'nickname']);
+      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
       getUserList(page, pageSize ?? 10, args);
     }
   };
@@ -209,12 +209,12 @@ export default (): React.ReactNode => {
             <Form onFinish={handleSearch} form={searchForm}>
               <Row gutter={24}>
                 <Col span={8}>
-                  <Form.Item name="username" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
+                  <Form.Item name="UserName" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
                     <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name="nickname" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
+                  <Form.Item name="NickName" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
                     <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
                   </Form.Item>
                 </Col>
@@ -237,7 +237,7 @@ export default (): React.ReactNode => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <Table loading={LoadingObject(loading)} rowKey={(record:Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
       </Card>
       <Modal
         visible={modalShow}
