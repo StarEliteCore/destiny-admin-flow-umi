@@ -63,11 +63,47 @@ declare namespace Types {
     sex?: number;
   }
 
+  export interface RoleTable {
+    id?: string;
+    name?: string;
+    isAdmin?: boolean;
+    code?: string;
+    description?: string;
+    lastModifierTime?: string;
+    createdTime?: string;
+  }
+
   export interface Role {
     disabled?: boolean;
     group?: any;
     selected?: boolean;
     text?: string;
     value?: string;
+  }
+
+  //  树数据模型
+
+  export interface ResultBase {
+    success: boolean;
+    message: string;
+  }
+
+  export interface ListResult<TData> {
+    itemList: TData[];
+  }
+
+  export interface TreeMenu {
+    id: string = '';
+    name: string = '';
+    parentId: string = '';
+    children: Array<TreeMenu> = [];
+    key: string;
+    title: string;
+  }
+
+  export enum AjaxResultType {
+    info = 203,
+    success = 200,
+    error = 500
   }
 }
