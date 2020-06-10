@@ -1,5 +1,7 @@
-import { Button, Card, Collapse, Divider, Form, Input, Modal, Popconfirm, Switch, Tooltip, Tree, message, notification } from 'antd';
+import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Row, Select, Switch, Tooltip, Tree, message, notification } from 'antd';
+import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
+import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +22,7 @@ export default (): React.ReactNode => {
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('role.modal.title.create');
   const [modalForm] = useForm();
+  const [searchForm] = useForm();
   const [itemId, setItemId] = useState<string>('');
 
   const [expandedKeys, setExpandedKeys] = useState<string[]>();
@@ -28,7 +31,7 @@ export default (): React.ReactNode => {
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [newCheckedKeys, setNewCheckedKeys] = useState<any>({ checked: [] });
   useEffect(() => {
-    getTreeList();
+    //getTreeList();
   }, []);
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
@@ -89,12 +92,30 @@ export default (): React.ReactNode => {
     total,
     current,
     pageSize,
-    onShowSizeChange: (current: number, pageSize: number) => getRoleList(current, pageSize),
-    onChange: (page: number, pageSize?: number) => getRoleList(page, pageSize ?? 10)
+    onShowSizeChange: (current: number, pageSize: number) => {
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getRoleList(current, pageSize, filter);
+    },
+    onChange: (page: number, pageSize?: number) => {
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getRoleList(page, pageSize ?? 10, filter);
+    }
   };
 
-  const getRoleList = (current: number, pageSize: number) => {
-    getRoleTable({ pageIndex: current, pageSize }).catch((error: Error) => {
+  const getRoleList = (current: number, pageSize: number, args: Conditions[] = []) => {
+    let operationProps: Operation = {
+      pageIndex: current,
+      pageSize: pageSize
+    };
+    if (args.length > 0) {
+      operationProps.filter = {
+        filterConnect: FilterConnect.AND,
+        conditions: args
+      };
+    }
+    getRoleTable(operationProps).catch((error: Error) => {
       notification.error({
         message: intl.formatMessage({ id: 'role.function.get.role.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'role.function.get.role.list.fail.description' })} ${error}`
@@ -104,7 +125,7 @@ export default (): React.ReactNode => {
 
   const onCreateClick = () => {
     setModalModel('create');
-    setModalTitle('user.modal.title.create');
+    setModalTitle('role.modal.title.create');
     modalForm.setFieldsValue({
       name: '',
       isAdmin: false,
@@ -239,11 +260,69 @@ export default (): React.ReactNode => {
     // setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
   };
+  const getSearchFormInfo = () => {
+    const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('isAdmin')];
+
+    return conditions;
+  };
+
+  const getSearchFilter = (values: any) => {
+    const conditions = getSearchFormInfo();
+    let newConditions: Conditions[] = [];
+    for (let key in values) {
+      if (values[key] === '' || values[key] === undefined) {
+        continue;
+      }
+      const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
+      const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
+      let item: Conditions = {
+        field: key,
+        value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
+        operator: operator
+      };
+      newConditions.push(item);
+    }
+    return newConditions;
+  };
+  const handleSearch = (values: Store) => {
+    let filter = getSearchFilter(values);
+    getRoleList(1, 10, filter);
+  };
 
   return (
     <PageContainer>
       <Card>
-        <Collapse accordion></Collapse>
+        <Collapse accordion>
+          <Collapse.Panel header={intl.formatMessage({ id: 'role.collapse.panel_1.header' })} key="1">
+            <Form onFinish={handleSearch} form={searchForm}>
+              <Row gutter={24}>
+                <Col span={8}>
+                  <Form.Item name="name" label={intl.formatMessage({ id: 'role.form.item.name' })} style={{ marginBottom: 0 }}>
+                    <Input allowClear placeholder={intl.formatMessage({ id: 'role.input.placeholder' })} />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="isAdmin" label={intl.formatMessage({ id: 'role.form.item.is.admin' })} style={{ marginBottom: 0 }}>
+                    <Select allowClear placeholder={intl.formatMessage({ id: 'role.select.placeholder' })}>
+                      <Select.Option value="true">是</Select.Option>
+                      <Select.Option value="false">否</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <span style={{ float: 'right' }}>
+                    <Button type="primary" htmlType="submit">
+                      {intl.formatMessage({ id: 'role.button.submit' })}
+                    </Button>
+                    {/* <Button style={{ marginLeft: 14 }} onClick={handleReset}>
+                      {intl.formatMessage({ id: 'user.button.reset' })}
+                    </Button> */}
+                  </span>
+                </Col>
+              </Row>
+            </Form>
+          </Collapse.Panel>
+        </Collapse>
       </Card>
 
       <Card>
@@ -288,9 +367,9 @@ export default (): React.ReactNode => {
           <Form.Item name="description" label={intl.formatMessage({ id: 'role.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'role.modal.form.item.description.placeholder' })} />
           </Form.Item>
-          <Form.Item name="description" label={intl.formatMessage({ id: 'role.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
+          {/* <Form.Item name="description" label={intl.formatMessage({ id: 'role.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
             <Tree checkable defaultExpandAll={true} autoExpandParent={autoExpandParent} onCheck={onCheck} checkedKeys={checkedKeys1} selectedKeys={selectedKeys} treeData={treeMenu} checkStrictly={true} />
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
     </PageContainer>

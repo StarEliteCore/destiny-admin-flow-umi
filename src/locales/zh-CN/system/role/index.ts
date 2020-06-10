@@ -38,5 +38,12 @@ export default {
   'role.function.delete.click.success': '删除成功',
   'role.function.delete.click.fail': '删除失败',
   'role.table.columns.tooltip.delete': '删除',
-  'role.table.columns.popconfirm.title': '是否删除'
+  'role.table.columns.popconfirm.title': '是否删除',
+
+  'role.collapse.panel_1.header': '查询面板',
+  'role.form.item.name': '角色名',
+  'role.input.placeholder': '请输入角色名',
+  'role.button.submit': '查询',
+  'role.form.item.is.admin': '是否管理员',
+  'role.select.placeholder': '--请选择--'
 };
