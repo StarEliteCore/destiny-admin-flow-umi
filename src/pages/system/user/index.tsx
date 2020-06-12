@@ -19,7 +19,7 @@ export default (): React.ReactNode => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser } = useModel('userList');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm, loadUserForm } = useModel('userList');
   const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
@@ -51,6 +51,15 @@ export default (): React.ReactNode => {
       key: 'lastModifierTime',
       align: 'center',
       render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+    },
+    {
+      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.is.system' })} />,
+      dataIndex: 'isSystem',
+      key: 'isSystem',
+      align: 'center',
+      render: (text: boolean, row, index) => {
+        return text === true ? '是' : '否';
+      }
     },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {
@@ -86,15 +95,19 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
     setItemId(record.id!);
-    modalForm.setFieldsValue({
-      username: record.userName,
-      nickname: record.nickName,
-      sex: record.sex,
-      isSystem: record.isSystem,
-      password: '',
-      roles: '',
-      description: record.description
+    getUserForm(record.id!).then(() => {
+      let data = loadUserForm;
+      modalForm.setFieldsValue({
+        username: data?.userName,
+        nickname: data?.nickName,
+        sex: data?.sex,
+        isSystem: data?.isSystem,
+
+        roles: data?.roleIds,
+        description: data?.description
+      });
     });
+
     setModalShow(true);
   };
 
@@ -126,14 +139,20 @@ export default (): React.ReactNode => {
       modalForm.validateFields().then((values: Store) => {
         const { username, nickname, sex, isSystem, password, roles, description } = values;
         let passwordTemp = password ? { passwordHash: password } : {};
+        let rolesIds: string[] = [];
+        if (roles instanceof Array) {
+          rolesIds = roles;
+        } else {
+          rolesIds.push(roles);
+        }
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: [roles],
+          roleIds: rolesIds,
           ...passwordTemp
         };
         addUser(args)
@@ -150,21 +169,27 @@ export default (): React.ReactNode => {
       });
     } else {
       modalForm.validateFields().then((values: Store) => {
-        const { username, nickname, sex, isSystem, password, roles, description } = values;
-        let passwordTemp = password ? { passwordHash: password } : {};
+        debugger;
+        const { username, nickname, sex, isSystem, roles, description } = values;
+        let rolesIds: string[] = [];
+        if (roles instanceof Array) {
+          rolesIds = roles;
+        } else {
+          rolesIds.push(roles);
+        }
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: [roles],
-          ...passwordTemp
+          roleIds: rolesIds
         };
         editUser({ ...args, id: itemId })
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
+            getUserList(1, 10);
           })
           .catch((error: Error) =>
             notification.error({
@@ -296,18 +321,21 @@ export default (): React.ReactNode => {
           <Form.Item name="isSystem" label={intl.formatMessage({ id: 'user.modal.form.item.is.system' })} valuePropName="checked">
             <Switch checkedChildren={intl.formatMessage({ id: 'user.modal.form.item.is.system.check' })} unCheckedChildren={intl.formatMessage({ id: 'user.modal.form.item.is.system.un.check' })} />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({ id: 'user.modal.form.item.password.rule.message' })
-              }
-            ]}
-            label={intl.formatMessage({ id: 'user.modal.form.item.password.label' })}
-          >
-            <Input.Password allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.password.input.placeholder' })} />
-          </Form.Item>
+          {itemId == '' && (
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({ id: 'user.modal.form.item.password.rule.message' })
+                }
+              ]}
+              label={intl.formatMessage({ id: 'user.modal.form.item.password.label' })}
+            >
+              <Input.Password allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.password.input.placeholder' })} />
+            </Form.Item>
+          )}
+
           <Form.Item name="roles" label={intl.formatMessage({ id: 'user.modal.form.item.roles.label' })}>
             <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
               {roles?.map((item: Types.Role) => (

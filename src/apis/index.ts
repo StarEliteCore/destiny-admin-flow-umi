@@ -58,6 +58,6 @@ export const UserApi = {
   addUser: 'User/CreateAsync',
   editUser: 'User/UpdateAsync',
   deleteUser: 'User/DeleteAsync',
-  loadUser: 'User/LoadAsync'
+  loadUser: 'User/LoadAsync' //为什么这里就小写呢？
 };
 //#endregion
