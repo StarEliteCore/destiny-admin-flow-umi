@@ -43,14 +43,14 @@ export default (): React.ReactNode => {
       dataIndex: 'createdTime',
       key: 'createdTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.modify.time' })} />,
       dataIndex: 'lastModifierTime',
       key: 'lastModifierTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {
@@ -155,7 +155,7 @@ export default (): React.ReactNode => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
