@@ -251,7 +251,10 @@ export default (): React.ReactNode => {
         destroyOnClose
         centered
         width={550}
-        onCancel={() => setModalShow(false)}
+        onCancel={() => {
+          modalForm.resetFields();
+          setModalShow(false)
+        }}
         onOk={onModalOK}
       >
         <Form {...modalFormLayout} form={modalForm}>
