@@ -43,14 +43,14 @@ export default (): React.ReactNode => {
       dataIndex: 'createdTime',
       key: 'createdTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.modify.time' })} />,
       dataIndex: 'lastModifierTime',
       key: 'lastModifierTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.is.system' })} />,
@@ -276,7 +276,10 @@ export default (): React.ReactNode => {
         destroyOnClose
         centered
         width={550}
-        onCancel={() => setModalShow(false)}
+        onCancel={() => {
+          modalForm.resetFields();
+          setModalShow(false)
+        }}
         onOk={onModalOK}
       >
         <Form {...modalFormLayout} form={modalForm}>

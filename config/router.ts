@@ -9,18 +9,6 @@ const Route: IRoute[] = [
     path: '/login'
   },
   {
-    path: '/403',
-    component: './exception/403'
-  },
-  {
-    path: '/404',
-    component: './exception/404'
-  },
-  {
-    path: '/500',
-    component: './exception/500'
-  },
-  {
     path: '/',
     redirect: '/home'
   },
