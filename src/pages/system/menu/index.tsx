@@ -4,7 +4,6 @@ import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
-<<<<<<< HEAD
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { PaginationProps } from 'antd/lib/pagination';
@@ -308,16 +307,4 @@ const User: React.FC<{}> = () => {
   );
 };
 
-export default User;
-=======
-import { PageContainer } from '@ant-design/pro-layout';
-import React from 'react';
-
-export default (): React.ReactNode => (
-  <PageContainer>
-    <Card>
-      <Typography.Text strong>基于 menu 开发，快速构建标准页面</Typography.Text>
-    </Card>
-  </PageContainer>
-);
->>>>>>> master
+export default Menu;
