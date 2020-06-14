@@ -10,7 +10,7 @@ import styles from './index.less';
 /**
  * 此方法会跳转到 redirect 参数所在的位置
  */
-const replaceGoto = () => {
+const replaceGoto = (): void => {
   const urlParams = new URL(window.location.href);
   const params = getPageQuery();
   let { redirect } = params as { redirect: string };
@@ -29,15 +29,20 @@ const replaceGoto = () => {
   history.replace(redirect || '/');
 };
 
-const Login: React.FC<{}> = () => {
-  const { refresh } = useModel('@@initialState');
-  const { loading, login } = useModel('useAuthModel');
+export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
 
+  const { refresh } = useModel('@@initialState');
+  const { loading, login } = useModel('auth');
+
   const handleSubmit = async (values: any) => {
-    login(values).then(() => {
-      replaceGoto();
-      setTimeout(() => refresh(), 0);
+    await login(values).then(async () => {
+      await refresh().then(() => {
+        setTimeout(() => {
+          replaceGoto();
+          location.reload();
+        }, 200);
+      });
     });
   };
 
@@ -107,5 +112,3 @@ const Login: React.FC<{}> = () => {
     </div>
   );
 };
-
-export default Login;

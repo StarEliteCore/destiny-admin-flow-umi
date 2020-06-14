@@ -4,20 +4,20 @@ import Cookies from 'js-cookie';
 import { Login } from '../services';
 import { history } from 'umi';
 
-export default function useAuthModel() {
+const useAuthModel = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const login = useCallback(
     async ({ account, password }: { account: string; password: string }) =>
-      await new Promise((resolve, reject) => {
+      await new Promise(async (resolve, reject) => {
         setLoading(true);
-        Login({ userName: account, password })
+        await Login({ userName: account, password })
           .then((response: Types.AjaxResult) => {
             let data: Types.AuthDto = response.data;
             const { accessToken, userId } = data;
             Cookies.set('accessToken', accessToken ?? '', { path: '/' });
             Cookies.set('userId', userId ?? '', { path: '/' });
-            resolve(true);
+            resolve(data);
           })
           .catch((error) => reject(error))
           .finally(() => setLoading(false));
@@ -31,4 +31,6 @@ export default function useAuthModel() {
   }, []);
 
   return { loading, login, logout };
-}
+};
+
+export default useAuthModel;

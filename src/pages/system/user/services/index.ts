@@ -10,6 +10,7 @@ export const GetPage = (param: any): Promise<Types.AjaxResult> =>
 export const AddUser = (param: any): Promise<Types.AjaxResult> =>
   request<Types.AjaxResult>(UserApi.addUser, {
     data: param,
+
     method: 'POST'
   });
 

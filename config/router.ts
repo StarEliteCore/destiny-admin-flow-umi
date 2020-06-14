@@ -1,4 +1,4 @@
-// 抽离Router的配置信息刀单独文件.
+// 抽离Router的配置信息到单独文件.
 
 import { IRoute } from 'umi';
 
@@ -7,18 +7,6 @@ const Route: IRoute[] = [
     layout: false,
     component: './login',
     path: '/login'
-  },
-  {
-    path: '/403',
-    component: './exception/403'
-  },
-  {
-    path: '/404',
-    component: './exception/404'
-  },
-  {
-    path: '/500',
-    component: './exception/500'
   },
   {
     path: '/',
@@ -31,6 +19,7 @@ const Route: IRoute[] = [
     component: './home'
   },
   {
+    access: 'canAdmin',
     path: '/system',
     name: 'systemmanage',
     icon: 'setting',
@@ -42,12 +31,14 @@ const Route: IRoute[] = [
         component: './system/role'
       },
       {
+        access: 'canAdmin',
         name: 'usermanage',
         icon: 'user',
         path: '/system/user',
         component: './system/user'
       },
       {
+        access: 'canAdmin',
         name: 'menumanage',
         icon: 'menu',
         path: '/system/menu',

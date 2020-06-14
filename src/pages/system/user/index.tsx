@@ -6,27 +6,32 @@ import React, { useEffect, useState } from 'react';
 
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
+import IconFont from '@/components/IconFont';
+import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import dayjs from 'dayjs';
+import { fixValue } from './operation';
 import { useForm } from 'antd/lib/form/util';
 
-const User: React.FC<{}> = () => {
+export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
-  const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser } = useModel('userList');
+  const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
-  const [pageIndex, setPageIndex] = useState<number>(1);
 
   useEffect(() => {
     getRoles();
+  }, []);
+
+  useEffect(() => {
     getUserTable({ pageIndex: 1, pageSize: 10 });
   }, []);
 
@@ -38,19 +43,19 @@ const User: React.FC<{}> = () => {
       dataIndex: 'createdTime',
       key: 'createdTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.modify.time' })} />,
       dataIndex: 'lastModifierTime',
       key: 'lastModifierTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
     },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
-      key: 'action',
+      key: 'operation',
       align: 'center',
       render: (_: string, record: Types.UserTable) => (
         <div>
@@ -74,7 +79,7 @@ const User: React.FC<{}> = () => {
         message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
         getUserList(1, 10);
       })
-      .catch((error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
 
   const onEditClick = (record: Types.UserTable) => {
@@ -95,10 +100,10 @@ const User: React.FC<{}> = () => {
 
   const handleReset = () => {
     searchForm.resetFields();
-    handleSearch({});
+    getUserList(1, 10);
   };
 
-  const handleSearch = (values: Store) => {};
+  const handleSearch = (values: Store) => getUserList(1, 10, values);
 
   const onCreateClick = () => {
     setModalModel('create');
@@ -136,7 +141,7 @@ const User: React.FC<{}> = () => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
             getUserList(1, 10);
           })
-          .catch((error) =>
+          .catch((error: Error) =>
             notification.error({
               message: intl.formatMessage({ id: 'user.function.add.user.fail.message' }),
               description: `${intl.formatMessage({ id: 'user.function.add.user.fail.description' })} ${error}`
@@ -150,7 +155,7 @@ const User: React.FC<{}> = () => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
@@ -161,7 +166,7 @@ const User: React.FC<{}> = () => {
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
           })
-          .catch((error) =>
+          .catch((error: Error) =>
             notification.error({
               message: intl.formatMessage({ id: 'user.function.modify.user.fail.message' }),
               description: `${intl.formatMessage({ id: 'user.function.modify.user.fail.description' })} ${error}`
@@ -172,9 +177,8 @@ const User: React.FC<{}> = () => {
     setModalShow(false);
   };
 
-  const getUserList = (current: number, pageSize: number) => {
-    setPageIndex(current);
-    getUserTable({ pageIndex: current, pageSize }).catch((error) => {
+  const getUserList = (current: number, pageSize: number, args: any = {}) => {
+    getUserTable(fixValue({ pageIndex: current, pageSize, ...args })).catch((error: Error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
@@ -184,26 +188,33 @@ const User: React.FC<{}> = () => {
 
   const pagination: PaginationProps = {
     ...tacitPagingProps,
-    total: total,
-    current: pageIndex,
-    onShowSizeChange: (current: number, pageSize: number) => getUserList(current, pageSize),
-    onChange: (page: number, pageSize?: number) => getUserList(page, pageSize ?? 10)
+    total,
+    current,
+    pageSize,
+    onShowSizeChange: (current: number, pageSize: number) => {
+      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
+      getUserList(current, pageSize, args);
+    },
+    onChange: (page: number, pageSize?: number) => {
+      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
+      getUserList(page, pageSize ?? 10, args);
+    }
   };
 
   return (
-    <div className="global-container">
+    <PageContainer>
       <Card>
         <Collapse accordion>
           <Collapse.Panel header={intl.formatMessage({ id: 'user.collapse.panel_1.header' })} key="1">
             <Form onFinish={handleSearch} form={searchForm}>
               <Row gutter={24}>
                 <Col span={8}>
-                  <Form.Item name="username" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
+                  <Form.Item name="UserName" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
                     <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name="nickname" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
+                  <Form.Item name="NickName" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
                     <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
                   </Form.Item>
                 </Col>
@@ -226,7 +237,7 @@ const User: React.FC<{}> = () => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <Table loading={LoadingObject(loading)} rowKey={(record:Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
       </Card>
       <Modal
         visible={modalShow}
@@ -240,7 +251,10 @@ const User: React.FC<{}> = () => {
         destroyOnClose
         centered
         width={550}
-        onCancel={() => setModalShow(false)}
+        onCancel={() => {
+          modalForm.resetFields();
+          setModalShow(false)
+        }}
         onOk={onModalOK}
       >
         <Form {...modalFormLayout} form={modalForm}>
@@ -270,8 +284,16 @@ const User: React.FC<{}> = () => {
           </Form.Item>
           <Form.Item name="sex" label={intl.formatMessage({ id: 'user.modal.form.item.sex.label' })}>
             <Radio.Group>
-              <Radio value={0}>{intl.formatMessage({ id: 'user.modal.form.item.sex.man' })}</Radio>
-              <Radio value={1}>{intl.formatMessage({ id: 'user.modal.form.item.sex.woman' })}</Radio>
+              <Radio value={0}>
+                <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.modal.form.item.sex.man' })}>
+                  <IconFont type="icon-man" />
+                </Tooltip>
+              </Radio>
+              <Radio value={1}>
+                <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.modal.form.item.sex.woman' })}>
+                  <IconFont type="icon-woman" />
+                </Tooltip>
+              </Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item name="isSystem" label={intl.formatMessage({ id: 'user.modal.form.item.is.system' })} valuePropName="checked">
@@ -303,8 +325,6 @@ const User: React.FC<{}> = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </PageContainer>
   );
 };
-
-export default User;

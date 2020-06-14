@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
-    "@ant-design/pro-layout": "6.0.0-4",
-    "antd": "^4.3.1",
+    "@ant-design/pro-layout": "6.0.0-7",
+    "antd": "^4.3.3",
     "dayjs": "^1.8.28",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
@@ -29,9 +29,9 @@
     "@types/js-cookie": "^2.2.6",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
-    "@umijs/fabric": "^2.0.9",
+    "@umijs/fabric": "^2.1.0",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "@umijs/preset-react": "^1.5.5",
+    "@umijs/preset-react": "^1.5.6",
     "cross-env": "^7.0.2"
   },
   "engines": {

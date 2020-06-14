@@ -1,17 +1,18 @@
-import { AntDesignOutlined, GithubOutlined, GoogleOutlined } from '@ant-design/icons';
+import { AntDesignOutlined, GithubOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl } from 'umi';
 
 import { DefaultFooter } from '@ant-design/pro-layout';
+import IconFont from '@/components/IconFont';
 import React from 'react';
 
-const Footer: React.FC<{}> = () => {
+export default (): React.ReactElement => {
   const intl: IntlShape = useIntl();
   return (
     <DefaultFooter
       copyright={intl.formatMessage({ id: 'components.footer.copyright' })}
       links={[
         {
-          key: 'ali',
+          key: 'Ali',
           title: <AntDesignOutlined />,
           href: 'https://pro.ant.design',
           blankTarget: true
@@ -23,8 +24,8 @@ const Footer: React.FC<{}> = () => {
           blankTarget: true
         },
         {
-          key: 'google',
-          title: <GoogleOutlined />,
+          key: 'Bing',
+          title: <IconFont type="icon-Bing" />,
           href: 'https://cn.bing.com',
           blankTarget: true
         }
@@ -32,5 +33,3 @@ const Footer: React.FC<{}> = () => {
     />
   );
 };
-
-export default Footer;
