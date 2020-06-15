@@ -11,7 +11,7 @@ import { Store } from 'antd/lib/form/interface';
 import dayjs from 'dayjs';
 import { useForm } from 'antd/lib/form/util';
 
-const User: React.FC<{}> = () => {
+const Menu: React.FC<{}> = () => {
   const intl: IntlShape = useIntl();
   const [searchForm] = useForm();
   const [modalForm] = useForm();
