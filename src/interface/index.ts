@@ -1,28 +1,28 @@
 import { FilterConnect, FilterOperator } from '@/enumerate';
 
 export interface OrderCondition {
-  SortField: string;
-  SortDirection: FilterConnect;
+  sortField: string;
+  sortDirection: FilterConnect;
 }
 
 export interface Filter {
-  FilterConnect: FilterConnect;
-  Conditions: Array<Conditions>;
-  Filters?: Array<Filter>;
+  filterConnect: FilterConnect;
+  conditions: Array<Conditions>;
+  filters?: Array<Filter>;
 }
 
 export interface Conditions {
-  Field?: string;
-  Value?: any;
-  Operator?: FilterOperator; //过滤条件,
-  QueryFilter?: '';
+  field?: string;
+  value?: any;
+  operator?: FilterOperator; //过滤条件,
+  queryFilter?: '';
 }
 
 export interface Operation {
-  PageIndex: number;
-  PageSize: number;
-  OrderConditions?: Array<OrderCondition>;
-  Filter?: Filter;
+  pageIndex: number;
+  pageSize: number;
+  orderConditions?: Array<OrderCondition>;
+  filter?: Filter;
 }
 
 export class FilterInfo {

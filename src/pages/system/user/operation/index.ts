@@ -3,30 +3,30 @@ import { FilterConnect, FilterOperator } from '@/enumerate';
 
 export const fixValue = (values: any): Operation => {
   let operationProps: Operation = {
-    PageIndex: 1,
-    PageSize: 10,
-    Filter: {
-      FilterConnect: FilterConnect.AND,
-      Conditions: []
+    pageIndex: 1,
+    pageSize: 10,
+    filter: {
+      filterConnect: FilterConnect.AND,
+      conditions: []
     }
   };
   for (let key in values) {
     switch (key) {
       case 'pageIndex':
       case 'PageIndex':
-        operationProps.PageIndex = values[key];
+        operationProps.pageIndex = values[key];
         break;
       case 'pageSize':
       case 'PageSize':
-        operationProps.PageSize = values[key];
+        operationProps.pageSize = values[key];
         break;
       default:
         let item: Conditions = {
-          Field: key,
-          Value: values[key],
-          Operator: FilterOperator.LIKE
+          field: key,
+          value: values[key],
+          operator: FilterOperator.LIKE
         };
-        operationProps.Filter?.Conditions.push(item);
+        operationProps.filter?.conditions.push(item);
     }
   }
   return operationProps;
