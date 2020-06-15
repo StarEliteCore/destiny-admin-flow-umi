@@ -9,6 +9,7 @@ export default defineConfig({
   hash: true,
   // Ant Design相关配置设置暗黑主题或者紧凑主题
   antd: { dark: false },
+  esbuild: {},
   // Ant Design Pro Layout相关配置
   layout: {
     locale: true

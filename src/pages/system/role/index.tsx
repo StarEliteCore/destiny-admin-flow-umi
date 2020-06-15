@@ -11,7 +11,7 @@ import ColumnTitle from '@/components/ColumnTitle';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
@@ -57,14 +57,14 @@ export default (): React.ReactNode => {
       dataIndex: 'createdTime',
       key: 'createdTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => moment(text).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.modify.time' })} />,
       dataIndex: 'lastModifierTime',
       key: 'lastModifierTime',
       align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+      render: (text: string) => moment(text).format('YYYY-MM-DD HH:mm:ss')
     },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
     {

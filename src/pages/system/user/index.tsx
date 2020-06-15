@@ -10,8 +10,8 @@ import IconFont from '@/components/IconFont';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
-import dayjs from 'dayjs';
 import { fixValue } from './operation';
+import moment from 'moment';
 import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
@@ -36,23 +36,68 @@ export default (): React.ReactNode => {
   }, []);
 
   const columns: Array<ColumnProps<Types.UserTable>> = [
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.username' })} />, dataIndex: 'userName', key: 'userName', align: 'center' },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.nickname' })} />, dataIndex: 'nickName', key: 'nickName', align: 'center' },
     {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.create.time' })} />,
+      title: (
+        <ColumnTitle
+          name={intl.formatMessage({
+            id: 'user.table.columns.username'
+          })}
+        />
+      ),
+      dataIndex: 'userName',
+      key: 'userName',
+      align: 'center'
+    },
+    {
+      title: (
+        <ColumnTitle
+          name={intl.formatMessage({
+            id: 'user.table.columns.nickname'
+          })}
+        />
+      ),
+      dataIndex: 'nickName',
+      key: 'nickName',
+      align: 'center'
+    },
+    {
+      title: (
+        <ColumnTitle
+          name={intl.formatMessage({
+            id: 'user.table.columns.create.time'
+          })}
+        />
+      ),
       dataIndex: 'createdTime',
       key: 'createdTime',
       align: 'center',
-      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
+      render: (text: string) => (text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : undefined)
     },
     {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.modify.time' })} />,
+      title: (
+        <ColumnTitle
+          name={intl.formatMessage({
+            id: 'user.table.columns.modify.time'
+          })}
+        />
+      ),
       dataIndex: 'lastModifierTime',
       key: 'lastModifierTime',
       align: 'center',
-      render: (text: string) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : undefined
+      render: (text: string) => (text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : undefined)
     },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
+    {
+      title: (
+        <ColumnTitle
+          name={intl.formatMessage({
+            id: 'user.table.columns.description'
+          })}
+        />
+      ),
+      dataIndex: 'description',
+      key: 'description',
+      align: 'center'
+    },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
       key: 'operation',
@@ -129,7 +174,7 @@ export default (): React.ReactNode => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
@@ -155,7 +200,7 @@ export default (): React.ReactNode => {
         let args = {
           userName: username,
           nickName: nickname,
-          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
@@ -237,7 +282,7 @@ export default (): React.ReactNode => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record:Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <Table loading={LoadingObject(loading)} rowKey={(record: Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} />
       </Card>
       <Modal
         visible={modalShow}
@@ -253,7 +298,7 @@ export default (): React.ReactNode => {
         width={550}
         onCancel={() => {
           modalForm.resetFields();
-          setModalShow(false)
+          setModalShow(false);
         }}
         onOk={onModalOK}
       >
