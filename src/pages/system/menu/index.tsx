@@ -1,14 +1,14 @@
 import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl, useModel } from 'umi';
-import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
+import { LoadingObject, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { useForm } from 'antd/lib/form/util';
 
 const Menu: React.FC<{}> = () => {
@@ -16,8 +16,8 @@ const Menu: React.FC<{}> = () => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, total, getUserTable, addUser, editUser, deleteUser } = useModel('useUserListModel');
-  const { loading: roleLoading, roles, getRoles } = useModel('useRoleModel');
+  const { itemList, loading, total, current, getMenuTable } = useModel('useMenuModel');
+  const { loading: roleLoading } = useModel('useMenuModel');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
@@ -26,28 +26,14 @@ const Menu: React.FC<{}> = () => {
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   useEffect(() => {
-    getRoles();
-    getUserTable({ pageIndex: 1, pageSize: 10 });
+    getMenuTable({ pageIndex: 1, pageSize: 10 });
   }, []);
 
   const columns: Array<ColumnProps<Types.UserTable>> = [
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.username' })} />, dataIndex: 'userName', key: 'userName', align: 'center' },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.nickname' })} />, dataIndex: 'nickName', key: 'nickName', align: 'center' },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.create.time' })} />,
-      dataIndex: 'createdTime',
-      key: 'createdTime',
-      align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
-    },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.modify.time' })} />,
-      dataIndex: 'lastModifierTime',
-      key: 'lastModifierTime',
-      align: 'center',
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
-    },
+    { title: <ColumnTitle name="菜单名" />, dataIndex: 'name', key: 'name', align: 'center' },
+    { title: <ColumnTitle name="路由" />, dataIndex: 'routerPath', key: 'routerPath', align: 'center' },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
+    { title: <ColumnTitle name="排序" />, dataIndex: 'sort', key: 'sort', align: 'center' },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
       key: 'action',
@@ -68,14 +54,7 @@ const Menu: React.FC<{}> = () => {
     }
   ];
 
-  const onDeleteClick = (id: string) => {
-    deleteUser(id)
-      .then(() => {
-        message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-        getUserList(1, 10);
-      })
-      .catch((error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
-  };
+  const onDeleteClick = (id: string) => {};
 
   const onEditClick = (record: Types.UserTable) => {
     setModalModel('edit');
@@ -124,24 +103,13 @@ const Menu: React.FC<{}> = () => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
           roleIds: [roles],
           ...passwordTemp
         };
-        addUser(args)
-          .then(() => {
-            message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
-            getUserList(1, 10);
-          })
-          .catch((error) =>
-            notification.error({
-              message: intl.formatMessage({ id: 'user.function.add.user.fail.message' }),
-              description: `${intl.formatMessage({ id: 'user.function.add.user.fail.description' })} ${error}`
-            })
-          );
       });
     } else {
       modalForm.validateFields().then((values: Store) => {
@@ -150,23 +118,13 @@ const Menu: React.FC<{}> = () => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,
           roleIds: [roles],
           ...passwordTemp
         };
-        editUser({ ...args, id: itemId })
-          .then(() => {
-            message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
-          })
-          .catch((error) =>
-            notification.error({
-              message: intl.formatMessage({ id: 'user.function.modify.user.fail.message' }),
-              description: `${intl.formatMessage({ id: 'user.function.modify.user.fail.description' })} ${error}`
-            })
-          );
       });
     }
     setModalShow(false);
@@ -174,7 +132,7 @@ const Menu: React.FC<{}> = () => {
 
   const getUserList = (current: number, pageSize: number) => {
     setPageIndex(current);
-    getUserTable({ pageIndex: current, pageSize }).catch((error) => {
+    getMenuTable({ pageIndex: current, pageSize }).catch((error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
@@ -228,81 +186,6 @@ const Menu: React.FC<{}> = () => {
         </Button>
         <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
       </Card>
-      <Modal
-        visible={modalShow}
-        title={intl.formatMessage({ id: modalTitle })}
-        cancelText={intl.formatMessage({
-          id: 'user.modal.cancel.text'
-        })}
-        okText={intl.formatMessage({
-          id: 'user.modal.ok.text'
-        })}
-        destroyOnClose
-        centered
-        width={550}
-        onCancel={() => setModalShow(false)}
-        onOk={onModalOK}
-      >
-        <Form {...modalFormLayout} form={modalForm}>
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({ id: 'user.modal.form.item.username.rule.message' })
-              }
-            ]}
-            label={intl.formatMessage({ id: 'user.modal.form.item.username.label' })}
-          >
-            <Input allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.username.input.placeholder' })} />
-          </Form.Item>
-          <Form.Item
-            name="nickname"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({ id: 'user.modal.form.item.nickname.rule.message' })
-              }
-            ]}
-            label={intl.formatMessage({ id: 'user.modal.form.item.nickname.label' })}
-          >
-            <Input allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.nickname.input.placeholder' })} />
-          </Form.Item>
-          <Form.Item name="sex" label={intl.formatMessage({ id: 'user.modal.form.item.sex.label' })}>
-            <Radio.Group>
-              <Radio value={0}>{intl.formatMessage({ id: 'user.modal.form.item.sex.man' })}</Radio>
-              <Radio value={1}>{intl.formatMessage({ id: 'user.modal.form.item.sex.woman' })}</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item name="isSystem" label={intl.formatMessage({ id: 'user.modal.form.item.is.system' })} valuePropName="checked">
-            <Switch checkedChildren={intl.formatMessage({ id: 'user.modal.form.item.is.system.check' })} unCheckedChildren={intl.formatMessage({ id: 'user.modal.form.item.is.system.un.check' })} />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({ id: 'user.modal.form.item.password.rule.message' })
-              }
-            ]}
-            label={intl.formatMessage({ id: 'user.modal.form.item.password.label' })}
-          >
-            <Input.Password allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.password.input.placeholder' })} />
-          </Form.Item>
-          <Form.Item name="roles" label={intl.formatMessage({ id: 'user.modal.form.item.roles.label' })}>
-            <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
-              {roles?.map((item: Types.Role) => (
-                <Select.Option key={item.value} value={item.value!}>
-                  {item.text}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name="description" label={intl.formatMessage({ id: 'user.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
-            <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.description.placeholder' })} />
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
   );
 };
