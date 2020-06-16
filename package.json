@@ -27,20 +27,22 @@
   "devDependencies": {
     "@types/history": "^4.7.6",
     "@types/js-cookie": "^2.2.6",
+    "@types/prettier": "^2.0.1",
     "@types/react": "^16.9.36",
     "@types/react-dom": "^16.9.8",
     "@umijs/fabric": "^2.1.0",
     "@umijs/plugin-access": "^2.3.1",
     "@umijs/plugin-antd": "^0.6.0",
-    "@umijs/plugin-esbuild": "^1.0.0-beta.2",
+    "@umijs/plugin-esbuild": "^1.0.0-beta.3",
     "@umijs/plugin-helmet": "^1.0.2",
     "@umijs/plugin-initial-state": "^2.2.1",
     "@umijs/plugin-layout": "^0.11.7",
-    "@umijs/plugin-locale": "^0.7.1",
+    "@umijs/plugin-locale": "^0.8.0",
     "@umijs/plugin-model": "^2.3.1",
     "@umijs/plugin-request": "^2.3.2",
     "@umijs/preset-ant-design-pro": "^1.2.2",
-    "cross-env": "^7.0.2"
+    "cross-env": "^7.0.2",
+    "prettier": "^2.0.5"
   },
   "engines": {
     "node": ">=13.5.0"
