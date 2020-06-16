@@ -25,3 +25,9 @@ export const DeleteUser = (param: { id: string }): Promise<Types.AjaxResult> =>
     params: param,
     method: 'DELETE'
   });
+
+export const LoadUser = (param: { id: string }): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(UserApi.loadUser, {
+    params: param,
+    method: 'get'
+  });

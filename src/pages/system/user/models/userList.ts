@@ -1,4 +1,4 @@
-import { AddUser, DeleteUser, EditUser, GetPage } from '../services';
+import { AddUser, DeleteUser, EditUser, GetPage, LoadUser } from '../services';
 import { useCallback, useState } from 'react';
 
 const useUserListModel = () => {
@@ -7,6 +7,7 @@ const useUserListModel = () => {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadUserForm, setLoadUserForm] = useState<Types.UserOutputDto>();
 
   const getUserTable = useCallback(
     async (param: any) =>
@@ -70,7 +71,23 @@ const useUserListModel = () => {
     []
   );
 
-  return { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser };
+  const getUserForm = useCallback(
+    async (id: string) =>
+      await new Promise<Types.UserOutputDto>((resolve, reject) => {
+        setLoading(true);
+        LoadUser({ id })
+          .then((response: any) => {
+            let userData = response.data as Types.UserOutputDto;
+            setLoadUserForm(userData);
+            resolve(userData);
+          })
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+
+  return { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm, loadUserForm };
 };
 
 export default useUserListModel;

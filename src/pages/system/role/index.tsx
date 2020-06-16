@@ -16,7 +16,7 @@ import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getTreeSelectMenu, treeMenu, menuList } = useModel('roleList');
+  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getTreeSelectMenu, menuList } = useModel('roleList');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
@@ -106,13 +106,13 @@ export default (): React.ReactNode => {
 
   const getRoleList = (current: number, pageSize: number, args: Conditions[] = []) => {
     let operationProps: Operation = {
-      pageIndex: current,
-      pageSize: pageSize
+      PageIndex: current,
+      PageSize: pageSize
     };
     if (args.length > 0) {
-      operationProps.filter = {
-        filterConnect: FilterConnect.AND,
-        conditions: args
+      operationProps.Filter = {
+        FilterConnect: FilterConnect.AND,
+        Conditions: args
       };
     }
     getRoleTable(operationProps).catch((error: Error) => {
@@ -276,9 +276,9 @@ export default (): React.ReactNode => {
       const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
       const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
       let item: Conditions = {
-        field: key,
-        value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
-        operator: operator
+        Field: key,
+        Value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
+        Operator: operator
       };
       newConditions.push(item);
     }

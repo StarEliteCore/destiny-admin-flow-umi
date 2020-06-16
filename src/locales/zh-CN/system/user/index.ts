@@ -56,5 +56,6 @@ export default {
   'user.function.modify.user.fail.description': '失败,错误信息:',
 
   'user.function.get.user.list.fail.message': '获取信息失败!',
-  'user.function.get.user.list.fail.description': '获取数据失败,错误信息:'
+  'user.function.get.user.list.fail.description': '获取数据失败,错误信息:',
+  'user.table.columns.is.system': '是否系统'
 };

@@ -63,6 +63,17 @@ declare namespace Types {
     sex?: number;
   }
 
+  export interface UserOutputDto {
+    userName?: string;
+    nickName?: string;
+    passwordHash?: string;
+    createdTime?: string;
+    isSystem?: boolean;
+    description?: string;
+    sex?: Sex;
+    roleIds?: Array<string>;
+    id?: string;
+  }
   export interface RoleTable {
     id?: string;
     name?: string;
