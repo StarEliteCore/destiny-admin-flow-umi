@@ -98,19 +98,6 @@ export default (): React.ReactNode => {
       key: 'description',
       align: 'center'
     },
-<<<<<<< HEAD
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.is.system' })} />,
-      dataIndex: 'isSystem',
-      key: 'isSystem',
-      align: 'center',
-      render: (text: boolean, row, index) => {
-        return text === true ? '是' : '否';
-      }
-    },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
-=======
->>>>>>> 17717e83694d1b1fcbb95cf71536366625261cef
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
       key: 'operation',
@@ -197,11 +184,7 @@ export default (): React.ReactNode => {
         let args = {
           userName: username,
           nickName: nickname,
-<<<<<<< HEAD
-          // createdTime: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-=======
           createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
->>>>>>> 17717e83694d1b1fcbb95cf71536366625261cef
           isSystem: isSystem,
           description: description,
           sex: sex,
