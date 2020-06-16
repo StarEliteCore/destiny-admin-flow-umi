@@ -22,7 +22,7 @@ const useRoleModel = (): RoleModelProps => {
             setRoles(data);
             resolve(data);
           })
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
