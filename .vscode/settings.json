@@ -20,7 +20,7 @@
   "npm.packageManager": "yarn",
   "prettier.packageManager": "yarn",
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  "workbench.colorTheme": "Raspberry",
+  "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "material-icon-theme",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "window.zoomLevel": 0,

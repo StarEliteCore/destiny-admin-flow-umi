@@ -4,6 +4,13 @@ declare namespace MenuDto {
     name?: string;
     description?: string;
     routerPath?: string;
-    sort?: string;
+    sort?: number;
+    parentNumber?: string;
+    depth?: number;
+    icon?: string;
+    parentId?: string;
+    parentId?: string;
+    parentId?: string;
+    parentId?: string;
   }
 }

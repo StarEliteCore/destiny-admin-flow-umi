@@ -13,7 +13,7 @@ export default function useMenuModel() {
     async (param: any) =>
       await new Promise<Array<MenuDto.MenuTable>>((resolve, reject) => {
         setLoading(true);
-        GetPage(param)
+        GetPage()
           .then((response: any) => {
             let data: MenuDto.MenuTable[] = response.itemList;
             let total: number = response.total ?? 0;
