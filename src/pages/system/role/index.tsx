@@ -106,13 +106,13 @@ export default (): React.ReactNode => {
 
   const getRoleList = (current: number, pageSize: number, args: Conditions[] = []) => {
     let operationProps: Operation = {
-      PageIndex: current,
-      PageSize: pageSize
+      pageIndex: current,
+      pageSize: pageSize
     };
     if (args.length > 0) {
-      operationProps.Filter = {
-        FilterConnect: FilterConnect.AND,
-        Conditions: args
+      operationProps.filter = {
+        filterConnect: FilterConnect.AND,
+        conditions: args
       };
     }
     getRoleTable(operationProps).catch((error: Error) => {
@@ -276,9 +276,9 @@ export default (): React.ReactNode => {
       const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
       const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
       let item: Conditions = {
-        Field: key,
-        Value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
-        Operator: operator
+        field: key,
+        value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
+        operator: operator
       };
       newConditions.push(item);
     }

@@ -27,7 +27,7 @@ export const DeleteRole = (param: { id: string }): Promise<Types.AjaxResult> =>
     method: 'DELETE'
   });
 
-export const GetTreeSelect = (): Promise<TreeModel<Types.TreeMenu>> =>
-  request<TreeModel<Types.TreeMenu>>(MenuApi.selectTreeMenu, {
-    method: 'Get'
-  });
+// export const GetTreeSelect = (): Promise<TreeModel<Types.TreeMenu>> =>
+//   request<TreeModel<Types.TreeMenu>>(MenuApi.selectTreeMenu, {
+//     method: 'Get'
+//   });

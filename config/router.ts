@@ -43,6 +43,13 @@ const Route: IRoute[] = [
         icon: 'menu',
         path: '/system/menu',
         component: './system/menu'
+      },
+      {
+        access: 'canAdmin',
+        name: 'functionmanage',
+        icon: 'menu',
+        path: '/system/function',
+        component: './system/function'
       }
     ]
   }

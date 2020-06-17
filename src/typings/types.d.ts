@@ -92,6 +92,17 @@ declare namespace Types {
     value?: string;
   }
 
+  export interface FunctionTable {
+    id?: string;
+    name?: string;
+    description?: string;
+    lastModifierTime?: string;
+    createdTime?: string;
+    controller?: string;
+    action?: string;
+    isEnabled?: boolean;
+  }
+
   //  树数据模型
 
   export interface ResultBase {
