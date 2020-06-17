@@ -3,14 +3,13 @@ declare namespace MenuDto {
     id?: string;
     name?: string;
     description?: string;
-    routerPath?: string;
+    path?: string;
     sort?: number;
     parentNumber?: string;
     depth?: number;
     icon?: string;
+    component?: string;
     parentId?: string;
-    parentId?: string;
-    parentId?: string;
-    parentId?: string;
+    children?: [];
   }
 }

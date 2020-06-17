@@ -31,9 +31,12 @@ const Menu: React.FC<{}> = () => {
 
   const columns: Array<ColumnProps<Types.UserTable>> = [
     { title: <ColumnTitle name="菜单名" />, dataIndex: 'name', key: 'name', align: 'center' },
-    { title: <ColumnTitle name="路由" />, dataIndex: 'routerPath', key: 'routerPath', align: 'center' },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
+    { title: <ColumnTitle name="路由" />, dataIndex: 'path', key: 'path', align: 'center' },
+    { title: <ColumnTitle name="说明" />, dataIndex: 'description', key: 'description', align: 'center' },
+    { title: <ColumnTitle name="图标" />, dataIndex: 'icon', key: 'icon', align: 'center' },
     { title: <ColumnTitle name="排序" />, dataIndex: 'sort', key: 'sort', align: 'center' },
+    { title: <ColumnTitle name="组件路径" />, dataIndex: 'component', key: 'component', align: 'center' },
+    { title: <ColumnTitle name="深度" />, dataIndex: 'depth', key: 'depth', align: 'center' },
     {
       title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
       key: 'action',
