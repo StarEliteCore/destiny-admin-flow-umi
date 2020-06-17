@@ -1,4 +1,4 @@
-import { AddRole, DeleteRole, EditRole, GetRolePage, GetTreeSelect } from '../services';
+import { AddRole, DeleteRole, EditRole, GetRolePage } from '../services';
 import { useCallback, useState } from 'react';
 
 import { TreeModel } from '@/typings/model';

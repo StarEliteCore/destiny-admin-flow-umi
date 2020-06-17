@@ -45,3 +45,13 @@ export const UserApi = {
   loadUser: 'User/LoadAsync' //为什么这里就小写呢？
 };
 //#endregion
+
+//#region FunctionApi
+/**
+ * 功能相关
+ */
+export const FunctionApi = {
+  getPageFunction: 'Function/GetFunctionPageAsync',
+  addFunction: 'Function/CreateAsync'
+};
+//#endregion

@@ -184,7 +184,7 @@ export default (): React.ReactNode => {
         let args = {
           userName: username,
           nickName: nickname,
-          createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+          // createdTime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
           isSystem: isSystem,
           description: description,
           sex: sex,

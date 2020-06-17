@@ -9,5 +9,6 @@ export default {
   'menu.systemmanage': '系统管理',
   'menu.systemmanage.usermanage': '用户管理',
   'menu.systemmanage.rolemanage': '角色管理',
-  'menu.systemmanage.menumanage': '菜单管理'
+  'menu.systemmanage.menumanage': '菜单管理',
+  'menu.systemmanage.functionmanage': '功能管理'
 };
