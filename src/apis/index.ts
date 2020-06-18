@@ -52,6 +52,8 @@ export const UserApi = {
  */
 export const FunctionApi = {
   getPageFunction: 'Function/GetFunctionPageAsync',
-  addFunction: 'Function/CreateAsync'
+  addFunction: 'Function/CreateAsync',
+  updateFunction: 'Function/UpdateAsync',
+  deleteFunction: 'Function/DeleteAsync'
 };
 //#endregion

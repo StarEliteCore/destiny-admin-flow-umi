@@ -1,4 +1,4 @@
-import { AddFunction, GetFunctionPage } from '../services';
+import { AddFunction, DeleteFunction, GetFunctionPage, UpdateFunction } from '../services';
 import { useCallback, useState } from 'react';
 
 const useFunctionListModel = () => {
@@ -45,7 +45,32 @@ const useFunctionListModel = () => {
       }),
     []
   );
-  return { itemList, loading, total, current, pageSize, getFunctionTable, addFunction };
+
+  const updateFunction = useCallback(
+    async (param: any) =>
+      await new Promise<boolean>((resolve, reject) => {
+        setLoading(true);
+        UpdateFunction(param)
+          .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+
+  const deleteFunction = useCallback(
+    async (id: string) =>
+      await new Promise<boolean>((resolve, reject) => {
+        setLoading(true);
+        DeleteFunction({ id })
+          .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+
+  return { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction };
 };
 
 export default useFunctionListModel;

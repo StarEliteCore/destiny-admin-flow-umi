@@ -12,3 +12,15 @@ export const AddFunction = (param: any): Promise<Types.AjaxResult> =>
     data: param,
     method: 'POST'
   });
+
+export const UpdateFunction = (param: any): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(FunctionApi.updateFunction, {
+    data: param,
+    method: 'POST'
+  });
+
+export const DeleteFunction = (param: { id: string }): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(FunctionApi.deleteFunction, {
+    params: param,
+    method: 'DELETE'
+  });
