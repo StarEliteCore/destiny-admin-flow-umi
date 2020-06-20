@@ -1,4 +1,4 @@
-import { Button, Card, Collapse, Form, Input, Modal, Popconfirm, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Collapse, Form, Input, Modal, Switch, Table, message, notification } from 'antd';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
@@ -12,13 +12,13 @@ import { useForm } from 'antd/lib/form/util';
 import { useModel } from 'umi';
 
 export default (): React.ReactNode => {
-  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction } = useModel('functionList');
+  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('functionList');
   const [modalForm] = useForm();
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<boolean>(true);
   const [modalTitle, setModalTitle] = useState<string>('新增功能');
   const [itemId, setItemId] = useState<string>('');
-
+  const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
   useEffect(() => {
     getFunctionTable({ pageIndex: 1, pageSize: 10 });
   }, []);
@@ -84,6 +84,52 @@ export default (): React.ReactNode => {
     setItemId('');
     setModalShow(true);
   };
+
+  const getTableSelected = (rows: any[], callback: any) => {
+    if (rows.length == 0) {
+      message.warning('请选择数据！！！');
+
+      return;
+    }
+    if (rows.length > 1) {
+      message.warning(`已选择${rows.length}行数据,请重选择！！！`);
+      return;
+    }
+
+    let fun = function () {
+      if (callback) {
+        callback(rows[0]);
+      }
+    };
+
+    fun();
+  };
+  const onUpdateClick = () => {
+    // setModalModel(false);
+    setModalTitle('修改');
+    getTableSelected(getSelectedRows, (row: any) => {
+      modalForm.setFieldsValue({
+        name: row.name,
+        controller: row.controller,
+        action: row.action,
+        isEnabled: row.isEnabled,
+        description: row.description
+      });
+      setItemId(row.id);
+      setModalShow(true);
+    });
+  };
+  const onDeleteClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      deleteFunction(row.id)
+        .then(() => {
+          message.success('删除失败');
+          getFunctionList(1, 10);
+        })
+        .catch((error: Error) => message.error(`'删除失败,错误信息:' ${error}`));
+    });
+  };
+
   const pagination: PaginationProps = {
     ...tacitPagingProps,
     total,
@@ -105,7 +151,7 @@ export default (): React.ReactNode => {
     });
   };
   const onModalOK = () => {
-    if (modalModel === true) {
+    if (itemId === '') {
       modalForm.validateFields().then((values: Store) => {
         const { name, controller, action, isEnabled, description } = values;
 
@@ -124,11 +170,42 @@ export default (): React.ReactNode => {
           })
           .catch((error: Error) =>
             notification.error({
+              message: '保存失败!',
+              description: `'失败,错误信息:' ${error}`
+            })
+          );
+      });
+    } else {
+      modalForm.validateFields().then((values: Store) => {
+        const { name, controller, action, isEnabled, description } = values;
+
+        let args = {
+          name: name,
+          controller: controller,
+          action: action,
+          description: description,
+          isEnabled: isEnabled,
+          id: itemId
+        };
+        updateFunction(args)
+          .then(() => {
+            message.success('保存成功');
+            getFunctionList(1, 10);
+            setModalShow(false);
+          })
+          .catch((error: Error) =>
+            notification.error({
               message: '新增失败!',
               description: `'失败,错误信息:' ${error}`
             })
           );
       });
+    }
+  };
+
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      setSelectedRows(selectedRows);
     }
   };
   return (
@@ -142,7 +219,25 @@ export default (): React.ReactNode => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           新增
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record: Types.FunctionTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} />
+        <Button type="primary" style={{ marginBottom: 15 }} onClick={onUpdateClick}>
+          修改
+        </Button>
+        <Button type="primary" style={{ marginBottom: 15 }} onClick={onDeleteClick}>
+          删除
+        </Button>
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={(record: Types.FunctionTable) => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          pagination={pagination}
+          columns={columns}
+        />
       </Card>
       <Modal
         visible={modalShow}
