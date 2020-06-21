@@ -16,7 +16,10 @@ export const AuthApi = {
  */
 export const MenuApi = {
   getAuthorityTree: 'Menu/GetTreeAsync',
-  getPageData: 'Menu/GetTableAsync'
+  getData: 'Menu/GetTableAsync',
+  addMenu: 'Menu/AddMenuAsync',
+  editMenu: 'Menu/UpdateMenuAsync',
+  deleteMenu: 'Menu/DeleteAsync'
 };
 //#endregion
 

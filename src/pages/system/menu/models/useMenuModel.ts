@@ -1,24 +1,19 @@
+import { AddMenu, DeleteMenu, GetPage, UpdateMenu } from '../services';
 import { useCallback, useState } from 'react';
-
-import { GetPage } from '../services';
 
 export default function useMenuModel() {
   const [itemList, setItemList] = useState<Array<MenuDto.MenuTable>>([]);
 
-  const [total, setTotal] = useState<number>(0);
-  const [current, setCurrent] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
 
   const getMenuTable = useCallback(
-    async (param: any) =>
+    async () =>
       await new Promise<Array<MenuDto.MenuTable>>((resolve, reject) => {
         setLoading(true);
         GetPage()
           .then((response: any) => {
             let data: MenuDto.MenuTable[] = response.itemList;
-            let total: number = response.total ?? 0;
             setItemList(data);
-            setTotal(total);
             resolve(data);
           })
           .catch((error) => reject(error))
@@ -26,5 +21,41 @@ export default function useMenuModel() {
       }),
     []
   );
-  return { itemList, loading, total, current, getMenuTable };
+  const addMenu = useCallback(
+    async (param: any) =>
+      await new Promise<boolean>((resolve, reject) => {
+        setLoading(true);
+        AddMenu(param)
+          .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+  const delMenu = useCallback(
+    async (id: any) =>
+      await new Promise<boolean>((resolve, reject) => {
+        debugger;
+
+        setLoading(true);
+        DeleteMenu({ id })
+          .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+
+  const editMenu = useCallback(
+    async (param: any) =>
+      await new Promise<boolean>((resolve, reject) => {
+        setLoading(true);
+        UpdateMenu(param)
+          .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu };
 }
