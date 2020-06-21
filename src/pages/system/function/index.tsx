@@ -1,4 +1,5 @@
-import { Button, Card, Collapse, Form, Input, Modal, Switch, Table, message, notification } from 'antd';
+import { Button, Card, Collapse, Form, Input, Modal, Switch, Table, Tooltip, message, notification } from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
@@ -216,15 +217,15 @@ export default (): React.ReactNode => {
         </Collapse>
       </Card>
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
-          新增
-        </Button>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onUpdateClick}>
-          修改
-        </Button>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onDeleteClick}>
-          删除
-        </Button>
+        <Tooltip placement="bottom" title="新增">
+          <Button shape="circle" icon={<PlusOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onCreateClick} />
+        </Tooltip>
+        <Tooltip placement="bottom" title="修改">
+          <Button shape="circle" icon={<EditOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onUpdateClick} />
+        </Tooltip>
+        <Tooltip placement="bottom" title="删除">
+          <Button shape="circle" icon={<DeleteOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onDeleteClick} />
+        </Tooltip>
         <Table
           rowSelection={{
             type: 'checkbox',
