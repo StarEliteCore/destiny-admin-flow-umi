@@ -1,5 +1,7 @@
-import { Button, Card, Collapse, Form, Input, Modal, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Collapse, Form, Input, Modal, Row, Switch, Table, Tooltip, message, notification } from 'antd';
+import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { FilterConnect, FilterOperator } from '@/enumerate';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
@@ -20,6 +22,7 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('新增功能');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
+  const [searchForm] = useForm();
   useEffect(() => {
     getFunctionTable({ pageIndex: 1, pageSize: 10 });
   }, []);
@@ -137,14 +140,28 @@ export default (): React.ReactNode => {
     current,
     pageSize,
     onShowSizeChange: (current: number, pageSize: number) => {
-      getFunctionList(current, pageSize);
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getFunctionList(current, pageSize, filter);
     },
     onChange: (page: number, pageSize?: number) => {
-      getFunctionList(page, pageSize ?? 10);
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getFunctionList(page, pageSize ?? 10, filter);
     }
   };
-  const getFunctionList = (current: number, pageSize: number, args: any = {}) => {
-    getFunctionTable({ pageIndex: current, pageSize, ...args }).catch((error: Error) => {
+  const getFunctionList = (current: number, pageSize: number, args: Conditions[] = []) => {
+    let operationProps: Operation = {
+      pageIndex: current,
+      pageSize: pageSize
+    };
+    if (args.length > 0) {
+      operationProps.filter = {
+        filterConnect: FilterConnect.AND,
+        conditions: args
+      };
+    }
+    getFunctionTable(operationProps).catch((error: Error) => {
       notification.error({
         message: '获取信息失败!!',
         description: `'获取数据失败,错误信息:${error}`
@@ -209,11 +226,67 @@ export default (): React.ReactNode => {
       setSelectedRows(selectedRows);
     }
   };
+
+  const getSearchFormInfo = () => {
+    const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('controller', FilterOperator.LIKE), new ConditionInfo('action')];
+
+    return conditions;
+  };
+
+  const getSearchFilter = (values: any) => {
+    const conditions = getSearchFormInfo();
+    let newConditions: Conditions[] = [];
+    for (let key in values) {
+      if (values[key] === '' || values[key] === undefined) {
+        continue;
+      }
+      const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
+      const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
+      let item: Conditions = {
+        field: key,
+        value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
+        operator: operator
+      };
+      newConditions.push(item);
+    }
+    return newConditions;
+  };
+  const handleSearch = (values: Store) => {
+    let filter = getSearchFilter(values);
+    getFunctionList(1, 10, filter);
+  };
   return (
     <PageContainer>
       <Card>
         <Collapse accordion>
-          <Collapse.Panel header="查询面板" key="1"></Collapse.Panel>
+          <Collapse.Panel header="查询面板" key="1">
+            <Form onFinish={handleSearch} form={searchForm}>
+              <Row gutter={32}>
+                <Col span={8}>
+                  <Form.Item name="name" label="功能名字" style={{ marginBottom: 0 }}>
+                    <Input allowClear placeholder="请输入查询功能名字！！" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="controller" label="控制器" style={{ marginBottom: 0 }}>
+                    <Input allowClear placeholder="请输入查询控制器名字！！" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="action" label="方法" style={{ marginBottom: 0 }}>
+                    <Input allowClear placeholder="请输入查询方法名字！！" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <span style={{ float: 'right' }}>
+                    <Button type="primary" htmlType="submit">
+                      查询
+                    </Button>
+                  </span>
+                </Col>
+              </Row>
+            </Form>
+          </Collapse.Panel>
         </Collapse>
       </Card>
       <Card>

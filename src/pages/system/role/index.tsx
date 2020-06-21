@@ -37,9 +37,9 @@ export default (): React.ReactNode => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
 
-  const getTreeList = () => {
-    getTreeSelectMenu();
-  };
+  // const getTreeList = () => {
+  //   getTreeSelectMenu();
+  // };
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -253,13 +253,6 @@ export default (): React.ReactNode => {
     setCheckedKeys(newChecked);
   };
 
-  const onExpand = (expandedKeys: any) => {
-    console.log('onExpand', expandedKeys);
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    // setExpandedKeys(expandedKeys);
-    setAutoExpandParent(false);
-  };
   const getSearchFormInfo = () => {
     const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('isAdmin')];
 
@@ -314,9 +307,6 @@ export default (): React.ReactNode => {
                     <Button type="primary" htmlType="submit">
                       {intl.formatMessage({ id: 'role.button.submit' })}
                     </Button>
-                    {/* <Button style={{ marginLeft: 14 }} onClick={handleReset}>
-                      {intl.formatMessage({ id: 'user.button.reset' })}
-                    </Button> */}
                   </span>
                 </Col>
               </Row>
@@ -367,9 +357,6 @@ export default (): React.ReactNode => {
           <Form.Item name="description" label={intl.formatMessage({ id: 'role.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'role.modal.form.item.description.placeholder' })} />
           </Form.Item>
-          {/* <Form.Item name="description" label={intl.formatMessage({ id: 'role.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
-            <Tree checkable defaultExpandAll={true} autoExpandParent={autoExpandParent} onCheck={onCheck} checkedKeys={checkedKeys1} selectedKeys={selectedKeys} treeData={treeMenu} checkStrictly={true} />
-          </Form.Item> */}
         </Form>
       </Modal>
     </PageContainer>
