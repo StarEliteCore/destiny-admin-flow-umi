@@ -35,3 +35,8 @@ export const DeleteMenu = (param: { id: string }): Promise<Types.AjaxResult> =>
     params: param,
     method: 'DELETE'
   });
+export const GetLoadMenu = (param: { id: string }): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(MenuApi.LoadMenu, {
+    params: param,
+    method: 'GET'
+  });

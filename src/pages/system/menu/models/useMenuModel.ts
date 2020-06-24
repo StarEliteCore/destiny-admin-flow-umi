@@ -1,7 +1,8 @@
-import { AddMenu, DeleteMenu, GetPage, UpdateMenu } from '../services';
+import { AddMenu, DeleteMenu, GetLoadMenu, GetPage, UpdateMenu } from '../services';
 import { useCallback, useState } from 'react';
 
 export default function useMenuModel() {
+  const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>([]);
   const [itemList, setItemList] = useState<Array<MenuDto.MenuTable>>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,11 +36,27 @@ export default function useMenuModel() {
   const delMenu = useCallback(
     async (id: any) =>
       await new Promise<boolean>((resolve, reject) => {
-        debugger;
-
         setLoading(true);
         DeleteMenu({ id })
           .then(() => resolve(true))
+          .catch((error) => reject(error))
+          .finally(() => setLoading(false));
+      }),
+    []
+  );
+  /**
+   * 加载一个菜单
+   */
+  const getLoadMenu = useCallback(
+    async (id: any) =>
+      await new Promise<MenuDto.MenuOutputLoadDto>((resolve, reject) => {
+        setLoading(true);
+        GetLoadMenu({ id })
+          .then((response: any) => {
+            let menuData = response.data as MenuDto.MenuOutputLoadDto;
+            setLoadMenuForm(menuData);
+            resolve(menuData);
+          })
           .catch((error) => reject(error))
           .finally(() => setLoading(false));
       }),
@@ -57,5 +74,5 @@ export default function useMenuModel() {
       }),
     []
   );
-  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu };
+  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm };
 }

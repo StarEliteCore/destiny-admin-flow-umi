@@ -35,6 +35,8 @@ export default {
   'menu.modal.form.item.description.input.message': '请输入菜单说明',
   'menu.modal.form.item.sort.label': '排序',
   'menu.modal.form.item.sort.input.message': '请输入排序',
+  'menu.modal.form.item.functions.select.placeholder': '请选择功能',
+  'menu.modal.form.item.functions.label': '功能',
   'menu.modal.form.item.depth': '深度',
   /**
    *公共配置

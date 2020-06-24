@@ -92,6 +92,14 @@ declare namespace Types {
     value?: string;
   }
 
+  export interface FunctionSelect {
+    disabled?: boolean;
+    group?: any;
+    selected?: boolean;
+    text?: string;
+    value?: string;
+  }
+
   export interface FunctionTable {
     id?: string;
     name?: string;

@@ -19,7 +19,8 @@ export const MenuApi = {
   getData: 'Menu/GetTableAsync',
   addMenu: 'Menu/AddMenuAsync',
   editMenu: 'Menu/UpdateMenuAsync',
-  deleteMenu: 'Menu/DeleteAsync'
+  deleteMenu: 'Menu/DeleteAsync',
+  LoadMenu: 'Menu/LoadFormMenuAsync'
 };
 //#endregion
 
@@ -57,6 +58,7 @@ export const FunctionApi = {
   getPageFunction: 'Function/GetFunctionPageAsync',
   addFunction: 'Function/CreateAsync',
   updateFunction: 'Function/UpdateAsync',
-  deleteFunction: 'Function/DeleteAsync'
+  deleteFunction: 'Function/DeleteAsync',
+  selectFunction: 'Function/GetFunctionSelectListItemAsync'
 };
 //#endregion
