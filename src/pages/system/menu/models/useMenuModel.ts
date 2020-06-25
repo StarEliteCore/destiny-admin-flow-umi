@@ -2,7 +2,7 @@ import { AddMenu, DeleteMenu, GetLoadMenu, GetPage, UpdateMenu } from '../servic
 import { useCallback, useState } from 'react';
 
 export default function useMenuModel() {
-  const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>([]);
+  const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>();
   const [itemList, setItemList] = useState<Array<MenuDto.MenuTable>>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
