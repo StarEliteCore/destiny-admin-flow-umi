@@ -25,4 +25,11 @@ declare namespace MenuDto {
     parentNumber: string;
     parentId: string;
   }
+
+  export interface MenuFunctionTable {
+    functionId: string;
+    name: string;
+    linkUrl: string;
+    description: string;
+  }
 }

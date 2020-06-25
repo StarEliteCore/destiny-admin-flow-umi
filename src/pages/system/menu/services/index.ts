@@ -40,3 +40,9 @@ export const GetLoadMenu = (param: { id: string }): Promise<Types.AjaxResult> =>
     params: param,
     method: 'GET'
   });
+
+export const GetMenuFunctionList = (param: { id: string }): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(MenuApi.getMenuFunction, {
+    params: param,
+    method: 'GET'
+  });

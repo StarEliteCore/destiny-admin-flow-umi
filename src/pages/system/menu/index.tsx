@@ -1,5 +1,5 @@
-import { Button, Card, Divider, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tooltip, message, notification } from 'antd';
-import { DeleteOutlined, EditOutlined, FileAddFilled, WarningOutlined } from '@ant-design/icons';
+import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tooltip, message, notification } from 'antd';
+import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,6 @@ import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
-import moment from 'moment';
 import { useForm } from 'antd/lib/form/util';
 
 const Menu: React.FC<{}> = () => {
@@ -17,7 +16,7 @@ const Menu: React.FC<{}> = () => {
   const [searchForm] = useForm();
   const [modalForm] = useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm } = useModel('useMenuModel');
+  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('useMenuModel');
   const { loading: roleLoading } = useModel('useMenuModel');
   const { functions, getFunctions } = useModel('function');
   const [parentNumber, setparentNumber] = useState<string>('');
@@ -27,6 +26,7 @@ const Menu: React.FC<{}> = () => {
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
+  const [showDrawer, setShowDrawer] = useState<boolean>(false);
   useEffect(() => {
     getMenuList();
   }, []);
@@ -124,6 +124,10 @@ const Menu: React.FC<{}> = () => {
       align: 'center',
       render: (_: string, record: MenuDto.MenuTable) => (
         <div>
+          <Tooltip placement="bottom" title="查看菜单功能">
+            <SecurityScanFilled onClick={() => onViewClick(record.id)} />
+          </Tooltip>
+          <Divider type="vertical" />
           <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.add' })}>
             <FileAddFilled onClick={() => onCreateChildrenClick(record)} />
           </Tooltip>
@@ -142,6 +146,27 @@ const Menu: React.FC<{}> = () => {
     }
   ];
 
+  const menuFunctionColumns: Array<ColumnProps<MenuDto.MenuFunctionTable>> = [
+    {
+      title: <ColumnTitle name="功能名称" />,
+      dataIndex: 'name',
+      key: 'name',
+      align: 'center'
+    },
+    {
+      title: <ColumnTitle name="链接" />,
+      dataIndex: 'linkUrl',
+      key: 'linkUrl',
+      align: 'center'
+    },
+    {
+      title: <ColumnTitle name="描述" />,
+      dataIndex: 'description',
+      key: 'description',
+      align: 'center'
+    }
+  ];
+
   const onDeleteClick = (id: string) => {
     delMenu(id)
       .then(() => {
@@ -150,6 +175,18 @@ const Menu: React.FC<{}> = () => {
       })
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
+
+  const onViewClick = (id: string) => {
+    console.log(id);
+    getMenuFunctionList(id);
+    setShowDrawer(true);
+    // console.log(menuFunctionItemList);
+  };
+
+  const onCloseDrawer = () => {
+    setShowDrawer(false);
+  };
+
   const onEditClick = (record: MenuDto.MenuTable) => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
@@ -257,13 +294,23 @@ const Menu: React.FC<{}> = () => {
     });
   };
   const getMenuList = () => {
-    getMenuTable().catch((error) => {
+    getMenuTable().catch((error: any) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
       });
     });
   };
+
+  const getMenuFunctionList = (id: string) => {
+    getMenuFunctionTable(id).catch((error: any) => {
+      notification.error({
+        message: intl.formatMessage({ id: '加载菜单功能数据失败' }),
+        description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
+      });
+    });
+  };
+
   return (
     <PageContainer>
       <Card>
@@ -358,6 +405,10 @@ const Menu: React.FC<{}> = () => {
           </Form.Item>
         </Form>
       </Modal>
+
+      <Drawer title="查看菜单功能" width={520} visible={showDrawer} onClose={onCloseDrawer}>
+        <Table pagination={false} loading={LoadingObject(menuFunctionLoading)} tableLayout="fixed" size="small" dataSource={menuFunctionItemList} columns={menuFunctionColumns}></Table>
+      </Drawer>
     </PageContainer>
   );
 };
