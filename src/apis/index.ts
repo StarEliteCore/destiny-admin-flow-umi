@@ -20,7 +20,8 @@ export const MenuApi = {
   addMenu: 'Menu/AddMenuAsync',
   editMenu: 'Menu/UpdateMenuAsync',
   deleteMenu: 'Menu/DeleteAsync',
-  LoadMenu: 'Menu/LoadFormMenuAsync'
+  LoadMenu: 'Menu/LoadFormMenuAsync',
+  getMenuFunction: 'Menu/GetMenuFunctionListAsync'
 };
 //#endregion
 

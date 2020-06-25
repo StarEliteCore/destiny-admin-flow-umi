@@ -1,12 +1,13 @@
-import { AddMenu, DeleteMenu, GetLoadMenu, GetPage, UpdateMenu } from '../services';
+import { AddMenu, DeleteMenu, GetLoadMenu, GetMenuFunctionList, GetPage, UpdateMenu } from '../services';
 import { useCallback, useState } from 'react';
 
 export default function useMenuModel() {
-  const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>([]);
+  const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>();
   const [itemList, setItemList] = useState<Array<MenuDto.MenuTable>>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [menuFunctionItemList, setMenuFunctionItemList] = useState<Array<MenuDto.MenuFunctionTable>>([]);
+  const [menuFunctionLoading, setMnuFunctionLoading] = useState<boolean>(false);
   const getMenuTable = useCallback(
     async () =>
       await new Promise<Array<MenuDto.MenuTable>>((resolve, reject) => {
@@ -74,5 +75,21 @@ export default function useMenuModel() {
       }),
     []
   );
-  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm };
+
+  const getMenuFunctionTable = useCallback(
+    async (id: any) =>
+      await new Promise<Array<MenuDto.MenuFunctionTable>>((resolve, reject) => {
+        setMnuFunctionLoading(true);
+        GetMenuFunctionList({ id })
+          .then((response: any) => {
+            let data: MenuDto.MenuFunctionTable[] = response.itemList;
+            setMenuFunctionItemList(data);
+            resolve(data);
+          })
+          .catch((error) => reject(error))
+          .finally(() => setMnuFunctionLoading(false));
+      }),
+    []
+  );
+  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading };
 }
