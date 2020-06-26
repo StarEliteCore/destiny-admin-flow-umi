@@ -12,12 +12,11 @@ import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import { fixValue } from './operation';
 import moment from 'moment';
-import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const [searchForm] = useForm();
-  const [modalForm] = useForm();
+  const [searchForm] = Form.useForm();
+  const [modalForm] = Form.useForm();
 
   const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm, loadUserForm } = useModel('userList');
   const { loading: roleLoading, roles, getRoles } = useModel('role');
