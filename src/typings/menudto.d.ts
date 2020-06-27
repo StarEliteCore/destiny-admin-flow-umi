@@ -32,4 +32,12 @@ declare namespace MenuDto {
     linkUrl: string;
     description: string;
   }
+  /**
+   * 权限分配树形Dto
+   */
+  export interface MenuTreeOutDto {
+    key: string;
+    title: string;
+    children: [];
+  }
 }

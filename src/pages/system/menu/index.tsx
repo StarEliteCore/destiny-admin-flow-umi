@@ -15,7 +15,7 @@ export default (): React.ReactNode => {
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading, loadMenuForm } = useModel('menuServices');
+  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
   const { functions, getFunctions } = useModel('function');
   const [menuRow, setMenuRow] = useState<MenuDto.MenuTable>();
 

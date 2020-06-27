@@ -26,7 +26,14 @@ export const DeleteRole = (param: { id: string }): Promise<Types.AjaxResult> =>
     params: param,
     method: 'DELETE'
   });
-
+/**
+ *
+ * @param param
+ */
+export const GetMenuTreeList = (): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(MenuApi.AuthorityAssignmentTree, {
+    method: 'GET'
+  });
 // export const GetTreeSelect = (): Promise<TreeModel<Types.TreeMenu>> =>
 //   request<TreeModel<Types.TreeMenu>>(MenuApi.selectTreeMenu, {
 //     method: 'Get'

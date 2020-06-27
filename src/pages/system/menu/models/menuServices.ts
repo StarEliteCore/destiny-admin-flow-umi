@@ -1,4 +1,4 @@
-import { AddMenu, DeleteMenu, GetLoadMenu, GetMenuFunctionList, GetPage, UpdateMenu } from '../services';
+import { AddMenu, DeleteMenu, GetLoadMenu, GetMenuFunctionList, GetMenuTreeList, GetPage, UpdateMenu } from '../services';
 import { useCallback, useState } from 'react';
 
 const useMenuModel = () => {
@@ -109,16 +109,16 @@ const useMenuModel = () => {
     []
   );
   return {
-    itemList,
-    loading,
     getMenuTable,
     addMenu,
     delMenu,
     editMenu,
     getLoadMenu,
-    loadMenuForm,
     getMenuFunctionTable,
+    itemList,
+    loading,
     menuFunctionItemList,
+    loadMenuForm,
     menuFunctionLoading
   };
 };
