@@ -9,16 +9,19 @@ import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
+import { useForm } from 'antd/lib/form/util';
 
-export default (): React.ReactNode => {
+const Menu: React.FC<{}> = () => {
   const intl: IntlShape = useIntl();
-  const [searchForm] = Form.useForm();
-  const [modalForm] = Form.useForm();
+  const [searchForm] = useForm();
+  const [modalForm] = useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
+  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('useMenuModel');
+  const { loading: roleLoading } = useModel('useMenuModel');
   const { functions, getFunctions } = useModel('function');
-  const [menuRow, setMenuRow] = useState<MenuDto.MenuTable>();
-
+  const [parentNumber, setparentNumber] = useState<string>('');
+  const [depth, setdepth] = useState<number>(0);
+  const [parentId, setparent] = useState<string>('');
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
@@ -142,6 +145,7 @@ export default (): React.ReactNode => {
       )
     }
   ];
+
   const menuFunctionColumns: Array<ColumnProps<MenuDto.MenuFunctionTable>> = [
     {
       title: <ColumnTitle name="功能名称" />,
@@ -162,6 +166,7 @@ export default (): React.ReactNode => {
       align: 'center'
     }
   ];
+
   const onDeleteClick = (id: string) => {
     delMenu(id)
       .then(() => {
@@ -170,41 +175,37 @@ export default (): React.ReactNode => {
       })
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
+
   const onViewClick = (id: string) => {
     console.log(id);
     getMenuFunctionList(id);
     setShowDrawer(true);
+    // console.log(menuFunctionItemList);
   };
+
   const onCloseDrawer = () => {
     setShowDrawer(false);
   };
 
-  const [loadmenudata, setLoadMenuData] = useState<{ parentId?: string; parentNumber?: string; depth?: number }>({});
   const onEditClick = (record: MenuDto.MenuTable) => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
     setItemId(record.id!);
-    getLoadMenu({
-      payload: { id: record.id },
-      callback: (result: any) => {
-        const {
-          data,
-          data: { parentId, parentNumber, depth }
-        } = result;
-        setLoadMenuData({ parentId, parentNumber, depth });
-        modalForm.setFieldsValue({
-          name: data?.name,
-          component: data?.component,
-          icon: data?.icon,
-          path: data?.path,
-          sort: data?.sort,
-          description: data?.description,
-          func: data?.functionIds,
-          parentId: data?.parentId,
-          parentNumber: data?.parentNumber,
-          depth: data?.depth
-        });
-      }
+    getLoadMenu(record.id).then(() => {
+      let data = loadMenuForm;
+      debugger;
+      setparent(data.parentId);
+      setdepth(data.depth);
+      setparentNumber(data.parentNumber);
+      modalForm.setFieldsValue({
+        name: data.name,
+        component: data.component,
+        icon: data.icon,
+        path: data.path,
+        sort: data.sort,
+        description: data.description,
+        func: data.functionIds
+      });
     });
     setModalShow(true);
   };
@@ -215,7 +216,9 @@ export default (): React.ReactNode => {
   };
   const handleSearch = (values: Store) => {};
   const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
-    setMenuRow(record);
+    setparent(record.id);
+    setdepth(record.depth + 1);
+    setparentNumber(record.parentNumber + ',' + record.id);
     setModalModel('create');
     setModalTitle('modal.title.create');
     modalForm.setFieldsValue({
@@ -231,6 +234,9 @@ export default (): React.ReactNode => {
     setModalShow(true);
   };
   const onCreateClick = () => {
+    setModalModel('create');
+    setModalTitle('modal.title.create');
+    setparent(Guid.EMPTY);
     modalForm.setFieldsValue({
       name: '',
       component: '',
@@ -238,10 +244,7 @@ export default (): React.ReactNode => {
       path: '',
       sort: 0,
       func: [],
-      depth: 0,
-      description: '',
-      parentId: Guid.EMPTY,
-      parentNumber: Guid.EMPTY
+      description: ''
     });
     setItemId('');
     setModalShow(true);
@@ -249,32 +252,18 @@ export default (): React.ReactNode => {
   const onModalOK = () => {
     modalForm.validateFields().then((values: Store) => {
       const { name, component, icon, path, sort, description, func } = values;
-      console.log(menuRow);
-      let dep = 0;
-      let parentNu = '';
-      let parentId = Guid.EMPTY;
-      if (menuRow !== undefined) {
-        dep = menuRow?.depth! + 1;
-        parentNu = menuRow?.parentNumber!;
-        parentId = menuRow?.id!;
-      } else if (modalModel !== 'create') {
-        dep = loadmenudata?.depth ?? 0;
-        parentNu = loadmenudata?.parentNumber ?? '';
-        parentId = loadmenudata?.parentId ?? Guid.EMPTY;
-      }
       let args = {
         name: name,
         component: component,
         icon: icon,
         path: path,
-        depth: dep,
+        depth: depth,
         sort: sort,
         description: description,
-        parentNumber: parentNu,
+        parentNumber: parentNumber,
         parentId: parentId,
         functionId: func
       };
-
       if (modalModel === 'create') {
         addMenu(args)
           .then(() => {
@@ -400,7 +389,7 @@ export default (): React.ReactNode => {
             <Input allowClear placeholder={intl.formatMessage({ id: 'menu.modal.form.item.icon.input.message' })} />
           </Form.Item>
           <Form.Item name="func" label={intl.formatMessage({ id: 'menu.modal.form.item.functions.label' })}>
-            <Select mode="multiple" placeholder={intl.formatMessage({ id: 'menu.modal.form.item.functions.select.placeholder' })}>
+            <Select mode="multiple" loading={roleLoading} placeholder={intl.formatMessage({ id: 'menu.modal.form.item.functions.select.placeholder' })}>
               {functions?.map((item: Types.FunctionSelect) => (
                 <Select.Option key={item.value} value={item.value!}>
                   {item.text}
@@ -423,3 +412,5 @@ export default (): React.ReactNode => {
     </PageContainer>
   );
 };
+
+export default Menu;
