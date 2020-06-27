@@ -19,12 +19,6 @@ const Route: IRoute[] = [
     component: './home'
   },
   {
-    name: 'tree',
-    icon: 'home',
-    path: '/treedemo',
-    component: './treedemo'
-  },
-  {
     access: 'canAdmin',
     path: '/system',
     name: 'systemmanage',

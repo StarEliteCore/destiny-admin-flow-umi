@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Row, Select, Switch, Tooltip, Tree, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
@@ -16,14 +18,15 @@ import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getTreeSelectMenu, menuList } = useModel('roleList');
-
+  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getMenuTree } = useModel('roleList');
+  const [menuTree, setMenuTreeForm] = useState<Array<MenuDto.MenuTreeOutDto>>([]);
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('role.modal.title.create');
   const [modalForm] = useForm();
   const [searchForm] = useForm();
   const [itemId, setItemId] = useState<string>('');
+  const [menucheckedKeys, setTreeCheckedKeys] = useState<any>(['08d815d8-868f-45cc-8fdf-0dff5acac7fc', '08d8190f-377e-471a-87c5-51b770656110']);
 
   const [expandedKeys, setExpandedKeys] = useState<string[]>();
   const [checkedKeys1, setCheckedKeys] = useState<string[]>([]);
@@ -31,15 +34,17 @@ export default (): React.ReactNode => {
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [newCheckedKeys, setNewCheckedKeys] = useState<any>({ checked: [] });
   useEffect(() => {
-    //getTreeList();
+    getMenuTree({
+      callback: (result: any) => {
+        const data = result.data;
+        setMenuTreeForm(data);
+        console.log(data);
+      }
+    });
   }, []);
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
-
-  // const getTreeList = () => {
-  //   getTreeSelectMenu();
-  // };
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -122,7 +127,6 @@ export default (): React.ReactNode => {
       });
     });
   };
-
   const onCreateClick = () => {
     setModalModel('create');
     setModalTitle('role.modal.title.create');
@@ -146,7 +150,16 @@ export default (): React.ReactNode => {
     });
     setModalShow(true);
   };
-
+  /**
+   *
+   * @param checkedKeys
+   * @param e
+   */
+  const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
+    let concat = checkedKeys.concat(e.halfCheckedKeys);
+    console.log('concat:', concat);
+    setTreeCheckedKeys(checkedKeys);
+  };
   const onDeleteClick = (id: string) => {
     deleteRole(id)
       .then(() => {
@@ -185,9 +198,9 @@ export default (): React.ReactNode => {
         let args = {
           name: name,
           isAdmin: isAdmin,
-          description: description
+          description: description,
+          menuIds: menucheckedKeys
         };
-
         updateRole({ ...args, id: itemId })
           .then(() => {
             message.success(intl.formatMessage({ id: 'role.function.modify.role.success' }));
@@ -257,7 +270,6 @@ export default (): React.ReactNode => {
 
     return conditions;
   };
-
   const getSearchFilter = (values: any) => {
     const conditions = getSearchFormInfo();
     let newConditions: Conditions[] = [];
@@ -349,7 +361,6 @@ export default (): React.ReactNode => {
           >
             <Input allowClear placeholder={intl.formatMessage({ id: 'role.modal.form.item.name.input.placeholder' })} />
           </Form.Item>
-
           <Form.Item name="isAdmin" label={intl.formatMessage({ id: 'role.modal.form.item.is.admin' })} valuePropName="checked">
             <Switch checkedChildren={intl.formatMessage({ id: 'role.modal.form.item.is.admin.check' })} unCheckedChildren={intl.formatMessage({ id: 'role.modal.form.item.is.admin.un.check' })} />
           </Form.Item>
@@ -357,6 +368,9 @@ export default (): React.ReactNode => {
             <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'role.modal.form.item.description.placeholder' })} />
           </Form.Item>
         </Form>
+        <Card>
+          <Tree checkable onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} />
+        </Card>
       </Modal>
     </PageContainer>
   );

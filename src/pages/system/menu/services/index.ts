@@ -46,3 +46,11 @@ export const GetMenuFunctionList = (param: { id: string }): Promise<Types.AjaxRe
     params: param,
     method: 'GET'
   });
+/**
+ *
+ * @param param
+ */
+export const GetMenuTreeList = (): Promise<Types.AjaxResult> =>
+  request<Types.AjaxResult>(MenuApi.AuthorityAssignmentTree, {
+    method: 'GET'
+  });

@@ -1,7 +1,9 @@
 import { AddRole, DeleteRole, EditRole, GetRolePage } from '../services';
 import { useCallback, useState } from 'react';
 
-import { TreeModel } from '@/typings/model';
+import { GetMenuTreeList } from '../../menu/services';
+
+const treeData = [];
 
 const useRoleListModel = () => {
   const [itemList, setItemList] = useState<Array<Types.RoleTable>>([]);
@@ -9,7 +11,7 @@ const useRoleListModel = () => {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [menuTree, setMenuTreeForm] = useState<Array<MenuDto.MenuTreeOutDto>>([]);
   const getRoleTable = useCallback(
     async (param: any) =>
       await new Promise<Array<Types.RoleTable>>((resolve, reject) => {
@@ -72,53 +74,24 @@ const useRoleListModel = () => {
       }),
     []
   );
-
-  const [treeMenu, setTreeMenu] = useState<Types.TreeMenu[]>([]);
-  const [menuList, setMenuList] = useState<Types.TreeMenu[]>([]);
-  const getMenuTreeToList = (allNodes: Array<Types.TreeMenu>): Array<Types.TreeMenu> => {
-    let nodes: Types.TreeMenu[] = [];
-    let rev = (data: Array<Types.TreeMenu>) => {
-      for (var i = 0, length = data.length; i < length; i++) {
-        let node = data[i];
-        let newNode: Types.TreeMenu = {
-          id: node.id,
-          parentId: node.parentId,
-          name: node.name,
-          children: [],
-          title: node.name,
-          key: node.id
-        };
-        nodes.push(newNode);
-
-        if (node.children.length > 0) {
-          rev(node.children);
-        }
-      }
-      return nodes;
-    };
-    nodes = rev(allNodes);
-
-    return nodes;
-  };
-  const getTreeSelectMenu = useCallback(
-    async () =>
-      await new Promise<Types.TreeMenu[]>((resolve, reject) => {
-        GetTreeSelect()
-          .then((response: TreeModel<Types.TreeMenu>) => {
-            let data = response.itemList;
-            setTreeMenu(data);
-            setMenuList(getMenuTreeToList(data));
-            resolve(data);
-          })
-          .catch((error) => {
-            reject(error);
-          })
-          .finally(() => setLoading(false));
-      }),
+  /**
+   *获取角色分配权限树形
+   */
+  const getMenuTree = useCallback(
+    async ({ callback }: { callback?: (result: any) => void }) =>
+      await GetMenuTreeList()
+        .then((response: any) => {
+          let treat = response.itemList as MenuDto.MenuTreeOutDto[];
+          setMenuTreeForm(treat);
+          if (callback) callback({ success: response.success, message: response.message, data: treat });
+        })
+        .catch((error) => {
+          if (callback) callback({ state: false, msg: error });
+          else console.log(error);
+        }),
     []
   );
-
-  return { itemList, loading, total, current, pageSize, getRoleTable, addRole, updateRole, deleteRole, getTreeSelectMenu, treeMenu, menuList };
+  return { itemList, loading, total, current, pageSize, getRoleTable, addRole, updateRole, deleteRole, menuTree, getMenuTree };
 };
 
 export default useRoleListModel;
