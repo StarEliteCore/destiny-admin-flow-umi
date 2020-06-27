@@ -1,10 +1,9 @@
 import { AddMenu, DeleteMenu, GetLoadMenu, GetMenuFunctionList, GetPage, UpdateMenu } from '../services';
 import { useCallback, useState } from 'react';
 
-export default function useMenuModel() {
+const useMenuModel = () => {
   const [loadMenuForm, setLoadMenuForm] = useState<MenuDto.MenuOutputLoadDto>();
   const [itemList, setItemList] = useState<Array<MenuDto.MenuTable>>([]);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [menuFunctionItemList, setMenuFunctionItemList] = useState<Array<MenuDto.MenuFunctionTable>>([]);
   const [menuFunctionLoading, setMnuFunctionLoading] = useState<boolean>(false);
@@ -45,24 +44,42 @@ export default function useMenuModel() {
       }),
     []
   );
+
+  const getLoadMenu = useCallback(
+    async ({ payload, callback }: { payload: { id: any }; callback?: (result: any) => void }) =>
+      await GetLoadMenu(payload)
+        .then((response: any) => {
+          let menuData = response.data as MenuDto.MenuOutputLoadDto;
+
+          setLoadMenuForm(menuData);
+          // resolve(menuData);
+          if (callback) callback({ state: true, msg: response.msg, data: menuData });
+        })
+        .catch((error) => {
+          if (callback) callback({ state: false, msg: error });
+          else console.log(error);
+        }),
+    []
+  );
   /**
    * 加载一个菜单
    */
-  const getLoadMenu = useCallback(
-    async (id: any) =>
-      await new Promise<MenuDto.MenuOutputLoadDto>((resolve, reject) => {
-        setLoading(true);
-        GetLoadMenu({ id })
-          .then((response: any) => {
-            let menuData = response.data as MenuDto.MenuOutputLoadDto;
-            setLoadMenuForm(menuData);
-            resolve(menuData);
-          })
-          .catch((error) => reject(error))
-          .finally(() => setLoading(false));
-      }),
-    []
-  );
+  // const getLoadMenu = useCallback(
+  //   async (id: any) =>
+  //     await new Promise<MenuDto.MenuOutputLoadDto>((resolve, reject) => {
+  //       setLoading(true);
+  //       GetLoadMenu({ id })
+  //         .then((response: any) => {
+  //           let menuData = response.data as MenuDto.MenuOutputLoadDto;
+  //
+  //           setLoadMenuForm(menuData);
+  //           resolve(menuData);
+  //         })
+  //         .catch((error) => reject(error))
+  //         .finally(() => setLoading(false));
+  //     }),
+  //   []
+  // );
 
   const editMenu = useCallback(
     async (param: any) =>
@@ -91,5 +108,18 @@ export default function useMenuModel() {
       }),
     []
   );
-  return { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, loadMenuForm, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading };
-}
+  return {
+    itemList,
+    loading,
+    getMenuTable,
+    addMenu,
+    delMenu,
+    editMenu,
+    getLoadMenu,
+    loadMenuForm,
+    getMenuFunctionTable,
+    menuFunctionItemList,
+    menuFunctionLoading
+  };
+};
+export default useMenuModel;
