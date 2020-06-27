@@ -188,6 +188,7 @@ const Menu: React.FC<{}> = () => {
   };
 
   const onEditClick = (record: MenuDto.MenuTable) => {
+    debugger;
     setModalModel('edit');
     setModalTitle('modal.title.modify');
     setItemId(record.id!);
@@ -388,7 +389,7 @@ const Menu: React.FC<{}> = () => {
           >
             <Input allowClear placeholder={intl.formatMessage({ id: 'menu.modal.form.item.icon.input.message' })} />
           </Form.Item>
-          <Form.Item name="func" label={intl.formatMessage({ id: 'menu.modal.form.item.functions.label' })}>
+          {/* <Form.Item name="func" label={intl.formatMessage({ id: 'menu.modal.form.item.functions.label' })}>
             <Select mode="multiple" loading={roleLoading} placeholder={intl.formatMessage({ id: 'menu.modal.form.item.functions.select.placeholder' })}>
               {functions?.map((item: Types.FunctionSelect) => (
                 <Select.Option key={item.value} value={item.value!}>
@@ -396,7 +397,7 @@ const Menu: React.FC<{}> = () => {
                 </Select.Option>
               ))}
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name="sort" label={intl.formatMessage({ id: 'menu.modal.form.item.sort.label' })}>
             <InputNumber placeholder={intl.formatMessage({ id: 'menu.modal.form.item.sort.input.message' })} />
           </Form.Item>

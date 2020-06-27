@@ -33,16 +33,11 @@ export default (): React.ReactNode => {
       key: 'name',
       align: 'center'
     },
+
     {
-      title: <ColumnTitle name="控制器" />,
-      dataIndex: 'controller',
-      key: 'controller',
-      align: 'center'
-    },
-    {
-      title: <ColumnTitle name="方法" />,
-      dataIndex: 'action',
-      key: 'action',
+      title: <ColumnTitle name="链接URL" />,
+      dataIndex: 'linkUrl',
+      key: 'linkUrl',
       align: 'center'
     },
     {
@@ -80,8 +75,7 @@ export default (): React.ReactNode => {
     setModalTitle('新增');
     modalForm.setFieldsValue({
       name: '',
-      controller: '',
-      action: '',
+      linkUrl: '',
       isEnabled: true,
       description: ''
     });
@@ -114,8 +108,7 @@ export default (): React.ReactNode => {
     getTableSelected(getSelectedRows, (row: any) => {
       modalForm.setFieldsValue({
         name: row.name,
-        controller: row.controller,
-        action: row.action,
+        linkUrl: row.linkUrl,
         isEnabled: row.isEnabled,
         description: row.description
       });
@@ -171,12 +164,11 @@ export default (): React.ReactNode => {
   const onModalOK = () => {
     if (itemId === '') {
       modalForm.validateFields().then((values: Store) => {
-        const { name, controller, action, isEnabled, description } = values;
+        const { name, linkUrl, isEnabled, description } = values;
 
         let args = {
           name: name,
-          controller: controller,
-          action: action,
+          linkUrl: linkUrl,
           description: description,
           isEnabled: isEnabled
         };
@@ -195,12 +187,11 @@ export default (): React.ReactNode => {
       });
     } else {
       modalForm.validateFields().then((values: Store) => {
-        const { name, controller, action, isEnabled, description } = values;
+        const { name, linkUrl, isEnabled, description } = values;
 
         let args = {
           name: name,
-          controller: controller,
-          action: action,
+          linkUrl: linkUrl,
           description: description,
           isEnabled: isEnabled,
           id: itemId
@@ -228,7 +219,7 @@ export default (): React.ReactNode => {
   };
 
   const getSearchFormInfo = () => {
-    const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('controller', FilterOperator.LIKE), new ConditionInfo('action')];
+    const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE)];
 
     return conditions;
   };
@@ -267,16 +258,7 @@ export default (): React.ReactNode => {
                     <Input allowClear placeholder="请输入查询功能名字！！" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
-                  <Form.Item name="controller" label="控制器" style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder="请输入查询控制器名字！！" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="action" label="方法" style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder="请输入查询方法名字！！" />
-                  </Form.Item>
-                </Col>
+
                 <Col span={8}>
                   <span style={{ float: 'right' }}>
                     <Button type="primary" htmlType="submit">
@@ -341,20 +323,18 @@ export default (): React.ReactNode => {
             <Input allowClear placeholder="请输入功能名称！！！" />
           </Form.Item>
           <Form.Item
-            name="controller"
-            label="控制器"
+            name="linkUrl"
+            label="链接URL"
             rules={[
               {
                 required: true,
-                message: '请填写控制器'
+                message: '链接URL不能为空'
               }
             ]}
           >
-            <Input allowClear placeholder="请输入控制器！！！" />
+            <Input allowClear placeholder="链接URL" />
           </Form.Item>
-          <Form.Item name="action" label="方法">
-            <Input allowClear placeholder="请输入方法！！！" />
-          </Form.Item>
+
           <Form.Item name="isEnabled" label="是否可用" valuePropName="checked">
             <Switch checkedChildren="是" unCheckedChildren="否" />
           </Form.Item>

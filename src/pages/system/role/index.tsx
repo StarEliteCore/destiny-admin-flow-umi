@@ -235,7 +235,6 @@ export default (): React.ReactNode => {
 
     let value = e.node.key;
     let treeData = menuList;
-    debugger;
     if (e.checked) {
       let parentIds = getParentIds(value, treeData);
       if (!parentIds.includes(value)) {

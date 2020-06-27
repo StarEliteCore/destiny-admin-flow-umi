@@ -106,8 +106,8 @@ declare namespace Types {
     description?: string;
     lastModifierTime?: string;
     createdTime?: string;
-    controller?: string;
-    action?: string;
+
+    linkUrl?: string;
     isEnabled?: boolean;
   }
 
