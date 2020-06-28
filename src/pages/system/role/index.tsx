@@ -243,28 +243,6 @@ export default (): React.ReactNode => {
     return allNodes.filter((item: any) => item.id == id)[0];
   };
 
-  const onCheck = (checkedKeys: any, e: any) => {
-    let newChecked: any = [];
-
-    let value = e.node.key;
-    let treeData = menuList;
-    if (e.checked) {
-      let parentIds = getParentIds(value, treeData);
-      if (!parentIds.includes(value)) {
-        parentIds.push(value);
-      }
-      let children = getChildrenIds(value, treeData);
-      let addNodes: any = parentIds.concat(children).filter((item: string) => !checkedKeys1.includes(item));
-      newChecked = checkedKeys1.concat(addNodes);
-    } else {
-      //取消勾选事件,取消勾选所有子节点
-      let children = getChildrenIds(value, treeData);
-      children.push(value);
-      newChecked = checkedKeys1.filter((item: string) => !children.includes(item));
-    }
-    setCheckedKeys(newChecked);
-  };
-
   const getSearchFormInfo = () => {
     const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('isAdmin')];
 
