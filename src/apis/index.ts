@@ -15,7 +15,7 @@ export const AuthApi = {
  * 菜单相关
  */
 export const MenuApi = {
-  getAuthorityTree: 'Menu/GetTreeAsync',
+  AuthorityAssignmentTree: 'Menu/GetMenuTreeAsync',
   getData: 'Menu/GetTableAsync',
   addMenu: 'Menu/AddMenuAsync',
   editMenu: 'Menu/UpdateMenuAsync',
