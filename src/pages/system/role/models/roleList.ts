@@ -81,9 +81,10 @@ const useRoleListModel = () => {
     async ({ callback }: { callback?: (result: any) => void }) =>
       await GetMenuTreeList()
         .then((response: any) => {
-          let treat = response.itemList as MenuDto.MenuTreeOutDto[];
+          let treat = response.data.itemList as MenuDto.MenuTreeOutDto[];
           setMenuTreeForm(treat);
-          if (callback) callback({ success: response.success, message: response.message, data: treat });
+          console.log(response)
+          if (callback) callback({ success: response.success, message: response.message, data: treat, selected: response.data.selected });
         })
         .catch((error) => {
           if (callback) callback({ state: false, msg: error });

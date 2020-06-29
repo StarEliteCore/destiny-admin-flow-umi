@@ -38,7 +38,7 @@ export default (): React.ReactNode => {
       callback: (result: any) => {
         const data = result.data;
         setMenuTreeForm(data);
-        console.log(data);
+        console.log(result);
       }
     });
   }, []);
@@ -378,7 +378,7 @@ export default (): React.ReactNode => {
           </Form.Item>
         </Form>
         <Card>
-          <Tree checkable onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} />
+          <Tree checkable defaultExpandAll={true} onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} />
         </Card>
       </Modal>
     </PageContainer>
