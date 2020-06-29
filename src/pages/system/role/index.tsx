@@ -1,13 +1,12 @@
 //@ts-nocheck
 
-import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Row, Select, Switch, Tooltip, Tree, message, notification } from 'antd';
+import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Row, Select, Switch, Table, Tooltip, Tree, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import Table, { ColumnProps } from 'antd/lib/table';
 
 import ColumnTitle from '@/components/ColumnTitle';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -26,22 +25,13 @@ export default (): React.ReactNode => {
   const [modalForm] = useForm();
   const [searchForm] = useForm();
   const [itemId, setItemId] = useState<string>('');
-  const [menucheckedKeys, setTreeCheckedKeys] = useState<any>(['08d815d8-868f-45cc-8fdf-0dff5acac7fc', '08d8190f-377e-471a-87c5-51b770656110']);
+  const [menucheckedKeys, setTreeCheckedKeys] = useState<any>([]);
 
   const [expandedKeys, setExpandedKeys] = useState<string[]>();
   const [checkedKeys1, setCheckedKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [newCheckedKeys, setNewCheckedKeys] = useState<any>({ checked: [] });
-  useEffect(() => {
-    getMenuTree({
-      callback: (result: any) => {
-        const data = result.data;
-        setMenuTreeForm(data);
-        console.log(result);
-      }
-    });
-  }, []);
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
@@ -130,6 +120,13 @@ export default (): React.ReactNode => {
   const onCreateClick = () => {
     setModalModel('create');
     setModalTitle('role.modal.title.create');
+    getMenuTree({
+      callback: (result: any) => {
+        const data = result.data;
+        setMenuTreeForm(data);
+        setTreeCheckedKeys([]);
+      }
+    });
     modalForm.setFieldsValue({
       name: '',
       isAdmin: false,
@@ -143,6 +140,16 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('role.modal.title.modify');
     setItemId(record.id!);
+    getMenuTree({
+      payload: { roleId: record.id },
+      callback: (result: any) => {
+        const data = result.data;
+        const selecteddata = result.selected;
+        setMenuTreeForm(data);
+        setTreeCheckedKeys(selecteddata);
+      }
+    });
+
     modalForm.setFieldsValue({
       name: record.name,
       description: record.description,
@@ -157,7 +164,7 @@ export default (): React.ReactNode => {
    */
   const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
     let concat = checkedKeys.concat(e.halfCheckedKeys);
-    console.log('concat:', concat);
+    // console.log('concat:', concat);
     setTreeCheckedKeys(checkedKeys);
   };
   const onDeleteClick = (id: string) => {
@@ -300,6 +307,14 @@ export default (): React.ReactNode => {
   const handleSearch = (values: Store) => {
     let filter = getSearchFilter(values);
     getRoleList(1, 10, filter);
+  };
+
+  const onExpand = (expandedKeys) => {
+    console.log('onExpand', expandedKeys);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpandedKeys(expandedKeys);
+    setAutoExpandParent(false);
   };
 
   return (

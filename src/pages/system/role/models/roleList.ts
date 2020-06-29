@@ -78,12 +78,12 @@ const useRoleListModel = () => {
    *获取角色分配权限树形
    */
   const getMenuTree = useCallback(
-    async ({ callback }: { callback?: (result: any) => void }) =>
-      await GetMenuTreeList()
+    async ({ payload, callback }: { payload: { roleId: any }; callback?: (result: any) => void }) =>
+      await GetMenuTreeList(payload)
         .then((response: any) => {
           let treat = response.data.itemList as MenuDto.MenuTreeOutDto[];
           setMenuTreeForm(treat);
-          console.log(response)
+          console.log(response);
           if (callback) callback({ success: response.success, message: response.message, data: treat, selected: response.data.selected });
         })
         .catch((error) => {
