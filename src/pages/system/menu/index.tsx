@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
+import { MenuTypeEnum } from '@/pages/system/menu/models/MenuTypeEnum';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
 
@@ -24,6 +25,10 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
+  const [menuType, setMenuType] = useState<Array<MenuDto.MenuType>>([
+    { key: MenuTypeEnum.Menu, value: '菜单' },
+    { key: MenuTypeEnum.Button, value: '按钮' }
+  ]);
   useEffect(() => {
     getMenuList();
   }, []);
@@ -213,7 +218,7 @@ export default (): React.ReactNode => {
     searchForm.resetFields();
     handleSearch({});
   };
-  const handleSearch = (values: Store) => { };
+  const handleSearch = (values: Store) => {};
   const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
     setMenuRow(record);
     setModalModel('create');
@@ -239,16 +244,14 @@ export default (): React.ReactNode => {
       sort: 0,
       func: [],
       depth: 0,
-      description: '',
-      parentId: Guid.EMPTY,
-      parentNumber: Guid.EMPTY
+      description: ''
     });
     setItemId('');
     setModalShow(true);
   };
   const onModalOK = () => {
     modalForm.validateFields().then((values: Store) => {
-      const { name, component, icon, path, sort, description, func } = values;
+      const { name, component, icon, path, sort, description, func, type } = values;
       console.log(menuRow);
       let dep = 0;
       let parentNu = '';
@@ -269,12 +272,13 @@ export default (): React.ReactNode => {
         path: path,
         depth: dep,
         sort: sort,
+        type: type,
         description: description,
         parentNumber: parentNu,
         parentId: parentId,
         functionId: func
       };
-
+      console.log(args);
       if (modalModel === 'create') {
         addMenu(args)
           .then(() => {
@@ -404,6 +408,15 @@ export default (): React.ReactNode => {
               {functions?.map((item: Types.FunctionSelect) => (
                 <Select.Option key={item.value} value={item.value!}>
                   {item.text}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="type" label={intl.formatMessage({ id: 'menu.modal.form.item.menutype.label' })}>
+            <Select placeholder={intl.formatMessage({ id: 'menu.modal.form.item.functions.select.menutype' })}>
+              {menuType?.map((item: MenuDto.MenuType) => (
+                <Select.Option key={item.key} value={item.key}>
+                  {item.value}
                 </Select.Option>
               ))}
             </Select>

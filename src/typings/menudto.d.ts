@@ -40,4 +40,8 @@ declare namespace MenuDto {
     title: string;
     children: [];
   }
+  export interface MenuType {
+    key: MenuTypeEnum;
+    value: string;
+  }
 }

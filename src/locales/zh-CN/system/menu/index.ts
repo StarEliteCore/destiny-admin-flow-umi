@@ -38,6 +38,8 @@ export default {
   'menu.modal.form.item.functions.select.placeholder': '请选择功能',
   'menu.modal.form.item.functions.label': '功能',
   'menu.modal.form.item.depth': '深度',
+  'menu.modal.form.item.functions.select.menutype': '请选择类型',
+  'menu.modal.form.item.menutype.label': '类型',
   /**
    *公共配置
    */
