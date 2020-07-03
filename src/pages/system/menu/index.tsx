@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tag, Tooltip, message, notification } from 'antd';
 import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
+import { MenuDto } from '@/typings/menudto';
 import { MenuTypeEnum } from '@/pages/system/menu/models/MenuTypeEnum';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
@@ -121,6 +122,14 @@ export default (): React.ReactNode => {
       align: 'center'
     },
     {
+      title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.type' })} />,
+      key: 'action',
+      align: 'center',
+      render: (_: string, record: MenuDto.MenuTable) => {
+        return record.type == MenuTypeEnum.Menu ? <Tag color="cyan">菜单</Tag> : <Tag color="blue">按钮</Tag>;
+      }
+    },
+    {
       title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.operating' })} />,
       key: 'action',
       align: 'center',
@@ -207,7 +216,8 @@ export default (): React.ReactNode => {
           func: data?.functionIds,
           parentId: data?.parentId,
           parentNumber: data?.parentNumber,
-          depth: data?.depth
+          depth: data?.depth,
+          type: data.type
         });
       }
     });

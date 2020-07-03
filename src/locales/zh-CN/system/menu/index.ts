@@ -10,6 +10,7 @@ export default {
   'menu.table.columns.component': '组件路径',
   'menu.table.columns.depth': '深度',
   'menu.table.columns.operating': '操作',
+  'menu.table.columns.type': '类型',
   'menu.table.columns.tooltip.delete': '删除',
   'menu.table.columns.tooltip.modify': '修改',
   'menu.table.columns.tooltip.add': '添加子级',

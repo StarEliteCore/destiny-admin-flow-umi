@@ -1,3 +1,4 @@
+import { MenuTypeEnum } from '@/pages/system/menu/models/MenuTypeEnum';
 declare namespace MenuDto {
   export interface MenuTable {
     id: string;
@@ -10,6 +11,7 @@ declare namespace MenuDto {
     icon?: string;
     component?: string;
     parentId: string;
+    type: MenuTypeEnum;
     children?: [];
   }
   export interface MenuOutputLoadDto {
