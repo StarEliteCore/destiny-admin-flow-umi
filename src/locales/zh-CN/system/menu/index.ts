@@ -50,7 +50,9 @@ export default {
   'modal.ok.text': '保存',
   'function.add.user.success': '新增成功!',
   'function.add.user.fail.message': '新增失败!',
-  'function.add.user.fail.description': '失败,错误信息:'
+  'function.add.user.fail.description': '失败,错误信息:',
+  'function.add.user.menu.description': '不允许添加子级!'
+
   /**
    *
    */
