@@ -50,8 +50,13 @@ export default {
   'modal.ok.text': '保存',
   'function.add.user.success': '新增成功!',
   'function.add.user.fail.message': '新增失败!',
-  'function.add.user.fail.description': '失败,错误信息:'
+  'function.add.user.fail.description': '失败,错误信息:',
   /**
-   *
+   *数据字典配置
    */
+  'datadictionary.table.columns.title': '标题',
+  'datadictionary.table.columns.value': '值',
+  'datadictionary.table.columns.remark': '备注',
+  'datadictionary.table.columns.parentid': '父级',
+  'datadictionary.table.columns.sort': '排序',
 };

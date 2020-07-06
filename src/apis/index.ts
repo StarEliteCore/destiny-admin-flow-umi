@@ -63,3 +63,13 @@ export const FunctionApi = {
   selectFunction: 'Function/GetFunctionSelectListItemAsync'
 };
 //#endregion
+/**
+ * 数据字典相关
+ */
+export const DataDictionaryApi = {
+  getDataDictionary: 'DataDictionary/GetPageListAsync',
+  updateDataDictionary: 'DataDictionary/UpdateAsync',
+  createDataDictionary: 'DataDictionary/CreateAsync',
+  deleteDataDictionary: 'DataDictionary/CreateAsync',
+  getTreeDataDictionary: 'DataDictionary/GetTableAsync'
+}

@@ -50,6 +50,13 @@ const Route: IRoute[] = [
         icon: 'menu',
         path: '/system/function',
         component: './system/function'
+      },
+      {
+        access: 'canAdmin',
+        name: 'dataDictionarymanage',
+        icon: 'dataDictionary',
+        path: '/system/dataDictionary',
+        component: './system/dataDictionary'
       }
     ]
   }

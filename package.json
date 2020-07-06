@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "umi build",
-    "start": "cross-env PORT=8848 umi dev",
+    "start": "cross-env PORT=8080 umi dev",
     "postinstall": "umi g tmp",
     "analyze": "cross-env ANALYZE=1 umi build"
   },
