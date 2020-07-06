@@ -13,11 +13,15 @@ const useAuthModel = () => {
         setLoading(true);
         await Login({ userName: account, password })
           .then((response: Types.AjaxResult) => {
-            let data: Types.AuthDto = response.data;
-            const { accessToken, userId } = data;
-            Cookies.set('accessToken', accessToken ?? '', { path: '/' });
-            Cookies.set('userId', userId ?? '', { path: '/' });
-            resolve(data);
+            if (response.success == false) {
+              console.log('sda123sad13sa1');
+            } else {
+              let data: Types.AuthDto = response.data;
+              const { accessToken, userId } = data;
+              Cookies.set('accessToken', accessToken ?? '', { path: '/' });
+              Cookies.set('userId', userId ?? '', { path: '/' });
+              resolve(data);
+            }
           })
           .catch((error) => reject(error))
           .finally(() => setLoading(false));

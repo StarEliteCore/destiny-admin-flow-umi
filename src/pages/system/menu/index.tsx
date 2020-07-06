@@ -230,6 +230,13 @@ export default (): React.ReactNode => {
   };
   const handleSearch = (values: Store) => {};
   const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
+    if (record.type == MenuTypeEnum.Button) {
+      notification.error({
+        message: intl.formatMessage({ id: 'function.add.user.menu.description' })
+      });
+      return;
+    }
+
     setMenuRow(record);
     setModalModel('create');
     setModalTitle('modal.title.create');
