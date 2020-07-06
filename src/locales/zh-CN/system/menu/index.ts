@@ -51,11 +51,7 @@ export default {
   'function.add.user.success': '新增成功!',
   'function.add.user.fail.message': '新增失败!',
   'function.add.user.fail.description': '失败,错误信息:',
-<<<<<<< HEAD
-=======
-  'function.add.user.menu.description': '不允许添加子级!'
-
->>>>>>> cfb29d29ef0396894b07cb2a1a11235374ed3b50
+  'function.add.user.menu.description': '不允许添加子级!',
   /**
    *数据字典配置
    */
