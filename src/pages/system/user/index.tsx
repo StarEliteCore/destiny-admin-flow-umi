@@ -1,5 +1,7 @@
 import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
+import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
+import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
@@ -116,7 +118,10 @@ export default (): React.ReactNode => {
       )
     }
   ];
-
+  /**
+   *删除用户
+   * @param id
+   */
   const onDeleteClick = (id: string) => {
     deleteUser(id)
       .then(() => {
@@ -125,7 +130,10 @@ export default (): React.ReactNode => {
       })
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
-
+  /**
+   *
+   * @param record 修改用户
+   */
   const onEditClick = (record: Types.UserTable) => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
@@ -145,14 +153,18 @@ export default (): React.ReactNode => {
 
     setModalShow(true);
   };
-
   const handleReset = () => {
     searchForm.resetFields();
     getUserList(1, 10);
   };
 
-  const handleSearch = (values: Store) => getUserList(1, 10, values);
-
+  const handleSearch = (values: Store) => {
+    let filter = getSearchFilter(values);
+    getUserList(1, 10, filter);
+  };
+  /**
+   * 创建用户
+   */
   const onCreateClick = () => {
     setModalModel('create');
     setModalTitle('user.modal.title.create');
@@ -204,7 +216,6 @@ export default (): React.ReactNode => {
       });
     } else {
       modalForm.validateFields().then((values: Store) => {
-        debugger;
         const { username, nickname, sex, isSystem, roles, description } = values;
         let rolesIds: string[] = [];
         if (roles instanceof Array) {
@@ -237,8 +248,48 @@ export default (): React.ReactNode => {
     setModalShow(false);
   };
 
+  /**
+   * 查询条件拼接
+   */
+  const getSearchFilter = (values: any) => {
+    const conditions = getSearchFormInfo();
+    let newConditions: Conditions[] = [];
+    debugger;
+    for (let key in values) {
+      if (values[key] === '' || values[key] === undefined) {
+        continue;
+      }
+      debugger;
+      const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
+      const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
+      let item: Conditions = {
+        field: key,
+        value: operator == FilterOperator.LIKE ? `%${values[key]}%` : values[key],
+        operator: operator
+      };
+      newConditions.push(item);
+    }
+    return newConditions;
+  };
+  /**
+   * 查询条件定义
+   */
+  const getSearchFormInfo = () => {
+    const conditions: ConditionInfo[] = [new ConditionInfo('UserName', FilterOperator.LIKE), new ConditionInfo('nickname', FilterOperator.LIKE)];
+    return conditions;
+  };
   const getUserList = (current: number, pageSize: number, args: any = {}) => {
-    getUserTable(fixValue({ pageIndex: current, pageSize, ...args })).catch((error: Error) => {
+    let operationProps: Operation = {
+      pageIndex: current,
+      pageSize: pageSize
+    };
+    if (args.length > 0) {
+      operationProps.filter = {
+        filterConnect: FilterConnect.AND,
+        conditions: args
+      };
+    }
+    getUserTable(operationProps).catch((error: Error) => {
       notification.error({
         message: intl.formatMessage({ id: 'user.function.get.user.list.fail.message' }),
         description: `${intl.formatMessage({ id: 'user.function.get.user.list.fail.description' })} ${error}`
@@ -252,46 +303,43 @@ export default (): React.ReactNode => {
     current,
     pageSize,
     onShowSizeChange: (current: number, pageSize: number) => {
-      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
-      getUserList(current, pageSize, args);
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getUserList(current, pageSize, filter);
     },
     onChange: (page: number, pageSize?: number) => {
-      let args = searchForm.getFieldsValue(['UserName', 'NickName']);
-      getUserList(page, pageSize ?? 10, args);
+      let args = searchForm.getFieldsValue();
+      let filter = getSearchFilter(args);
+      getUserList(page, pageSize ?? 10, filter);
     }
   };
-
   return (
     <PageContainer>
       <Card>
-        <Collapse accordion>
-          <Collapse.Panel header={intl.formatMessage({ id: 'user.collapse.panel_1.header' })} key="1">
-            <Form onFinish={handleSearch} form={searchForm}>
-              <Row gutter={24}>
-                <Col span={8}>
-                  <Form.Item name="UserName" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="NickName" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <span style={{ float: 'right' }}>
-                    <Button type="primary" htmlType="submit">
-                      {intl.formatMessage({ id: 'user.button.submit' })}
-                    </Button>
-                    <Button style={{ marginLeft: 14 }} onClick={handleReset}>
-                      {intl.formatMessage({ id: 'user.button.reset' })}
-                    </Button>
-                  </span>
-                </Col>
-              </Row>
-            </Form>
-          </Collapse.Panel>
-        </Collapse>
+        <Form onFinish={handleSearch} form={searchForm}>
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item name="UserName" label={intl.formatMessage({ id: 'user.form.item.username' })} style={{ marginBottom: 0 }}>
+                <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="NickName" label={intl.formatMessage({ id: 'user.form.item.nickname' })} style={{ marginBottom: 0 }}>
+                <Input allowClear placeholder={intl.formatMessage({ id: 'user.input.placeholder' })} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <span style={{ float: 'right' }}>
+                <Button type="primary" htmlType="submit">
+                  {intl.formatMessage({ id: 'user.button.submit' })}
+                </Button>
+                <Button style={{ marginLeft: 14 }} onClick={handleReset}>
+                  {intl.formatMessage({ id: 'user.button.reset' })}
+                </Button>
+              </span>
+            </Col>
+          </Row>
+        </Form>
       </Card>
       <Card>
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
