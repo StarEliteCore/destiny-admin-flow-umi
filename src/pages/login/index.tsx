@@ -1,5 +1,5 @@
-import { Button, Card, Form, Input, Modal } from 'antd';
-import { IntlShape, SelectLang, history, useIntl, useModel } from 'umi';
+import { Button, Card, Form, Input, Modal, message } from 'antd';
+import { Helmet, IntlShape, SelectLang, history, useIntl, useModel } from 'umi';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 
 import Footer from '@/components/Footer';
@@ -10,7 +10,7 @@ import styles from './index.less';
 /**
  * 此方法会跳转到 redirect 参数所在的位置
  */
-const replaceGoto = (): void => {
+const replaceGoto = async (): Promise<void> => {
   const urlParams = new URL(window.location.href);
   const params = getPageQuery();
   let { redirect } = params as { redirect: string };
@@ -18,9 +18,7 @@ const replaceGoto = (): void => {
     const redirectUrlParams = new URL(redirect);
     if (redirectUrlParams.origin === urlParams.origin) {
       redirect = redirect.substr(urlParams.origin.length);
-      if (redirect.match(/^\/.*#/)) {
-        redirect = redirect.substr(redirect.indexOf('#') + 1);
-      }
+      if (redirect.match(/^\/.*#/)) redirect = redirect.substr(redirect.indexOf('#') + 1);
     } else {
       window.location.href = '/';
       return;
@@ -36,14 +34,14 @@ export default (): React.ReactNode => {
   const { loading, login } = useModel('auth');
 
   const handleSubmit = async (values: any) => {
-    await login(values).then(async () => {
-      await refresh().then(() => {
-        setTimeout(() => {
-          replaceGoto();
-          location.reload();
-        }, 200);
-      });
-    });
+    const { userName, password } = values;
+    let args: { userName: string; password: string } = { userName, password };
+    await login(args)
+      .then(async result => {
+        if (result) await refresh().then(() => replaceGoto().then(() => location.reload()));
+        else message.info('登陆失败');
+      })
+      .catch((reason: any) => message.error(`登陆失败:${reason}`));
   };
 
   const showModal = () =>
@@ -56,6 +54,10 @@ export default (): React.ReactNode => {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>登录</title>
+      </Helmet>
       <div className={styles.lang}>
         <SelectLang />
       </div>
@@ -74,7 +76,7 @@ export default (): React.ReactNode => {
         >
           <Form onFinish={handleSubmit} style={{ maxWidth: 350 }}>
             <Form.Item
-              name="account"
+              name="userName"
               rules={[
                 {
                   required: true,
