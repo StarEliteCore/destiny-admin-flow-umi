@@ -13,46 +13,48 @@ const Route: IRoute[] = [
     redirect: '/home'
   },
   {
+    access: 'home',
     name: 'home',
     icon: 'home',
     path: '/home',
     component: './home'
   },
   {
-    access: 'canAdmin',
+    access: 'systemmanage',
     path: '/system',
     name: 'systemmanage',
     icon: 'setting',
     routes: [
       {
+        access: 'rolemanage',
         name: 'rolemanage',
         icon: 'solution',
         path: '/system/role',
         component: './system/role'
       },
       {
-        access: 'canAdmin',
+        access: 'usermmanage',
         name: 'usermanage',
         icon: 'user',
         path: '/system/user',
         component: './system/user'
       },
       {
-        access: 'canAdmin',
+        access: 'menumanage',
         name: 'menumanage',
         icon: 'menu',
         path: '/system/menu',
         component: './system/menu'
       },
       {
-        access: 'canAdmin',
+        access: 'functionmanage',
         name: 'functionmanage',
         icon: 'menu',
         path: '/system/function',
         component: './system/function'
       },
       {
-        access: 'canAdmin',
+        access: 'add',
         name: 'dataDictionarymanage',
         icon: 'dataDictionary',
         path: '/system/dataDictionary',
