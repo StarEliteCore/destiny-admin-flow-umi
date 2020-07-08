@@ -2,11 +2,12 @@
 
 import { AvatarGif, LogoPng } from '@/assets';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { RequestConfig, history } from 'umi';
+import { ErrorShowType, RequestConfig, history } from 'umi';
 
 import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
 import { LoadUser } from '@/services/user';
+import { MenuAsyncAPI } from '@/services/menu';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
@@ -19,31 +20,30 @@ export const getInitialState = async (): Promise<{
   currentUser?: Types.CurrentUser;
   settings?: LayoutSettings;
   // settingDrawer?: SettingDrawerProps;
-}> =>
-  await new Promise(async (resolve, reject) => {
-    if (history.location.pathname !== '/login') {
+}> => {
+  if (history.location.pathname !== '/login') {
+    try {
       let userid: string = Cookies.get('userId') ?? '';
-      await LoadUser({ id: userid })
-        .then((response) => {
-          const userInfo: Types.UserTable = response.data;
-          const { nickName } = userInfo;
-          resolve({
-            currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: 'admin' },
-            settings: defaultSettings
-            // settingDrawer: {
-            //   hideCopyButton: true,
-            //   hideHintAlert: true
-            // }
-          });
-        })
-        .catch((error) => {
-          history.push('/login');
-          reject(error);
-        });
-    } else {
-      resolve({ settings: defaultSettings });
+      let response: Types.AjaxResult = await LoadUser({ id: userid });
+      const userInfo: Types.UserTable = response.data;
+      const { nickName } = userInfo;
+      let menuRes: any = await MenuAsyncAPI();
+      const { itemList } = menuRes;
+      return {
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: itemList },
+        settings: defaultSettings
+        // settingDrawer: {
+        //   hideCopyButton: true,
+        //   hideHintAlert: true
+        // }
+      };
+    } catch (error) {
+      history.push('/login');
+      throw error;
     }
-  });
+  } else return { settings: defaultSettings };
+};
+
 //#endregion
 
 //#region Layout配置
@@ -54,7 +54,7 @@ export const getInitialState = async (): Promise<{
 export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
-    siderWidth: 208,
+    siderWidth: 220,
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     disableMobile: true,
@@ -79,10 +79,10 @@ export const request: RequestConfig = {
         data: res.data || res.result,
         success: res.ok || res.Success || res.success,
         errorMessage: res.message || res.msg || res.Message,
-        errorCode: res.code || res.type
+        errorCode: res.code || res.type,
+        showType: ErrorShowType.NOTIFICATION
       };
-    },
-    errorPage: '4'
+    }
   },
   prefix: BaseUrl,
   credentials: 'include',
@@ -91,7 +91,6 @@ export const request: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (url: string, options) => {
-      Cookies.set('date', Date.now().toString(), { path: '/' });
       options.headers = { Authorization: `Bearer ${Cookies.get('accessToken') ?? ''}` };
       return { url, options };
     }

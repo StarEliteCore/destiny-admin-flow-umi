@@ -21,7 +21,8 @@ export const MenuApi = {
   editMenu: 'Menu/UpdateMenuAsync',
   deleteMenu: 'Menu/DeleteAsync',
   LoadMenu: 'Menu/LoadFormMenuAsync',
-  getMenuFunction: 'Menu/GetMenuFunctionListAsync'
+  getMenuFunction: 'Menu/GetMenuFunctionListAsync',
+  getMenuAsync: 'Menu/GetMenuAsync'
 };
 //#endregion
 
@@ -72,4 +73,4 @@ export const DataDictionaryApi = {
   createDataDictionary: 'DataDictionary/CreateAsync',
   deleteDataDictionary: 'DataDictionary/CreateAsync',
   getTreeDataDictionary: 'DataDictionary/GetTableAsync'
-}
+};
