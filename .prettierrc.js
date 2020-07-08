@@ -3,6 +3,7 @@ const fabric = require('@umijs/fabric');
 
 module.exports = {
   ...fabric.prettier,
-  printWidth: 500,
-  trailingComma: 'none'
+  printWidth: 200,
+  trailingComma: 'none',
+  arrowParens: 'avoid'
 };
