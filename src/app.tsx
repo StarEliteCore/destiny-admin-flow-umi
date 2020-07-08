@@ -7,6 +7,7 @@ import { ErrorShowType, RequestConfig, history } from 'umi';
 import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
 import { LoadUser } from '@/services/user';
+import { MenuAsyncAPI } from '@/services/menu';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
@@ -26,8 +27,10 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
+      let menuRes: any = await MenuAsyncAPI();
+      const { itemList } = menuRes;
       return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: 'admin' },
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: itemList },
         settings: defaultSettings
         // settingDrawer: {
         //   hideCopyButton: true,
