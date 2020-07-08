@@ -220,7 +220,6 @@ export default (): React.ReactNode => {
 
   const getSearchFormInfo = () => {
     const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE)];
-
     return conditions;
   };
 
@@ -249,27 +248,23 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-        <Collapse accordion>
-          <Collapse.Panel header="查询面板" key="1">
-            <Form onFinish={handleSearch} form={searchForm}>
-              <Row gutter={32}>
-                <Col span={8}>
-                  <Form.Item name="name" label="功能名字" style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder="请输入查询功能名字！！" />
-                  </Form.Item>
-                </Col>
+        <Form onFinish={handleSearch} form={searchForm}>
+          <Row gutter={32}>
+            <Col span={8}>
+              <Form.Item name="name" label="功能名字" style={{ marginBottom: 0 }}>
+                <Input allowClear placeholder="请输入查询功能名字！！" />
+              </Form.Item>
+            </Col>
 
-                <Col span={8}>
-                  <span style={{ float: 'right' }}>
-                    <Button type="primary" htmlType="submit">
-                      查询
-                    </Button>
-                  </span>
-                </Col>
-              </Row>
-            </Form>
-          </Collapse.Panel>
-        </Collapse>
+            <Col span={8}>
+              <span style={{ float: 'right' }}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+              </span>
+            </Col>
+          </Row>
+        </Form>
       </Card>
       <Card>
         <Tooltip placement="bottom" title="新增">

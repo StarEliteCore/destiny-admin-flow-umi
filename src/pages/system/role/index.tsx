@@ -320,34 +320,30 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-        <Collapse accordion>
-          <Collapse.Panel header={intl.formatMessage({ id: 'role.collapse.panel_1.header' })} key="1">
-            <Form onFinish={handleSearch} form={searchForm}>
-              <Row gutter={24}>
-                <Col span={8}>
-                  <Form.Item name="name" label={intl.formatMessage({ id: 'role.form.item.name' })} style={{ marginBottom: 0 }}>
-                    <Input allowClear placeholder={intl.formatMessage({ id: 'role.input.placeholder' })} />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="isAdmin" label={intl.formatMessage({ id: 'role.form.item.is.admin' })} style={{ marginBottom: 0 }}>
-                    <Select allowClear placeholder={intl.formatMessage({ id: 'role.select.placeholder' })}>
-                      <Select.Option value="true">是</Select.Option>
-                      <Select.Option value="false">否</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <span style={{ float: 'right' }}>
-                    <Button type="primary" htmlType="submit">
-                      {intl.formatMessage({ id: 'role.button.submit' })}
-                    </Button>
-                  </span>
-                </Col>
-              </Row>
-            </Form>
-          </Collapse.Panel>
-        </Collapse>
+        <Form onFinish={handleSearch} form={searchForm}>
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item name="name" label={intl.formatMessage({ id: 'role.form.item.name' })} style={{ marginBottom: 0 }}>
+                <Input allowClear placeholder={intl.formatMessage({ id: 'role.input.placeholder' })} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="isAdmin" label={intl.formatMessage({ id: 'role.form.item.is.admin' })} style={{ marginBottom: 0 }}>
+                <Select allowClear placeholder={intl.formatMessage({ id: 'role.select.placeholder' })}>
+                  <Select.Option value="true">是</Select.Option>
+                  <Select.Option value="false">否</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <span style={{ float: 'right' }}>
+                <Button type="primary" htmlType="submit">
+                  {intl.formatMessage({ id: 'role.button.submit' })}
+                </Button>
+              </span>
+            </Col>
+          </Row>
+        </Form>
       </Card>
 
       <Card>
