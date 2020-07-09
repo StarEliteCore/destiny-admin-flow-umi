@@ -28,8 +28,9 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Build React
-      run: |
-      yarn build
+      run:  yarn build
+    - name: Copy nginx.conf
+      run:  cp nginx.conf ./dist
     - name: Build docker image
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
