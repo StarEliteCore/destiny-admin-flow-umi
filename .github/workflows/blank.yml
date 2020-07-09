@@ -30,8 +30,8 @@ jobs:
     - name: Build React
       run: |
       yarn build
-      cp nginx.conf ./dist
-      cp Dockerfile
+      cp /nginx.conf ./dist
+      cp /Dockerfile
       cd dist
     - name: Build docker image
       with:
