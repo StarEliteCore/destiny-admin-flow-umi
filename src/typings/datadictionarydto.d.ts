@@ -8,6 +8,13 @@ declare namespace DataDictionaryDto {
         sort?: number;
         parentId: string;
         children?: [];
+    }
+    export interface DataOutputLoadDto {
         id: string;
+        title?: string;
+        value?: string;
+        remark?: string;
+        sort?: number;
+        parentId: string;
     }
 }

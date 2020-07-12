@@ -73,4 +73,9 @@ export const DataDictionaryApi = {
   createDataDictionary: 'DataDictionary/CreateAsync',
   deleteDataDictionary: 'DataDictionary/CreateAsync',
   getTreeDataDictionary: 'DataDictionary/GetTableAsync'
-};
+
+  // deleteDataDictionary: 'DataDictionary/DeleteAsyc',
+  // getTreeDataDictionary: 'DataDictionary/GetTableAsync',
+  // getLoadDataDictionary: 'DataDictionary/GetDataDictionnnaryListAsync'
+}
+

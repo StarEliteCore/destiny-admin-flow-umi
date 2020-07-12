@@ -228,7 +228,7 @@ export default (): React.ReactNode => {
     searchForm.resetFields();
     handleSearch({});
   };
-  const handleSearch = (values: Store) => {};
+  const handleSearch = (values: Store) => { };
   const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
     if (record.type == MenuTypeEnum.Button) {
       notification.error({
