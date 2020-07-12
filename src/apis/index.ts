@@ -70,6 +70,7 @@ export const DataDictionaryApi = {
   getDataDictionary: 'DataDictionary/GetPageListAsync',
   updateDataDictionary: 'DataDictionary/UpdateAsync',
   createDataDictionary: 'DataDictionary/CreateAsync',
-  deleteDataDictionary: 'DataDictionary/CreateAsync',
-  getTreeDataDictionary: 'DataDictionary/GetTableAsync'
+  deleteDataDictionary: 'DataDictionary/DeleteAsyc',
+  getTreeDataDictionary: 'DataDictionary/GetTableAsync',
+  getLoadDataDictionary: 'DataDictionary/GetDataDictionnnaryListAsync'
 }
