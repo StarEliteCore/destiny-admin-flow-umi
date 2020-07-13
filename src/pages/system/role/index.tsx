@@ -13,7 +13,6 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
-import { useForm } from 'antd/lib/form/util';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
@@ -22,8 +21,8 @@ export default (): React.ReactNode => {
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('role.modal.title.create');
-  const [modalForm] = useForm();
-  const [searchForm] = useForm();
+  const [modalForm] = Form.useForm();
+  const [searchForm] = Form.useForm();
   const [itemId, setItemId] = useState<string>('');
   const [menucheckedKeys, setTreeCheckedKeys] = useState<any>([]);
 
@@ -43,7 +42,7 @@ export default (): React.ReactNode => {
       dataIndex: 'isAdmin',
       key: 'isAdmin',
       align: 'center',
-      render: (text) => {
+      render: text => {
         return text === true ? '是' : '否';
       }
     },
@@ -309,7 +308,7 @@ export default (): React.ReactNode => {
     getRoleList(1, 10, filter);
   };
 
-  const onExpand = (expandedKeys) => {
+  const onExpand = expandedKeys => {
     console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
@@ -350,7 +349,7 @@ export default (): React.ReactNode => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'role.button.create' })}
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <Table loading={LoadingObject(loading)} rowKey={record => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
       </Card>
 
       <Modal

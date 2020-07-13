@@ -31,7 +31,7 @@ interface String {
   /**
    * 是否是空字符串或者空
    */
-  isNullOrEmpty(): bool;
+  isNullOrEmpty(): boolean;
   /**
    * 对当前字符串进行正则匹配
    * @param reg 正则表达式
@@ -47,6 +47,10 @@ interface String {
    * @returns Array<string> (字符串数组)
    */
   segment(len: number): Array<string>;
+  /**
+   * 转到数字
+   */
+  toNumber(): number;
 }
 
 interface StringConstructor {

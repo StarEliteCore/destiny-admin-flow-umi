@@ -1,5 +1,5 @@
 import { Button, Card, Form, Input, Modal, message } from 'antd';
-import { Helmet, IntlShape, SelectLang, history, useIntl, useModel } from 'umi';
+import { Helmet, IntlShape, SelectLang, useIntl, useModel } from 'umi';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 
 import Footer from '@/components/Footer';
@@ -24,7 +24,7 @@ const replaceGoto = async (): Promise<void> => {
       return;
     }
   }
-  history.replace(redirect || '/');
+  window.location.href = urlParams.href.split(urlParams.pathname)[0] + (redirect || '/');
 };
 
 export default (): React.ReactNode => {
@@ -38,7 +38,7 @@ export default (): React.ReactNode => {
     let args: { userName: string; password: string } = { userName, password };
     await login(args)
       .then(async result => {
-        if (result) await refresh().then(() => replaceGoto().then(() => location.reload()));
+        if (result) await refresh().then(replaceGoto);
         else message.info('登陆失败');
       })
       .catch((reason: any) => message.error(`登陆失败:${reason}`));

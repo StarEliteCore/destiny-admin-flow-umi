@@ -11,18 +11,17 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
-import { useForm } from 'antd/lib/form/util';
 import { useModel } from 'umi';
 
 export default (): React.ReactNode => {
   const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('functionList');
-  const [modalForm] = useForm();
+  const [modalForm] = Form.useForm();
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<boolean>(true);
   const [modalTitle, setModalTitle] = useState<string>('新增功能');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
-  const [searchForm] = useForm();
+  const [searchForm] = Form.useForm();
   useEffect(() => {
     getFunctionTable({ pageIndex: 1, pageSize: 10 });
   }, []);
@@ -59,7 +58,7 @@ export default (): React.ReactNode => {
       dataIndex: 'isEnabled',
       key: 'isEnabled',
       align: 'center',
-      render: (text) => {
+      render: text => {
         return text === true ? '是' : '否';
       }
     },

@@ -1,4 +1,4 @@
-import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
@@ -12,7 +12,6 @@ import IconFont from '@/components/IconFont';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
-import { fixValue } from './operation';
 import moment from 'moment';
 
 export default (): React.ReactNode => {

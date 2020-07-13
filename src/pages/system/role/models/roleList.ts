@@ -2,6 +2,7 @@ import { AddRole, DeleteRole, EditRole, GetRolePage } from '../services';
 import { useCallback, useState } from 'react';
 
 import { GetMenuTreeList } from '../../menu/services';
+import { MenuDto } from '@/typings/menudto';
 
 const treeData = [];
 
@@ -26,7 +27,7 @@ const useRoleListModel = () => {
             setPageSize(param.pageSize);
             resolve(data);
           })
-          .catch((error) => {
+          .catch(error => {
             setItemList([]);
             setTotal(0);
             setCurrent(1);
@@ -44,7 +45,7 @@ const useRoleListModel = () => {
         setLoading(true);
         AddRole(param)
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -56,7 +57,7 @@ const useRoleListModel = () => {
         setLoading(true);
         EditRole(param)
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -69,7 +70,7 @@ const useRoleListModel = () => {
 
         DeleteRole({ id })
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -86,7 +87,7 @@ const useRoleListModel = () => {
           console.log(response);
           if (callback) callback({ success: response.success, message: response.message, data: treat, selected: response.data.selected });
         })
-        .catch((error) => {
+        .catch(error => {
           if (callback) callback({ state: false, msg: error });
           else console.log(error);
         }),

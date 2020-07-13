@@ -1,6 +1,5 @@
 import { MenuApi, RoleApi } from '@/apis';
 
-import { TreeModel } from '@/typings/model';
 import { request } from 'umi';
 
 export const GetRolePage = (param: any): Promise<Types.AjaxResult> =>

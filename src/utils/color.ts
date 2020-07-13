@@ -1,3 +1,5 @@
+import '@/extensions';
+
 /**
  * 加0补位
  */
@@ -23,10 +25,10 @@ const fAnalysisRGB = (temp: string): Array<number> => {
 /**
  * @description
  * 颜色渐变
- * @param {startColor:string} 起始色值
- * @param {endColor:string} 结束色值
- * @param {num:number} 渐变数量
- * @returns {Array<string>} 产生的渐变色数组(16进制色值)
+ * @param startColor:string 起始色值
+ * @param endColor:string 结束色值
+ * @param num:number 渐变数量
+ * @returns Array<string> 产生的渐变色数组(16进制色值)
  */
 const fColorGradualChange = (startColor: string, endColor: string, num: number): Array<string> => {
   let rgb: RegExp = /^rgb|RGB\((([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5])),){2}([0-9]|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\)$/; // rgb
@@ -34,28 +36,20 @@ const fColorGradualChange = (startColor: string, endColor: string, num: number):
   // 颜色预处理
   let startRGB: number[] = [];
   let endRGB: number[] = [];
-  if (hex.test(startColor)) {
-    startRGB = fAnalysisRGB(startColor);
-  } else if (rgb.test(startColor)) {
+  if (startColor.test(hex)) startRGB = fAnalysisRGB(startColor);
+  else if (startColor.test(rgb))
     startRGB = startColor
       .substring(3, 15)
       .split(',')
       .map((item: string): number => parseInt(item));
-  }
-  if (hex.test(endColor)) {
-    endRGB = fAnalysisRGB(endColor);
-  } else if (rgb.test(startColor)) {
+  if (endColor.test(hex)) endRGB = fAnalysisRGB(endColor);
+  else if (startColor.test(rgb))
     endRGB = endColor
       .substring(3, 15)
       .split(',')
       .map((item: string): number => parseInt(item));
-  }
-  let startR: number = startRGB[0];
-  let startG: number = startRGB[1];
-  let startB: number = startRGB[2];
-  let endR: number = endRGB[0];
-  let endG: number = endRGB[1];
-  let endB: number = endRGB[2];
+  let [startR, startG, startB]: Array<number> = startRGB;
+  let [endR, endG, endB]: Array<number> = endRGB;
   let sR: number = (endR - startR) / num;
   let sG: number = (endG - startG) / num;
   let sB: number = (endB - startB) / num;
@@ -72,14 +66,14 @@ const fColorGradualChange = (startColor: string, endColor: string, num: number):
  * 若是传入色值不符合要求默认返回[255,0,0]
  *
  * @param hexColor 16进制色值
- * @returns {number[]} RGB各值数组
+ * @returns number[] RGB各值数组
  */
 const hexToRgb = (hexColor: string): number[] => {
   let sColor: string = hexColor.toLowerCase();
   // 十六进制颜色值的正则表达式
   let reg: RegExp = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
   // 如果是16进制颜色
-  if (sColor && reg.test(sColor)) {
+  if (sColor && sColor.test(reg)) {
     if (sColor.length === 4) {
       let sColorNew: string = '#';
       for (let i = 1; i < 4; i += 1) {
@@ -104,13 +98,11 @@ const hexToRgb = (hexColor: string): number[] => {
  * r, g, 和 b 需要在 [0, 255] 范围内
  * 返回的 h, s, 和 l 在 [0, 1] 之间
  *
- * @param {number[]} RGB色值数组
- * @returns {Array<number>} HSL各值数组
+ * @param number[] RGB色值数组
+ * @returns Array<number> HSL各值数组
  */
 const rgbToHsl = (rgb: number[]): Array<number> => {
-  let r: number = rgb[0];
-  let g: number = rgb[1];
-  let b: number = rgb[2];
+  let [r, g, b]: Array<number> = rgb;
   r /= 255;
   g /= 255;
   b /= 255;
@@ -141,94 +133,24 @@ const rgbToHsl = (rgb: number[]): Array<number> => {
   return [h, s, l];
 };
 
+const colorArray: Array<string> = ['#FF0000', '#FF9A00', '#CCFF00', '#33FF00', '#00FF67', '#00FFFF', '#0066FF', '#3300FF', '#CC00FF', '#FF0099', '#FF0000'];
 /**
  * 获取HSL色值
- * @param {value:number} 1-100数值
- * @returns {Array<number>} [H,S,L]
+ * @param value:number 1-100数值
+ * @returns Array<number> [H,S,L]
  */
 export const getHslColor = (value: number): Array<number> => {
   let step: number = 10;
-  let colorZone: number = Math.floor(value / step);
-  let index: number = value % step;
-  let s: string[];
-  switch (colorZone) {
-    case 0:
-      s = fColorGradualChange('#FF0000', '#FF9A00', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 1:
-      s = fColorGradualChange('#FF9A00', '#CCFF00', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 2:
-      s = fColorGradualChange('#CCFF00', '#33FF00', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 3:
-      s = fColorGradualChange('#33FF00', '#00FF67', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 4:
-      s = fColorGradualChange('#00FF67', '#00FFFF', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 5:
-      s = fColorGradualChange('#00FFFF', '#0066FF', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 6:
-      s = fColorGradualChange('#0066FF', '#3300FF', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 7:
-      s = fColorGradualChange('#3300FF', '#CC00FF', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 8:
-      s = fColorGradualChange('#CC00FF', '#FF0099', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    case 9:
-      s = fColorGradualChange('#FF0099', '#FF0000', step);
-      return rgbToHsl(hexToRgb(s[index]));
-    default:
-      return rgbToHsl(hexToRgb('#FF0000'));
-  }
+  let colorZone: number = Math.floor(Math.abs(value - 1) / step);
+  return rgbToHsl(hexToRgb(fColorGradualChange(colorArray[colorZone], colorArray[colorZone + 1], step)[value % step]));
 };
-
 /**
  * 获取16进制格式色值
- * @param {value} 色值在滑块上的值,1-100
- * @returns {string} 16进制Hex色值
+ * @param value 色值在滑块上的值,1-100
+ * @returns string 16进制Hex色值
  */
 export const getHexColor = (value: number): string => {
   let step: number = 10;
-  let colorZone: number = Math.floor(value / step);
-  let index: number = value % step;
-  let s: string[];
-  switch (colorZone) {
-    case 0:
-      s = fColorGradualChange('#FF0000', '#FF9A00', step);
-      return s[index];
-    case 1:
-      s = fColorGradualChange('#FF9A00', '#CCFF00', step);
-      return s[index];
-    case 2:
-      s = fColorGradualChange('#CCFF00', '#33FF00', step);
-      return s[index];
-    case 3:
-      s = fColorGradualChange('#33FF00', '#00FF67', step);
-      return s[index];
-    case 4:
-      s = fColorGradualChange('#00FF67', '#00FFFF', step);
-      return s[index];
-    case 5:
-      s = fColorGradualChange('#00FFFF', '#0066FF', step);
-      return s[index];
-    case 6:
-      s = fColorGradualChange('#0066FF', '#3300FF', step);
-      return s[index];
-    case 7:
-      s = fColorGradualChange('#3300FF', '#CC00FF', step);
-      return s[index];
-    case 8:
-      s = fColorGradualChange('#CC00FF', '#FF0099', step);
-      return s[index];
-    case 9:
-      s = fColorGradualChange('#FF0099', '#FF0000', step);
-      return s[index];
-    default:
-      return '#FF0000';
-  }
+  let colorZone: number = Math.floor(Math.abs(value - 1) / step);
+  return fColorGradualChange(colorArray[colorZone], colorArray[colorZone + 1], step)[value % step];
 };

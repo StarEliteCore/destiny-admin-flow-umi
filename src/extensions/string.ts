@@ -17,13 +17,17 @@ String.random = function (expect: number = 16): string {
  * 判断字符串是否为空或者空字符串
  */
 String.prototype.isNullOrEmpty = function (): boolean {
-  return (this === undefined || this === null || typeof this === 'undefined' || this === '') ?? this.trim().length === 0;
+  return this === undefined || this === null || typeof this === 'undefined' || this === '' ? true : this.trim().length === 0;
 };
 /**
  * 使用正则表达式验证当前字符串
  */
 String.prototype.test = function (reg: RegExp): boolean {
-  return reg.test(this.valueOf());
+  try {
+    return reg.test(this.valueOf());
+  } catch (error) {
+    throw error;
+  }
 };
 /**
  * 是否是Url
@@ -45,5 +49,15 @@ String.prototype.segment = function (len: number): Array<string> {
     else array.push(this.substring(i * len, (i + 1) * len));
   }
   return array;
+};
+/**
+ * 转到Number
+ */
+String.prototype.toNumber = function (): number {
+  try {
+    return parseInt(this.valueOf());
+  } catch (error) {
+    throw error;
+  }
 };
 //#endregion
