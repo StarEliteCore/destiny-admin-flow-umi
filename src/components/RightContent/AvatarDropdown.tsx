@@ -3,7 +3,6 @@ import { IntlShape, history, useIntl, useModel } from 'umi';
 import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
 
-import { ClickParam } from 'antd/es/menu';
 import HeaderDropdown from '@/components/HeaderDropdown';
 import { getPageQuery } from '@/utils/utils';
 import styles from './index.less';
@@ -28,7 +27,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const intl: IntlShape = useIntl();
 
-  const onMenuClick = useCallback((event: ClickParam) => {
+  const onMenuClick = useCallback((event: any) => {
     const { key } = event;
     if (key === 'logout') {
       setInitialState({ ...initialState, currentUser: undefined });
