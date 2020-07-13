@@ -253,12 +253,10 @@ export default (): React.ReactNode => {
   const getSearchFilter = (values: any) => {
     const conditions = getSearchFormInfo();
     let newConditions: Conditions[] = [];
-    debugger;
     for (let key in values) {
       if (values[key] === '' || values[key] === undefined) {
         continue;
       }
-      debugger;
       const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
       const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
       let item: Conditions = {

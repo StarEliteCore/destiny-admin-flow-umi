@@ -1,5 +1,5 @@
+import { AddDataDictionary, DelDataDictionary, GetDataDictionary, GetDataDictionaryLoad, UpdateDataDictionary } from '../srevices/index';
 import { useCallback, useState } from 'react';
-import { GetDataDictionary, GetDataDictionaryLoad, AddDataDictionary, UpdateDataDictionary, DelDataDictionary } from '../srevices/index';
 
 const useDataDictionaryModel = () => {
     const [loadDictionaryForm, setLoadDictionaryForm] = useState<DataDictionaryDto.DataOutputLoadDto>();
@@ -10,11 +10,9 @@ const useDataDictionaryModel = () => {
     const getDataDictionary = useCallback(
         async () =>
             await new Promise<Array<DataDictionaryDto.DataDictionaryTable>>((resolve, reject) => {
-                debugger
                 setLoading(true);
                 GetDataDictionary()
                     .then((response: any) => {
-                        debugger
                         let data: DataDictionaryDto.DataDictionaryTable[] = response.itemList;
                         setItemList(data);
                         resolve(data);
@@ -44,7 +42,6 @@ const useDataDictionaryModel = () => {
     const editDataDictonary = useCallback(
         async (param: any) =>
             await new Promise<boolean>((resolve, reject) => {
-                debugger
                 setLoading(true);
                 UpdateDataDictionary(param)
                     .then(() => resolve(true))

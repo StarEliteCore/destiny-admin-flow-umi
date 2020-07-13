@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Button, Table, notification, Tooltip, Form, Input, InputNumber, Modal, message, Divider, Popconfirm } from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
+import { Button, Card, Divider, Form, Input, InputNumber, Modal, Popconfirm, Table, Tooltip, message, notification } from 'antd';
+import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
+import React, { useEffect, useState } from 'react';
+
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
-import { SecurityScanFilled, FileAddFilled, EditOutlined, DeleteOutlined, WarningOutlined } from '@ant-design/icons';
-import { Store } from 'antd/lib/form/interface';
 import { Guid } from 'guid-typescript';
-
-
+import { PageContainer } from '@ant-design/pro-layout';
+import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
     const intl: IntlShape = useIntl();
@@ -157,10 +156,8 @@ export default (): React.ReactNode => {
             payload: { id: record.id },
             callback: (result: any) => {
                 const {
-                    data,
-                    data: { parentId }
+                    data
                 } = result;
-                setLoadDataDictionary(parentId);
                 modalForm.setFieldsValue({
                     title: data?.title,
                     value: data?.value,
@@ -178,7 +175,6 @@ export default (): React.ReactNode => {
      */
     const onModalOK = () => {
         modalForm.validateFields().then((values: Store) => {
-
             const { title, value, remark, sort, code } = values;
             let parentId = Guid.EMPTY;
             if (dataDictionaryRow !== undefined) {
@@ -206,7 +202,6 @@ export default (): React.ReactNode => {
                             message: intl.formatMessage({ id: 'function.add.user.fail.message' }),
                             description: `${intl.formatMessage({ id: 'function.add.user.fail.description' })} ${error}`
                         }));
-
             } else {
                 // 修改
                 editDataDictonary({ ...args, id: itemId })
@@ -223,10 +218,8 @@ export default (): React.ReactNode => {
                     );
             }
         });
-
     }
     const onDeleteClick = (id: string) => {
-        debugger
         delDataDictionary(id)
             .then(() => {
                 message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
