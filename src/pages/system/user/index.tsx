@@ -137,19 +137,17 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
     setItemId(record.id!);
-    getUserForm(record.id!).then(() => {
-      let data = loadUserForm;
+    getUserForm({payload: { id: record.id },callback:(result:any)=>{
+      const data=result.data;
       modalForm.setFieldsValue({
         username: data?.userName,
         nickname: data?.nickName,
         sex: data?.sex,
         isSystem: data?.isSystem,
-
         roles: data?.roleIds,
         description: data?.description
       });
-    });
-
+    }})
     setModalShow(true);
   };
   const handleReset = () => {

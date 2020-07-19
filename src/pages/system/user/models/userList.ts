@@ -72,14 +72,14 @@ const useUserListModel = () => {
   );
 
   const getUserForm = useCallback(
-    async (id: string) =>
+    async ({ payload, callback }: { payload: { id: any }; callback?: (result: any) => void }) =>
       await new Promise<Types.UserOutputDto>((resolve, reject) => {
         setLoading(true);
-        LoadUser({ id })
+        LoadUser(payload)
           .then((response: any) => {
             let userData = response.data as Types.UserOutputDto;
             setLoadUserForm(userData);
-            resolve(userData);
+            if (callback) callback({ state: true, msg: response.msg, data: userData });
           })
           .catch((error) => reject(error))
           .finally(() => setLoading(false));
