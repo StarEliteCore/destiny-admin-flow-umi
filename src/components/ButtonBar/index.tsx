@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 
 import { Button } from 'antd';
+import { history } from 'umi';
 
 const button:Array<{key:string,clickName:string,style:string}>=[
   {key:"add",clickName:"add",style:"1231"},
@@ -9,6 +10,7 @@ const button:Array<{key:string,clickName:string,style:string}>=[
 class ButtonBar extends Component{
     constructor(props: Readonly<{}>){
         super(props);
+        console.log(history.location.pathname)
     }
     itemclick:any;//每次设定点击的那个方法
     btnclick=  (record:any) =>{
