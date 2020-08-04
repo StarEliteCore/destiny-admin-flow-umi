@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import ButtonBar from '@/components/ButtonBar';
 import { PageContainer } from '@ant-design/pro-layout';
-import { history } from 'umi';
 
 class Home extends Component {
   private buttonbar: any;

@@ -6,8 +6,9 @@ import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import ButtonBar from '@/components/ButtonBar';
 import ColumnTitle from '@/components/ColumnTitle';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
@@ -316,6 +317,19 @@ export default (): React.ReactNode => {
     setAutoExpandParent(false);
   };
 
+  const add = () => {
+    console.log('butBarRef.current.itemclick');
+  }
+  const fun = () => {
+    console.log('VV是个大佬');
+    console.log(butBarRef.current.itemclick)
+    switch (butBarRef.current.itemclick) {
+      case 'add':
+        add();
+        break;
+    }
+  }
+  const butBarRef = useRef<any>(null);
   return (
     <PageContainer>
       <Card>
@@ -342,6 +356,7 @@ export default (): React.ReactNode => {
               </span>
             </Col>
           </Row>
+          <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
         </Form>
       </Card>
 

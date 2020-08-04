@@ -11,6 +11,7 @@ import { MenuAsyncAPI } from '@/services/menu';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
+import menudata from './menudata'
 
 //#region InitialState
 /**
@@ -28,7 +29,9 @@ export const getInitialState = async (): Promise<{
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
       let menuRes: any = await MenuAsyncAPI();
+      console.log(menuRes);
       const { itemList } = menuRes;
+      window.localStorage.setItem("menu",JSON.stringify(itemList))
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: itemList },
         settings: defaultSettings
@@ -59,6 +62,7 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
     disableContentMargin: false,
     disableMobile: true,
     menuHeaderRender: undefined,
+    menuDataRender: menudata,
     ...initialState?.settings
   };
 };
