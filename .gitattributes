@@ -1,4 +1,3 @@
-*.less linguist-language=LESS
 *.html linguist-language=HTML
 *.ts linguist-language=TypeScript
 *.tsx linguist-language=TypeScript

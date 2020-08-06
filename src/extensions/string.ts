@@ -51,11 +51,12 @@ String.prototype.segment = function (len: number): Array<string> {
   return array;
 };
 /**
- * 转到Number
+ * 从某进制转换到10进制,默认10进制
+ * @param radix 源进制,默认10进制
  */
-String.prototype.toNumber = function (): number {
+String.prototype.toNumber = function (radix: number = 10): number {
   try {
-    return parseInt(this.valueOf());
+    return parseInt(this.valueOf(), radix);
   } catch (error) {
     throw error;
   }

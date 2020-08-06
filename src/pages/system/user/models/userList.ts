@@ -23,7 +23,7 @@ const useUserListModel = () => {
             setPageSize(param.pageSize);
             resolve(data);
           })
-          .catch((error) => {
+          .catch(error => {
             setItemList([]);
             setTotal(0);
             setCurrent(1);
@@ -41,7 +41,7 @@ const useUserListModel = () => {
         setLoading(true);
         AddUser(param)
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -53,7 +53,7 @@ const useUserListModel = () => {
         setLoading(true);
         EditUser(param)
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -65,7 +65,7 @@ const useUserListModel = () => {
         setLoading(true);
         DeleteUser({ id })
           .then(() => resolve(true))
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
@@ -81,7 +81,7 @@ const useUserListModel = () => {
             setLoadUserForm(userData);
             if (callback) callback({ state: true, msg: response.msg, data: userData });
           })
-          .catch((error) => reject(error))
+          .catch(error => reject(error))
           .finally(() => setLoading(false));
       }),
     []
