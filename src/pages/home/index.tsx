@@ -53,7 +53,7 @@ class Home extends Component {
           公共组件button按钮渲染
         
         */}
-        <ButtonBar getFun={this.fun} ref={(ref) => { this.buttonbar = ref; }} ></ButtonBar> 
+        {/* <ButtonBar getFun={this.fun} ref={(ref) => { this.buttonbar = ref; }} ></ButtonBar>  */}
       </PageContainer>
     )
   }

@@ -1,6 +1,6 @@
 import { Button, Card, Divider, Form, Input, InputNumber, Modal, Popconfirm, Table, Tooltip, message, notification } from 'antd';
 import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
-import { IntlShape, useIntl, useModel } from 'umi';
+import { IntlShape, history, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 
@@ -25,6 +25,7 @@ export default (): React.ReactNode => {
 
     useEffect(() => {
         getDataDictionaryList();
+        console.log(history.location.pathname)
     }, []);
 
     const getDataDictionaryList = () => {
@@ -35,7 +36,6 @@ export default (): React.ReactNode => {
             })
         })
     }
-
     /**
      * 表格列
      */

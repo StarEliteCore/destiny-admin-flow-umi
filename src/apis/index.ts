@@ -22,7 +22,8 @@ export const MenuApi = {
   deleteMenu: 'Menu/DeleteAsync',
   LoadMenu: 'Menu/LoadFormMenuAsync',
   getMenuFunction: 'Menu/GetMenuFunctionListAsync',
-  getMenuAsync: 'Menu/GetMenuAsync'
+  getMenuAsync: 'Menu/GetMenuAsync',
+  GetMenuChildrenButtonAsync: 'Menu/GetMenuChildrenButtonAsync'
 };
 //#endregion
 
