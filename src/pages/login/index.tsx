@@ -18,7 +18,7 @@ const replaceGoto = async (): Promise<void> => {
     const redirectUrlParams = new URL(redirect);
     if (redirectUrlParams.origin === urlParams.origin) {
       redirect = redirect.substr(urlParams.origin.length);
-      if (redirect.match(/^\/.*#/)) redirect = redirect.substr(redirect.indexOf('#') + 1);
+      if (redirect.match(/^\/.*#/)) redirect = redirect.substr(redirect.indexOf('#'));
     } else {
       window.location.href = '/';
       return;
