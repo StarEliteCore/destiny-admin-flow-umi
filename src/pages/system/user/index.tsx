@@ -19,7 +19,7 @@ export default (): React.ReactNode => {
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm, loadUserForm } = useModel('userList');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('userList');
   const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
@@ -137,17 +137,20 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
     setItemId(record.id!);
-    getUserForm({payload: { id: record.id },callback:(result:any)=>{
-      const data=result.data;
-      modalForm.setFieldsValue({
-        username: data?.userName,
-        nickname: data?.nickName,
-        sex: data?.sex,
-        isSystem: data?.isSystem,
-        roles: data?.roleIds,
-        description: data?.description
-      });
-    }})
+    getUserForm({
+      payload: { id: record.id },
+      callback: (result: any) => {
+        const data = result.data;
+        modalForm.setFieldsValue({
+          username: data?.userName,
+          nickname: data?.nickName,
+          sex: data?.sex,
+          isSystem: data?.isSystem,
+          roles: data?.roleIds,
+          description: data?.description
+        });
+      }
+    });
     setModalShow(true);
   };
   const handleReset = () => {

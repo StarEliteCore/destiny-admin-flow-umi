@@ -48,9 +48,10 @@ interface String {
    */
   segment(len: number): Array<string>;
   /**
-   * 转到数字
+   * 从某进制转换到10进制,默认10进制
+   * @param radix 源进制,默认10进制
    */
-  toNumber(): number;
+  toNumber(radix?: number): number;
 }
 
 interface StringConstructor {

@@ -54,7 +54,7 @@ export const getInitialState = async (): Promise<{
  * 运行时Layout配置
  * @param param
  */
-export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings } }): BasicLayoutProps => {
+export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings; currentUser?: Types.CurrentUser } }): BasicLayoutProps => {
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
     siderWidth: 220,
@@ -62,7 +62,10 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
     disableContentMargin: false,
     disableMobile: true,
     menuHeaderRender: undefined,
-    // menuDataRender: menudata,
+    onPageChange: () => {
+      // 如果没有登录并且不在登录页，重定向到 login
+      if (!initialState?.currentUser?.userid && history.location.pathname !== '/login') history.push('/login');
+    },
     ...initialState?.settings
   };
 };
