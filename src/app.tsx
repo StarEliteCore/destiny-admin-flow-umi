@@ -62,7 +62,7 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
     disableContentMargin: false,
     disableMobile: true,
     menuHeaderRender: undefined,
-    menuDataRender: menudata,
+    // menuDataRender: menudata,
     ...initialState?.settings
   };
 };
