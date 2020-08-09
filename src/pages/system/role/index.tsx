@@ -356,17 +356,22 @@ export default (): React.ReactNode => {
               </span>
             </Col>
           </Row>
-          <Row gutter={24}>
-            <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
-          </Row>
         </Form>
       </Card>
 
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
-          {intl.formatMessage({ id: 'role.button.create' })}
-        </Button>
-        <Table loading={LoadingObject(loading)} rowKey={record => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>        
+        <Table loading={LoadingObject(loading)} rowKey={record => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} onRow={record => {
+    return {
+      onClick: event => {
+        console.log(record)
+      }, // 点击行
+      onDoubleClick: event => {},
+      onContextMenu: event => {},
+      onMouseEnter: event => {}, // 鼠标移入行
+      onMouseLeave: event => {},
+    };
+  }} ></Table>
       </Card>
 
       <Modal

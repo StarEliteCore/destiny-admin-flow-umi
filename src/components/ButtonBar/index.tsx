@@ -37,10 +37,10 @@ class ButtonBar extends Component<IButtonBar> {
   }
   render() {
     return (
-      <div>
+      <div style={{margin: 10}} >
         {button.map(item => {
           return (
-            <Button
+            <Button style={{marginRight:10,marginBottom:5}}
               key={item.path} type={item.icon}
               onClick={() => {
                 this.btnclick(item.path);//动态渲染按钮
