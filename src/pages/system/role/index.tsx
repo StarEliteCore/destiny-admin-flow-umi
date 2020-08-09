@@ -197,7 +197,8 @@ export default (): React.ReactNode => {
         let args = {
           name: name,
           isAdmin: isAdmin,
-          description: description
+          description: description,
+          menuIds: menucheckedKeys
         };
 
         addRole(args)
