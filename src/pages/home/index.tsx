@@ -11,7 +11,6 @@ class Home extends Component {
     this.fun = this.fun.bind(this);
   }
   fun() {
-    console.log(this.buttonbar.itemclick)
   }
   render() {
     return (

@@ -29,7 +29,6 @@ export const getInitialState = async (): Promise<{
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
       const menustr = window.localStorage.getItem("menu")
-      console.log(menustr)
       let menu = menustr ? JSON.parse(menustr) : [];
       if(menu.length<=0){
         let menuRes: any = await MenuAsyncAPI();
@@ -40,10 +39,7 @@ export const getInitialState = async (): Promise<{
       let index=menu.findIndex((x: any)=>x.routerPath==history.location.pathname.substr(1));
       if(index<=-1)
       {
-        debugger
       }
-      console.log(history.location.pathname)
-      // window.localStorage.setItem("menu",JSON.stringify(itemList))
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
         settings: defaultSettings

@@ -25,7 +25,6 @@ export default (): React.ReactNode => {
 
     useEffect(() => {
         getDataDictionaryList();
-        console.log(history.location.pathname)
     }, []);
 
     const getDataDictionaryList = () => {

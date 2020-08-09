@@ -84,7 +84,6 @@ const useRoleListModel = () => {
         .then((response: any) => {
           let treat = response.data.itemList as MenuDto.MenuTreeOutDto[];
           setMenuTreeForm(treat);
-          console.log(response);
           if (callback) callback({ success: response.success, message: response.message, data: treat, selected: response.data.selected });
         })
         .catch(error => {

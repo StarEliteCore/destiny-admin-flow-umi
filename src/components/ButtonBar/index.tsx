@@ -19,13 +19,10 @@ class ButtonBar extends Component<IButtonBar> {
   private temp=async (menu:any)=>{
       // debugger
       if (menu.length > 0) {
-        console.log(history.location.pathname)
         let index=menu.findIndex((x: any)=>x.routerPath==history.location.pathname.substr(1));
-        console.log(index)
         if(index>=0)
         {
           let model= menu[index]
-          console.log(model)
           let buttonss =await MenuButtonAsyncAPI({ menuid: model.id });
           const { data } = buttonss;
           button=data;
@@ -44,7 +41,7 @@ class ButtonBar extends Component<IButtonBar> {
         {button.map(item => {
           return (
             <Button
-              key={item.path}
+              key={item.path} type={item.icon}
               onClick={() => {
                 this.btnclick(item.path);//动态渲染按钮
               }}

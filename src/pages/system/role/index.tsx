@@ -35,6 +35,21 @@ export default (): React.ReactNode => {
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onEditClick },
+      { name: 'delete', click1: onDeleteClick },
+    ];
+    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  }
+  const add = () => {
+    console.log('的防晒是否');
+  }
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -164,7 +179,6 @@ export default (): React.ReactNode => {
    */
   const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
     let concat = checkedKeys.concat(e.halfCheckedKeys);
-    // console.log('concat:', concat);
     setTreeCheckedKeys(checkedKeys);
   };
   const onDeleteClick = (id: string) => {
@@ -256,7 +270,6 @@ export default (): React.ReactNode => {
   //  */
   // const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
   //   let concat = checkedKeys.concat(e.halfCheckedKeys);
-  //   console.log('concat:', concat);
   //   setTreeCheckedKeys(checkedKeys);
   // };
   // const onCheck = (checkedKeys: any, e: any) => {
@@ -310,26 +323,11 @@ export default (): React.ReactNode => {
   };
 
   const onExpand = expandedKeys => {
-    console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
   };
-
-  const add = () => {
-    console.log('butBarRef.current.itemclick');
-  }
-  const fun = () => {
-    console.log('VV是个大佬');
-    console.log(butBarRef.current.itemclick)
-
-    switch (butBarRef.current.itemclick) {
-      case 'add':
-        add();
-        break;
-    }
-  }
   const butBarRef = useRef<any>(null);
   return (
     <PageContainer>
@@ -357,7 +355,9 @@ export default (): React.ReactNode => {
               </span>
             </Col>
           </Row>
-          <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+          <Row gutter={24}>
+            <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+          </Row>
         </Form>
       </Card>
 

@@ -30,6 +30,7 @@ export default (): React.ReactNode => {
     { key: MenuTypeEnum.Menu, value: '菜单' },
     { key: MenuTypeEnum.Button, value: '按钮' }
   ]);
+
   useEffect(() => {
     getMenuList();
   }, []);
@@ -185,7 +186,6 @@ export default (): React.ReactNode => {
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
   const onViewClick = (id: string) => {
-    console.log(id);
     getMenuFunctionList(id);
     setShowDrawer(true);
   };
@@ -269,7 +269,6 @@ export default (): React.ReactNode => {
   const onModalOK = () => {
     modalForm.validateFields().then((values: Store) => {
       const { name, component, icon, path, sort, description, func, type } = values;
-      console.log(menuRow);
       let dep = 0;
       let parentNu = '';
       let parentId = Guid.EMPTY;
@@ -295,7 +294,6 @@ export default (): React.ReactNode => {
         parentId: parentId,
         functionId: func
       };
-      console.log(args);
       if (modalModel === 'create') {
         addMenu(args)
           .then(() => {
