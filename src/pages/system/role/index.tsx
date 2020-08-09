@@ -323,6 +323,7 @@ export default (): React.ReactNode => {
   const fun = () => {
     console.log('VV是个大佬');
     console.log(butBarRef.current.itemclick)
+
     switch (butBarRef.current.itemclick) {
       case 'add':
         add();

@@ -28,17 +28,25 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-      let menuRes: any = await MenuAsyncAPI();
-      console.log(menuRes);
-      const { itemList } = menuRes;
-      window.localStorage.setItem("menu",JSON.stringify(itemList))
+      const menustr = window.localStorage.getItem("menu")
+      console.log(menustr)
+      let menu = menustr ? JSON.parse(menustr) : [];
+      if(menu.length<=0){
+        let menuRes: any = await MenuAsyncAPI();
+        const { itemList } = menuRes;
+        menu=itemList;
+        window.localStorage.setItem("menu",JSON.stringify(menu))
+      }
+      let index=menu.findIndex((x: any)=>x.routerPath==history.location.pathname.substr(1));
+      if(index<=-1)
+      {
+        debugger
+      }
+      console.log(history.location.pathname)
+      // window.localStorage.setItem("menu",JSON.stringify(itemList))
       return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: itemList },
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
         settings: defaultSettings
-        // settingDrawer: {
-        //   hideCopyButton: true,
-        //   hideHintAlert: true
-        // }
       };
     } catch (error) {
       history.push('/login');
