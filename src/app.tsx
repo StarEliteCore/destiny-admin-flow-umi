@@ -66,10 +66,11 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
     disableContentMargin: false,
     disableMobile: true,
     menuHeaderRender: undefined,
-    onPageChange: () => {
-      // 如果没有登录并且不在登录页，重定向到 login
-      if (!initialState?.currentUser?.userid && history.location.pathname !== '/login') history.push('/login');
-    },
+    menuDataRender:menudata,
+    // onPageChange: () => {
+    //   // 如果没有登录并且不在登录页，重定向到 login
+    //   if (!initialState?.currentUser?.userid && history.location.pathname !== '/login') history.push('/login');
+    // },
     ...initialState?.settings
   };
 };

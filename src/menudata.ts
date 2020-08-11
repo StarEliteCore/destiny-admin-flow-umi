@@ -8,12 +8,20 @@ import { SettingOutlined } from '@ant-design/icons';
 export default function loadMenuData(menuData: MenuDataItem[]): MenuDataItem[] {
   //   const menus = localStorage.getItem('menus'); // 登录后获取，存入 localStorage
   //   const resources = menus ? JSON.parse(menus) : [];
-  const routes: IRoute = [
-    {
-      layout: false,
-      component: './login',
-      path: '/login'
-    },
+
+  //   const menus = localStorage.getItem('menus'); // 登录后获取，存入 localStorage
+  //   const resources = menus ? JSON.parse(menus) : [];
+  // let routes: any = [];
+   //const menutree = await UserMenuTreeAsync();
+  // routes = menutree.data;
+  // console.log(routes);
+
+  const routes: any = [
+    // {
+    //   layout: false,
+    //   component: './login',
+    //   path: '/login'
+    // },
     {
       path: '/',
       redirect: '/home'
