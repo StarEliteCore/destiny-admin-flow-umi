@@ -11,7 +11,6 @@ import { MenuAsyncAPI } from '@/services/menu';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
-import menudata from './menudata'
 
 //#region InitialState
 /**
@@ -28,23 +27,27 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-      const menustr = window.localStorage.getItem("menu")
-      let menu = menustr ? JSON.parse(menustr) : [];
-      if(menu.length<=0){
+      // const menustr = localStorage.getItem("menu");
+      // let menu = [];
+      // console.log(menustr)
+      // if (menustr) {
+      //   menu = JSON.parse(menustr);
+      // }
+      // if (menu.length <= 0) {
         let menuRes: any = await MenuAsyncAPI();
-        const { itemList } = menuRes;
-        menu=itemList;
-        window.localStorage.setItem("menu",JSON.stringify(menu))
-      }
-      let index=menu.findIndex((x: any)=>x.routerPath==history.location.pathname.substr(1));
-      if(index<=-1)
-      {
-      }
+        const { data } = menuRes;
+        // menu = itemList;
+        // window.localStorage.setItem("menu", JSON.stringify(menu))
+      // }
+      // let index = menu.findIndex((x: any) => x.routerPath == history.location.pathname.substr(1));
+      // if (index <= -1) {
+      // }
       return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: data },
         settings: defaultSettings
       };
     } catch (error) {
+      console.log(error);
       history.push('/login');
       throw error;
     }
@@ -58,7 +61,7 @@ export const getInitialState = async (): Promise<{
  * 运行时Layout配置
  * @param param
  */
-export const layout = ({ initialState }: { initialState: { settings?: LayoutSettings; currentUser?: Types.CurrentUser } }): BasicLayoutProps => {
+export const layout = async ({ initialState }: { initialState: { settings?: LayoutSettings; currentUser?: Types.CurrentUser } }): Promise<BasicLayoutProps> => {
   return {
     logo: <img src={LogoPng} style={{ borderRadius: 7, marginLeft: 12, marginRight: 6 }} />,
     siderWidth: 220,
@@ -66,11 +69,15 @@ export const layout = ({ initialState }: { initialState: { settings?: LayoutSett
     disableContentMargin: false,
     disableMobile: true,
     menuHeaderRender: undefined,
-    menuDataRender:menudata,
-    // onPageChange: () => {
-    //   // 如果没有登录并且不在登录页，重定向到 login
-    //   if (!initialState?.currentUser?.userid && history.location.pathname !== '/login') history.push('/login');
+    // menuDataRender: (menuData: MenuDataItem[]) => {
+    //   let menus: any = '';
+    //   menudata(menuData).then((menus) => { console.log(menus); menus = menus });
+    //   return menus;
     // },
+    onPageChange: () => {
+      // 如果没有登录并且不在登录页，重定向到 login
+      if (!initialState?.currentUser?.userid && history.location.pathname !== '/login') history.push('/login');
+    },
     ...initialState?.settings
   };
 };

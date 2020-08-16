@@ -2,7 +2,7 @@
 
 import { Button, Card, Col, Collapse, Divider, Form, Input, Modal, Popconfirm, Row, Select, Switch, Table, Tooltip, Tree, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
-import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, SortDescendingOutlined, WarningOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
@@ -32,19 +32,27 @@ export default (): React.ReactNode => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [newCheckedKeys, setNewCheckedKeys] = useState<any>({ checked: [] });
+
+
+  const { initialState } = useModel('@@initialState');
+
+  console.log(initialState?.currentUser?.access);
+
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
-  const fun = () => {
+  const fun = (record: any) => {
     const clickarr = [
       { name: 'add', click1: onCreateClick },
-      { name: 'update', click1: onEditClick },
+      { name: 'update', click1: onEditClick(1212) },
       { name: 'delete', click1: onDeleteClick },
     ];
+    console.log(record)
+    console.log("1231212s")
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
     if (index >= 0) {
       let clickmodel = clickarr[index];
-      clickmodel.click1();
+      // clickmodel.click1();
     }
   }
   const add = () => {
@@ -82,6 +90,7 @@ export default (): React.ReactNode => {
       key: 'operation',
       align: 'center',
       render: (_: string, record: Types.RoleTable) => (
+        // if()
         <div>
           <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.delete' })}>
             <Popconfirm placement="top" title={intl.formatMessage({ id: 'role.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
@@ -92,10 +101,15 @@ export default (): React.ReactNode => {
           <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.modify' })}>
             <EditOutlined onClick={() => onEditClick(record)} />
           </Tooltip>
+          <ButtonBar getFun={() => fun(record)} ref={butBarRef} ></ButtonBar>
         </div>
       )
     }
   ];
+  // const test = (record: any) => {
+  //   console.log(record)
+  // }
+
 
   const pagination: PaginationProps = {
     ...tacitPagingProps,
@@ -179,6 +193,7 @@ export default (): React.ReactNode => {
    */
   const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
     let concat = checkedKeys.concat(e.halfCheckedKeys);
+    console.log(concat)
     setTreeCheckedKeys(checkedKeys);
   };
   const onDeleteClick = (id: string) => {
@@ -360,18 +375,18 @@ export default (): React.ReactNode => {
       </Card>
 
       <Card>
-        <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>        
+        <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
         <Table loading={LoadingObject(loading)} rowKey={record => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} onRow={record => {
-    return {
-      onClick: event => {
-        console.log(record)
-      }, // 点击行
-      onDoubleClick: event => {},
-      onContextMenu: event => {},
-      onMouseEnter: event => {}, // 鼠标移入行
-      onMouseLeave: event => {},
-    };
-  }} ></Table>
+          return {
+            onClick: event => {
+              console.log(record)
+            }, // 点击行
+            onDoubleClick: event => { },
+            onContextMenu: event => { },
+            onMouseEnter: event => { }, // 鼠标移入行
+            onMouseLeave: event => { },
+          };
+        }} ></Table>
       </Card>
 
       <Modal
