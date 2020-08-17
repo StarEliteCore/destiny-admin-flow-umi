@@ -11,7 +11,8 @@ import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
-import menudata from './menudata'
+
+// import menudata from './menudata'
 
 //#region InitialState
 /**
@@ -24,18 +25,23 @@ export const getInitialState = async (): Promise<{
 }> => {
   if (history.location.pathname !== '/login') {
     try {
-
-      debugger
       let userid: string = Cookies.get('userId') ?? '';
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-
+      
       const menustr = window.localStorage.getItem("menu")
-      let menu = menustr ? JSON.parse(menustr) : [];
-
+      let menu = [];
+      let menulist=[];
+      if(menustr!="undefined")
+      {
+        menu = menustr ? JSON.parse(menustr) : [];
+      }
       const menuliststr = window.localStorage.getItem("menulist")
-      let menulist = menuliststr ? JSON.parse(menuliststr) : [];
+      // if(menuliststr!="" || menuliststr!=null || menuliststr!="undefined")
+      // {
+      //   menu = menustr ? JSON.parse(menustr) : [];
+      // }
       if (menu.length <= 0) {
         let menuRes: any = await MenuAsyncAPI();
         const { itemList } = menuRes;
@@ -44,13 +50,9 @@ export const getInitialState = async (): Promise<{
       }
 
       if (menulist.length <= 0) {
-        debugger
         let menulists: any = await MenuListAsync();
         const {data} =menulists;
         window.localStorage.setItem("menulist", JSON.stringify(data))
-      }
-      let index = menu.findIndex((x: any) => x.routerPath == history.location.pathname.substr(1));
-      if (index <= -1) {
       }
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },

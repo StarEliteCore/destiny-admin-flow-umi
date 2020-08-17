@@ -11,7 +11,7 @@ interface IButtonBar {
 class ButtonBar extends Component<IButtonBar> {
   constructor(props: IButtonBar) {
     super(props);
-    const menustr = window.localStorage.getItem("menu")
+    const menustr = window.localStorage.getItem("menulist")
     const menu = menustr ? JSON.parse(menustr) : [];
     // debugger
     this.temp(menu);
@@ -24,6 +24,7 @@ class ButtonBar extends Component<IButtonBar> {
         let model = menu[index]
         let buttonss = await MenuButtonAsyncAPI({ menuid: model.id });
         const { data } = buttonss;
+        console.log(data)
         button = data;
       }
     }
@@ -32,18 +33,17 @@ class ButtonBar extends Component<IButtonBar> {
   btnclick = (record: any) => {
     this.itemclick = record;
     //调用父组件的方法，父组件内需要定义一个getFun
-    const { getFun } = this.props;
-    getFun;
+    this.props.getFun();
   }
   render() {
-    const { getFun } = this.props;
+    // const { getFun } = this.props;
     return (
       <div style={{ margin: 10 }} >
         {button.map(item => {
           return (
             <Button style={{ marginRight: 10, marginBottom: 5 }}
               key={item.path} type={item.icon}
-              onClick={getFun}
+              onClick={() => { this.btnclick(item.path) }}
             >
               {item.name}
             </Button>

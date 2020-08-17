@@ -23,6 +23,8 @@ export const MenuApi = {
   LoadMenu: 'Menu/LoadFormMenuAsync',
   getMenuFunction: 'Menu/GetMenuFunctionListAsync',
   getMenuAsync: 'Menu/GetMenuAsync',
+  GetMenuChildrenButtonAsync: 'Menu/GetMenuChildrenButtonAsync',
+  getUserMenuTreeAsync:'',
   GetMenuListAsync: 'Menu/GetMenuListAsync',
 };
 //#endregion
