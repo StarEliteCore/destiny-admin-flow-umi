@@ -77,24 +77,24 @@ export default (): React.ReactNode => {
       render: (text: string) => moment(text).format('YYYY-MM-DD HH:mm:ss')
     },
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.operating' })} />,
-      key: 'operation',
-      align: 'center',
-      render: (_: string, record: Types.RoleTable) => (
-        <div>
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.delete' })}>
-            <Popconfirm placement="top" title={intl.formatMessage({ id: 'role.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
-              <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
-            </Popconfirm>
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.modify' })}>
-            <EditOutlined onClick={() => onEditClick(record)} />
-          </Tooltip>
-        </div>
-      )
-    }
+    // {
+    //   title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.operating' })} />,
+    //   key: 'operation',
+    //   align: 'center',
+    //   render: (_: string, record: Types.RoleTable) => (
+    //     <div>
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.delete' })}>
+    //         <Popconfirm placement="top" title={intl.formatMessage({ id: 'role.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
+    //           <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
+    //         </Popconfirm>
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.modify' })}>
+    //         <EditOutlined onClick={() => onEditClick(record)} />
+    //       </Tooltip>
+    //     </div>
+    //   )
+    // }
   ];
 
   const pagination: PaginationProps = {
