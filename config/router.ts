@@ -51,13 +51,14 @@ const Route: IRoute[] = [
         icon: 'menu',
         path: '/system/function',
         component: './system/function'
-      },
-      {
-        name: 'system/dataDictionary',
-        icon: 'dataDictionary',
-        path: '/system/dataDictionary',
-        component: './system/dataDictionary'
       }
+      // ,
+      // {
+      //   name: 'system/dataDictionary',
+      //   icon: 'dataDictionary',
+      //   path: '/system/dataDictionary',
+      //   component: './system/dataDictionary'
+      // }
     ]
   }
 ];

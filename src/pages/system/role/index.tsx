@@ -427,18 +427,7 @@ export default (): React.ReactNode => {
           size="small"
           dataSource={itemList}
           pagination={pagination}
-          columns={columns}
-          onRow={record => {
-            return {
-              onClick: event => {
-                console.log(record)
-              }, // 点击行
-              onDoubleClick: event => { },
-              onContextMenu: event => { },
-              onMouseEnter: event => { }, // 鼠标移入行
-              onMouseLeave: event => { },
-            };
-          }} ></Table>
+          columns={columns} ></Table>
       </Card>
 
       <Modal

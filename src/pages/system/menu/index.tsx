@@ -30,7 +30,7 @@ export default (): React.ReactNode => {
     { key: MenuTypeEnum.Menu, value: '菜单' },
     { key: MenuTypeEnum.Button, value: '按钮' }
   ]);
-
+  const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
   useEffect(() => {
     getMenuList();
   }, []);
@@ -177,6 +177,41 @@ export default (): React.ReactNode => {
       align: 'center'
     }
   ];
+  /**
+   * 表格选择框事件
+   */
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      setSelectedRows(selectedRows);
+    }
+  };
+/***
+   * 获取选中的数据
+   */
+  const getTableSelected = (rows: any[], callback: any) => {
+    console.log(rows.length)
+    if (rows.length == 0) {
+      message.warning('请选择数据！！！');
+
+      return;
+    }
+    if (rows.length > 1) {
+      message.warning(`已选择${rows.length}行数据,请重选择！！！`);
+      return;
+    }
+
+    let fun = function () {
+      if (callback) {
+        callback(rows[0]);
+      }
+    };
+
+    fun();
+  };
+  /**
+   * 删除菜单或按钮
+   * @param id 
+   */
   const onDeleteClick = (id: string) => {
     delMenu(id)
       .then(() => {
@@ -185,19 +220,32 @@ export default (): React.ReactNode => {
       })
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
+  /**
+   * 获取菜单功能
+   * @param id 
+   */
   const onViewClick = (id: string) => {
     getMenuFunctionList(id);
     setShowDrawer(true);
   };
+  /**
+   * 关闭抽屉
+   */
   const onCloseDrawer = () => {
     setShowDrawer(false);
   };
 
   const [loadmenudata, setLoadMenuData] = useState<{ parentId?: string; parentNumber?: string; depth?: number }>({});
+  /**
+   * 修改菜单或按钮
+   * @param record 
+   */
   const onEditClick = (record: MenuDto.MenuTable) => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
     setItemId(record.id!);
+
+    
     getLoadMenu({
       payload: { id: record.id },
       callback: (result: any) => {
@@ -223,12 +271,10 @@ export default (): React.ReactNode => {
     });
     setModalShow(true);
   };
-
-  const handleReset = () => {
-    searchForm.resetFields();
-    handleSearch({});
-  };
-  const handleSearch = (values: Store) => { };
+  /**
+   * 添加子级
+   * @param record 
+   */
   const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
     if (record.type == MenuTypeEnum.Button) {
       notification.error({
@@ -252,6 +298,9 @@ export default (): React.ReactNode => {
     setItemId('');
     setModalShow(true);
   };
+  /***
+   * 添加 父级
+   */
   const onCreateClick = () => {
     modalForm.setFieldsValue({
       name: '',
@@ -266,6 +315,9 @@ export default (): React.ReactNode => {
     setItemId('');
     setModalShow(true);
   };
+  /**
+   * 弹框保存
+   */
   const onModalOK = () => {
     modalForm.validateFields().then((values: Store) => {
       const { name, component, icon, path, sort, description, func, type } = values;
@@ -323,6 +375,9 @@ export default (): React.ReactNode => {
       }
     });
   };
+  /**
+   * 获取表格数据
+   */
   const getMenuList = () => {
     getMenuTable().catch((error: any) => {
       notification.error({
@@ -331,7 +386,10 @@ export default (): React.ReactNode => {
       });
     });
   };
-
+/**
+ * 获取菜单功能
+ * @param id 
+ */
   const getMenuFunctionList = (id: string) => {
     getMenuFunctionTable(id).catch((error: any) => {
       notification.error({
@@ -347,7 +405,19 @@ export default (): React.ReactNode => {
         <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
         </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} columns={columns}></Table>
+        <Table 
+        rowSelection={{
+          type: 'checkbox',
+          ...rowSelection
+        }}
+        loading={LoadingObject(loading)} 
+        rowKey={(record) => record?.id!} 
+        tableLayout="fixed" 
+        size="small" 
+        dataSource={itemList} 
+        columns={columns}
+        
+        ></Table>
       </Card>
       <Modal
         visible={modalShow}
@@ -444,7 +514,6 @@ export default (): React.ReactNode => {
           </Form.Item>
         </Form>
       </Modal>
-
       <Drawer title="查看菜单功能" width={520} visible={showDrawer} onClose={onCloseDrawer}>
         <Table pagination={false} loading={LoadingObject(menuFunctionLoading)} tableLayout="fixed" size="small" dataSource={menuFunctionItemList} columns={menuFunctionColumns}></Table>
       </Drawer>
