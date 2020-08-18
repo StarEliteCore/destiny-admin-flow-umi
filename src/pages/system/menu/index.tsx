@@ -2,8 +2,9 @@ import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconf
 import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
@@ -37,6 +38,25 @@ export default (): React.ReactNode => {
   useEffect(() => {
     getFunctions();
   }, []);
+  const butBarRef = useRef<any>(null);
+  /**
+   * 通用事件
+   */
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onEditClick },
+      { name: 'delete', click1: onDeleteClick },
+      { name: 'addchildren', click1: onCreateChildrenClick },
+    ];
+    console.log(butBarRef.current.itemclick)
+    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    console.log(index)
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  }
   const columns: Array<ColumnProps<MenuDto.MenuTable>> = [
     {
       title: (
@@ -129,33 +149,34 @@ export default (): React.ReactNode => {
       render: (_: string, record: MenuDto.MenuTable) => {
         return record.type == MenuTypeEnum.Menu ? <Tag color="cyan">菜单</Tag> : <Tag color="blue">按钮</Tag>;
       }
-    },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.operating' })} />,
-      key: 'action',
-      align: 'center',
-      render: (_: string, record: MenuDto.MenuTable) => (
-        <div>
-          <Tooltip placement="bottom" title="查看菜单功能">
-            <SecurityScanFilled onClick={() => onViewClick(record.id)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.add' })}>
-            <FileAddFilled onClick={() => onCreateChildrenClick(record)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.modify' })}>
-            <EditOutlined onClick={() => onEditClick(record)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.delete' })}>
-            <Popconfirm placement="top" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
-              <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
-            </Popconfirm>
-          </Tooltip>
-        </div>
-      )
     }
+    // ,
+    // {
+    //   title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.operating' })} />,
+    //   key: 'action',
+    //   align: 'center',
+    //   render: (_: string, record: MenuDto.MenuTable) => (
+    //     <div>
+    //       <Tooltip placement="bottom" title="查看菜单功能">
+    //         <SecurityScanFilled onClick={() => onViewClick(record.id)} />
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.add' })}>
+    //         <FileAddFilled onClick={() => onCreateChildrenClick(record)} />
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       {/* <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.modify' })}>
+    //         <EditOutlined onClick={() => onEditClick(record)} />
+    //       </Tooltip> */}
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.delete' })}>
+    //         <Popconfirm placement="top" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
+    //           <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
+    //         </Popconfirm>
+    //       </Tooltip>
+    //     </div>
+    //   )
+    // }
   ];
   const menuFunctionColumns: Array<ColumnProps<MenuDto.MenuFunctionTable>> = [
     {
@@ -212,13 +233,13 @@ export default (): React.ReactNode => {
    * 删除菜单或按钮
    * @param id 
    */
-  const onDeleteClick = (id: string) => {
-    delMenu(id)
-      .then(() => {
-        message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-        getMenuList();
-      })
-      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+  const onDeleteClick = () => {
+    // delMenu(id)
+    //   .then(() => {
+    //     message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
+    //     getMenuList();
+    //   })
+    //   .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
   /**
    * 获取菜单功能
@@ -240,19 +261,19 @@ export default (): React.ReactNode => {
    * 修改菜单或按钮
    * @param record 
    */
-  const onEditClick = (record: MenuDto.MenuTable) => {
+  const onEditClick = () => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
-    setItemId(record.id!);
-
     
+    getTableSelected(getSelectedRows, (row: any) => {
     getLoadMenu({
-      payload: { id: record.id },
+      payload: { id: row.id },
       callback: (result: any) => {
         const {
           data,
           data: { parentId, parentNumber, depth }
         } = result;
+        setItemId(row.id!);
         setLoadMenuData({ parentId, parentNumber, depth });
         modalForm.setFieldsValue({
           name: data?.name,
@@ -268,22 +289,25 @@ export default (): React.ReactNode => {
           type: data.type
         });
       }
+
     });
     setModalShow(true);
+  });
   };
   /**
    * 添加子级
    * @param record 
    */
-  const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
-    if (record.type == MenuTypeEnum.Button) {
-      notification.error({
-        message: intl.formatMessage({ id: 'function.add.user.menu.description' })
-      });
-      return;
-    }
-
-    setMenuRow(record);
+  const onCreateChildrenClick = () => {
+    
+    getTableSelected(getSelectedRows, (row: any) => {
+      if (row.type == MenuTypeEnum.Button) {
+        notification.error({
+          message: intl.formatMessage({ id: 'function.add.user.menu.description' })
+        });
+        return;
+      }
+    setMenuRow(row);
     setModalModel('create');
     setModalTitle('modal.title.create');
     modalForm.setFieldsValue({
@@ -297,6 +321,7 @@ export default (): React.ReactNode => {
     });
     setItemId('');
     setModalShow(true);
+  })
   };
   /***
    * 添加 父级
@@ -402,9 +427,10 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
+      <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+        {/* <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
-        </Button>
+        </Button> */}
         <Table 
         rowSelection={{
           type: 'checkbox',
