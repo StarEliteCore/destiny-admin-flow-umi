@@ -11,5 +11,6 @@ export default {
   'menu.systemmanage.rolemanage': '角色管理',
   'menu.systemmanage.menumanage': '菜单管理',
   'menu.systemmanage.functionmanage': '功能管理',
-  'menu.systemmanage.dataDictionarymanage': '数据字典'
+  'menu.systemmanage.dataDictionarymanage': '数据字典',
+  'menu.systemmanage.organizationmanage':'组织架构',
 };

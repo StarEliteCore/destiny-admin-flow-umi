@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { GetDataDictionary, GetDataDictionaryLoad, AddDataDictionary, UpdateDataDictionary, DelDataDictionary } from '../srevices/index';
+import { GetDataDictionary, GetDataDictionaryLoad, AddDataDictionary, UpdateDataDictionary, DelDataDictionary } from '../services/index';
 
 const useDataDictionaryModel = () => {
     const [loadDictionaryForm, setLoadDictionaryForm] = useState<DataDictionaryDto.DataOutputLoadDto>();

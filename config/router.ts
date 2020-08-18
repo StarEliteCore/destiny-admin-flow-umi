@@ -54,11 +54,18 @@ const Route: IRoute[] = [
         component: './system/function'
       },
       {
-        access: 'add',
+        access: 'dataDictionarymanage',
         name: 'dataDictionarymanage',
         icon: 'dataDictionary',
         path: '/system/dataDictionary',
         component: './system/dataDictionary'
+      },
+      {
+        access: 'organizationmanage',
+        name: 'organizationmanage',
+        icon: 'organization',
+        path: '/system/organization',
+        component: './system/organization'
       }
     ]
   }

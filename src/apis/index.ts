@@ -73,9 +73,14 @@ export const DataDictionaryApi = {
   createDataDictionary: 'DataDictionary/CreateAsync',
   deleteDataDictionary: 'DataDictionary/CreateAsync',
   getTreeDataDictionary: 'DataDictionary/GetTableAsync'
-
-  // deleteDataDictionary: 'DataDictionary/DeleteAsyc',
-  // getTreeDataDictionary: 'DataDictionary/GetTableAsync',
-  // getLoadDataDictionary: 'DataDictionary/GetDataDictionnnaryListAsync'
 }
 
+/**
+ * 组织架构相关
+ */
+export const OrganiztionApi = {
+  getOrganiztion:'Organization/GetAsync',
+  createOrganiztion:'Organization/CreateAsync',
+  updateOrganiztion:'Organization/UpdateAsync',
+  deleteOrganiztion:'Organization/DeleteAsync',
+}
