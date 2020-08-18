@@ -13,60 +13,52 @@ const Route: IRoute[] = [
     redirect: '/home'
   },
   {
-    access: 'home',
     name: 'home',
     icon: 'home',
     path: '/home',
     component: './home'
   },
   {
-    access: 'systemmanage',
+    access: '/system',
     path: '/system',
     name: 'systemmanage',
     icon: 'setting',
     routes: [
       {
-        access: 'rolemanage',
+        access: 'system/role',
         name: 'rolemanage',
         icon: 'solution',
         path: '/system/role',
         component: './system/role'
       },
       {
-        access: 'usermmanage',
+        access: 'system/user',
         name: 'usermanage',
         icon: 'user',
         path: '/system/user',
         component: './system/user'
       },
       {
-        access: 'menumanage',
+        access: 'system/menu',
         name: 'menumanage',
         icon: 'menu',
         path: '/system/menu',
         component: './system/menu'
       },
       {
-        access: 'functionmanage',
+        access: 'system/function',
         name: 'functionmanage',
         icon: 'menu',
         path: '/system/function',
         component: './system/function'
-      },
-      {
-        access: 'dataDictionarymanage',
-        name: 'dataDictionarymanage',
-        icon: 'dataDictionary',
-        path: '/system/dataDictionary',
-        component: './system/dataDictionary'
-      },
-      {
-        access: 'organizationmanage',
-        name: 'organizationmanage',
-        icon: 'organization',
-        path: '/system/organization',
-        component: './system/organization'
       }
+      // ,
+      // {
+      //   name: 'system/dataDictionary',
+      //   icon: 'dataDictionary',
+      //   path: '/system/dataDictionary',
+      //   component: './system/dataDictionary'
+      // }
     ]
   }
 ];

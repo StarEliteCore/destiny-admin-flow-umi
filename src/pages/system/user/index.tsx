@@ -19,7 +19,7 @@ export default (): React.ReactNode => {
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm, loadUserForm } = useModel('userList');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('userList');
   const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
@@ -137,19 +137,20 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
     setItemId(record.id!);
-    getUserForm(record.id!).then(() => {
-      let data = loadUserForm;
-      modalForm.setFieldsValue({
-        username: data?.userName,
-        nickname: data?.nickName,
-        sex: data?.sex,
-        isSystem: data?.isSystem,
-
-        roles: data?.roleIds,
-        description: data?.description
-      });
+    getUserForm({
+      payload: { id: record.id },
+      callback: (result: any) => {
+        const data = result.data;
+        modalForm.setFieldsValue({
+          username: data?.userName,
+          nickname: data?.nickName,
+          sex: data?.sex,
+          isSystem: data?.isSystem,
+          roles: data?.roleIds,
+          description: data?.description
+        });
+      }
     });
-
     setModalShow(true);
   };
   const handleReset = () => {
@@ -253,12 +254,10 @@ export default (): React.ReactNode => {
   const getSearchFilter = (values: any) => {
     const conditions = getSearchFormInfo();
     let newConditions: Conditions[] = [];
-    debugger;
     for (let key in values) {
       if (values[key] === '' || values[key] === undefined) {
         continue;
       }
-      debugger;
       const condition = conditions.filter((o: ConditionInfo) => o.field.toLowerCase() == key.toLowerCase())[0];
       const operator = condition == undefined ? FilterOperator.LIKE : condition.operator;
       let item: Conditions = {
