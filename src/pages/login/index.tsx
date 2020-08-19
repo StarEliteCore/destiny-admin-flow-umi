@@ -31,7 +31,7 @@ export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
 
   const { refresh } = useModel('@@initialState');
-  const { loading, login } = useModel('auth');
+  const { loading, login } = useModel('login.auth');
 
   const handleSubmit = async (values: any) => {
     const { userName, password } = values;
