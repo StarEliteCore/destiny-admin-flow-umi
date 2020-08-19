@@ -1,5 +1,4 @@
-import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tag, Tooltip, message, notification } from 'antd';
-import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
+import { Card, Drawer, Form, Input, InputNumber, Modal, Select, Table, Tag, message, notification } from 'antd';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,10 +14,10 @@ import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const [searchForm] = Form.useForm();
+  const [] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
+  const { itemList, loading, getMenuTable, addMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
   const { functions, getFunctions } = useModel('function');
   const [menuRow, setMenuRow] = useState<MenuDto.MenuTable>();
 
@@ -27,7 +26,7 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [menuType, setMenuType] = useState<Array<MenuDto.MenuType>>([
+  const [menuType] = useState<Array<MenuDto.MenuType>>([
     { key: MenuTypeEnum.Menu, value: '菜单' },
     { key: MenuTypeEnum.Button, value: '按钮' }
   ]);
@@ -48,6 +47,7 @@ export default (): React.ReactNode => {
       { name: 'update', click1: onEditClick },
       { name: 'delete', click1: onDeleteClick },
       { name: 'addchildren', click1: onCreateChildrenClick },
+      { name: 'select', click1: onViewClick },
     ];
     console.log(butBarRef.current.itemclick)
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
@@ -245,9 +245,11 @@ export default (): React.ReactNode => {
    * 获取菜单功能
    * @param id 
    */
-  const onViewClick = (id: string) => {
-    getMenuFunctionList(id);
-    setShowDrawer(true);
+  const onViewClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      getMenuFunctionList(row.id);
+      setShowDrawer(true);
+    })
   };
   /**
    * 关闭抽屉
