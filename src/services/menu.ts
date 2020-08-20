@@ -15,7 +15,7 @@ export const MenuButtonAsyncAPI = (param: { menuid: string }): Promise<Types.Aja
     method: 'GET',
     params: param
   });
-  export const MenuListAsync = (): Promise<Types.AjaxResult> =>
+export const MenuListAsync = (): Promise<Types.AjaxResult> =>
   request<Types.AjaxResult>(MenuApi.GetMenuListAsync, {
-    method: 'GET',
+    method: 'GET'
   });

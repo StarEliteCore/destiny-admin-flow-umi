@@ -29,15 +29,14 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-      
-      const menustr = window.localStorage.getItem("menu")
+
+      const menustr = window.localStorage.getItem('menu');
       let menu = [];
-      let menulist=[];
-      if(menustr!="undefined")
-      {
+      let menulist = [];
+      if (menustr != 'undefined') {
         menu = menustr ? JSON.parse(menustr) : [];
       }
-      const menuliststr = window.localStorage.getItem("menulist")
+      const menuliststr = window.localStorage.getItem('menulist');
       // if(menuliststr!="" || menuliststr!=null || menuliststr!="undefined")
       // {
       //   menu = menustr ? JSON.parse(menustr) : [];
@@ -46,13 +45,13 @@ export const getInitialState = async (): Promise<{
         let menuRes: any = await MenuAsyncAPI();
         const { itemList } = menuRes;
         menu = itemList;
-        window.localStorage.setItem("menu", JSON.stringify(menu))
+        window.localStorage.setItem('menu', JSON.stringify(menu));
       }
 
       if (menulist.length <= 0) {
         let menulists: any = await MenuListAsync();
-        const {data} =menulists;
-        window.localStorage.setItem("menulist", JSON.stringify(data))
+        const { data } = menulists;
+        window.localStorage.setItem('menulist', JSON.stringify(data));
       }
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
