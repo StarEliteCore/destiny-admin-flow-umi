@@ -1,6 +1,5 @@
-import { Button, Card, Col, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
-import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
@@ -9,7 +8,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
-import { Guid } from 'guid-typescript';
 import IconFont from '@/components/IconFont';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
@@ -21,7 +19,7 @@ export default (): React.ReactNode => {
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('userList');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('system.user.userList');
   const { loading: roleLoading, roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
@@ -42,16 +40,16 @@ export default (): React.ReactNode => {
     const clickarr = [
       { name: 'add', click1: onCreateClick },
       { name: 'update', click1: onEditClick },
-      { name: 'delete', click1: onDeleteClick },
+      { name: 'delete', click1: onDeleteClick }
     ];
-  
+
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
 
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
     }
-  }
+  };
   const rowSelection = {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
       setSelectedRows(selectedRows);
@@ -121,7 +119,6 @@ export default (): React.ReactNode => {
       key: 'description',
       align: 'center'
     }
-    
   ];
   /**
    *删除用户
@@ -130,13 +127,12 @@ export default (): React.ReactNode => {
   const onDeleteClick = () => {
     getTableSelected(getSelectedRows, (row: any) => {
       deleteUser(row.id)
-      .then(() => {
-        message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-        getUserList(1, 10);
-      })
-      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+        .then(() => {
+          message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
+          getUserList(1, 10);
+        })
+        .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
     });
-    
   };
   /**
    *
@@ -146,35 +142,33 @@ export default (): React.ReactNode => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
     getTableSelected(getSelectedRows, (row: any) => {
-    setItemId(row.id!);
-    getUserForm({
-      payload: { id: row.id },
-      callback: (result: any) => {
-        const data = result.data;
-        modalForm.setFieldsValue({
-          username: data?.userName,
-          nickname: data?.nickName,
-          sex: data?.sex,
-          isSystem: data?.isSystem,
-          roles: data?.roleIds,
-          description: data?.description
-        });
-      }
+      setItemId(row.id!);
+      getUserForm({
+        payload: { id: row.id },
+        callback: (result: any) => {
+          const data = result.data;
+          modalForm.setFieldsValue({
+            username: data?.userName,
+            nickname: data?.nickName,
+            sex: data?.sex,
+            isSystem: data?.isSystem,
+            roles: data?.roleIds,
+            description: data?.description
+          });
+        }
+      });
+      setModalShow(true);
     });
-    setModalShow(true);
-  })
-
-    
   };
   const handleReset = () => {
     searchForm.resetFields();
     getUserList(1, 10);
   };
-/***
+  /***
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length)
+    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -376,13 +370,20 @@ export default (): React.ReactNode => {
         </Form>
       </Card>
       <Card>
-      <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
-        <Table 
-         rowSelection={{
-          type: 'checkbox',
-          ...rowSelection
-        }}
-        loading={LoadingObject(loading)} rowKey={(record: Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} />
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={(record: Types.UserTable) => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          pagination={pagination}
+          columns={columns}
+        />
       </Card>
       <Modal
         visible={modalShow}

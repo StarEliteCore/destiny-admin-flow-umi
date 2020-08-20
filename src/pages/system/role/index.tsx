@@ -17,7 +17,7 @@ import moment from 'moment';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getMenuTree } = useModel('roleList');
+  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getMenuTree } = useModel('system.role.roleList');
   const [menuTree, setMenuTreeForm] = useState<Array<MenuDto.MenuTreeOutDto>>([]);
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
@@ -40,19 +40,19 @@ export default (): React.ReactNode => {
     const clickarr = [
       { name: 'add', click1: onCreateClick },
       { name: 'update', click1: onEditClick },
-      { name: 'delete', click1: onDeleteClick },
+      { name: 'delete', click1: onDeleteClick }
     ];
-    console.log(butBarRef.current.itemclick)
+    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index)
+    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
     }
-  }
+  };
   const add = () => {
     console.log('的防晒是否');
-  }
+  };
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -79,7 +79,7 @@ export default (): React.ReactNode => {
       align: 'center',
       render: (text: string) => moment(text).format('YYYY-MM-DD HH:mm:ss')
     },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
+    { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' }
     // {
     //   title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.operating' })} />,
     //   key: 'operation',
@@ -125,7 +125,7 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length)
+    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -146,9 +146,9 @@ export default (): React.ReactNode => {
   };
   /**
    * 获取表格分页
-   * @param current 
-   * @param pageSize 
-   * @param args 
+   * @param current
+   * @param pageSize
+   * @param args
    */
   const getRoleList = (current: number, pageSize: number, args: Conditions[] = []) => {
     let operationProps: Operation = {
@@ -226,7 +226,7 @@ export default (): React.ReactNode => {
   };
   /**
    * 删除一个角色
-   * @param id 
+   * @param id
    */
   const onDeleteClick = (id: string) => {
     deleteRole(id)
@@ -353,7 +353,7 @@ export default (): React.ReactNode => {
   };
   /**
    * 查询搜索框
-   * @param values 
+   * @param values
    */
   const getSearchFilter = (values: any) => {
     const conditions = getSearchFormInfo();
@@ -415,7 +415,7 @@ export default (): React.ReactNode => {
       </Card>
 
       <Card>
-        <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
         <Table
           rowSelection={{
             type: 'checkbox',
@@ -431,14 +431,15 @@ export default (): React.ReactNode => {
           onRow={record => {
             return {
               onClick: event => {
-                console.log(record)
+                console.log(record);
               }, // 点击行
-              onDoubleClick: event => { },
-              onContextMenu: event => { },
-              onMouseEnter: event => { }, // 鼠标移入行
-              onMouseLeave: event => { },
+              onDoubleClick: event => {},
+              onContextMenu: event => {},
+              onMouseEnter: event => {}, // 鼠标移入行
+              onMouseLeave: event => {}
             };
-          }} ></Table>
+          }}
+        ></Table>
       </Card>
 
       <Modal
