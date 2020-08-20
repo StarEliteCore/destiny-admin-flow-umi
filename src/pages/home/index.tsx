@@ -1,18 +1,14 @@
 import { Card, Timeline } from 'antd';
 import React, { Component } from 'react';
 
-import ButtonBar from '@/components/ButtonBar';
 import { PageContainer } from '@ant-design/pro-layout';
 
 class Home extends Component {
-  private buttonbar: any;
   constructor(props: any) {
     super(props);
     this.fun = this.fun.bind(this);
   }
-  fun() {
-    console.log(this.buttonbar.itemclick)
-  }
+  fun() {}
   render() {
     return (
       <PageContainer>
@@ -55,7 +51,7 @@ class Home extends Component {
         */}
         {/* <ButtonBar getFun={this.fun} ref={(ref) => { this.buttonbar = ref; }} ></ButtonBar>  */}
       </PageContainer>
-    )
+    );
   }
 }
 

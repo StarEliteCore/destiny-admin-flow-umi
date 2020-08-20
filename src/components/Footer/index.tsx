@@ -28,6 +28,12 @@ export default (): React.ReactElement => {
           title: <IconFont type="icon-Bing" />,
           href: 'https://cn.bing.com',
           blankTarget: true
+        },
+        {
+          key: '豫ICP备19040084号-1',
+          title: '豫ICP备19040084号-1',
+          href: 'https://beian.miit.gov.cn',
+          blankTarget: true
         }
       ]}
     />

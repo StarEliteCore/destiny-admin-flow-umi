@@ -4,6 +4,8 @@
 
 ✔ [后端 API 链接](http://1065.cloud:9602/index.html)
 
+## 简要说明
+
 感兴趣的可以查看 API 并通过 PR 的方式贡献一些代码.尝试使用 V5 的特性来实现功能.
 
 由于动态主题对编译速度造成较大影响,在仓库中的代码默认不带动态主题相关内容. 若是需要动态主题切换,请执行如下代码
@@ -53,3 +55,33 @@ export const getInitialState = async (): Promise<{
   return { settings: defaultSettings };
 };
 ```
+
+### 脚本命令
+
+#### yarn install
+
+安装项目所需依赖包.
+
+#### yarn start
+
+启动项目,启动成功后打开浏览器,在[本地](http://localhost:8848)打开项目进行预览开发.
+
+#### yarn build
+
+构建项目,打包项目到静态资源文件.
+
+### yarn postinstall
+
+Umi 运行时导出构建,声明新的 Hooks 后,编辑器及 Umi 在编译前无法识别,会产生异常.使用该命令进行编译后即可解决.
+
+#### yarn analyze
+
+项目分析,用于分析项目各个资源占的大小,用于优化分析.
+
+#### yarn upgrade-interactive
+
+使用 yarn 更新项目依赖包.做开发建议经常更新依赖,这样不仅能解决一些 bug,特别是 antd 组件,每次更新都能修复大量 bug.
+
+#### yarn set version berry
+
+更新 yarn 2 自身

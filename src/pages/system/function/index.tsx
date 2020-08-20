@@ -1,10 +1,10 @@
-import { Button, Card, Col, Collapse, Form, Input, Modal, Row, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Row, Switch, Table, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table';
 import ColumnTitle from '@/components/ColumnTitle';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -14,14 +14,15 @@ import moment from 'moment';
 import { useModel } from 'umi';
 
 export default (): React.ReactNode => {
-  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('functionList');
+  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('system.function.functionList');
   const [modalForm] = Form.useForm();
   const [modalShow, setModalShow] = useState<boolean>(false);
-  const [modalModel, setModalModel] = useState<boolean>(true);
+  const [, setModalModel] = useState<boolean>(true);
   const [modalTitle, setModalTitle] = useState<string>('新增功能');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
   const [searchForm] = Form.useForm();
+  const butBarRef = useRef<any>(null);
   useEffect(() => {
     getFunctionTable({ pageIndex: 1, pageSize: 10 });
   }, []);
@@ -69,6 +70,21 @@ export default (): React.ReactNode => {
       align: 'center'
     }
   ];
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onUpdateClick },
+      { name: 'delete', click1: onDeleteClick }
+    ];
+    console.log(butBarRef.current.itemclick);
+    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    console.log(index);
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  };
+
   const onCreateClick = () => {
     setModalModel(true);
     setModalTitle('新增');
@@ -266,15 +282,7 @@ export default (): React.ReactNode => {
         </Form>
       </Card>
       <Card>
-        <Tooltip placement="bottom" title="新增">
-          <Button shape="circle" icon={<PlusOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onCreateClick} />
-        </Tooltip>
-        <Tooltip placement="bottom" title="修改">
-          <Button shape="circle" icon={<EditOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onUpdateClick} />
-        </Tooltip>
-        <Tooltip placement="bottom" title="删除">
-          <Button shape="circle" icon={<DeleteOutlined />} type="primary" style={{ margin: '0px 10px 15px 10px' }} onClick={onDeleteClick} />
-        </Tooltip>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
         <Table
           rowSelection={{
             type: 'checkbox',

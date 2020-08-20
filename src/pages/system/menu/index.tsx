@@ -1,9 +1,9 @@
-import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tag, Tooltip, message, notification } from 'antd';
-import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
+import { Card, Drawer, Form, Input, InputNumber, Modal, Select, Table, Tag, message, notification } from 'antd';
 import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
@@ -14,10 +14,10 @@ import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const [searchForm] = Form.useForm();
+  const [] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
+  const { itemList, loading, getMenuTable, addMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('system.menu.menuServices');
   const { functions, getFunctions } = useModel('function');
   const [menuRow, setMenuRow] = useState<MenuDto.MenuTable>();
 
@@ -26,16 +26,37 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [menuType, setMenuType] = useState<Array<MenuDto.MenuType>>([
+  const [menuType] = useState<Array<MenuDto.MenuType>>([
     { key: MenuTypeEnum.Menu, value: '菜单' },
     { key: MenuTypeEnum.Button, value: '按钮' }
   ]);
+  const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
   useEffect(() => {
     getMenuList();
   }, []);
   useEffect(() => {
     getFunctions();
   }, []);
+  const butBarRef = useRef<any>(null);
+  /**
+   * 通用事件
+   */
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onEditClick },
+      { name: 'delete', click1: onDeleteClick },
+      { name: 'addchildren', click1: onCreateChildrenClick },
+      { name: 'select', click1: onViewClick }
+    ];
+    console.log(butBarRef.current.itemclick);
+    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    console.log(index);
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  };
   const columns: Array<ColumnProps<MenuDto.MenuTable>> = [
     {
       title: (
@@ -128,33 +149,34 @@ export default (): React.ReactNode => {
       render: (_: string, record: MenuDto.MenuTable) => {
         return record.type == MenuTypeEnum.Menu ? <Tag color="cyan">菜单</Tag> : <Tag color="blue">按钮</Tag>;
       }
-    },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.operating' })} />,
-      key: 'action',
-      align: 'center',
-      render: (_: string, record: MenuDto.MenuTable) => (
-        <div>
-          <Tooltip placement="bottom" title="查看菜单功能">
-            <SecurityScanFilled onClick={() => onViewClick(record.id)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.add' })}>
-            <FileAddFilled onClick={() => onCreateChildrenClick(record)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.modify' })}>
-            <EditOutlined onClick={() => onEditClick(record)} />
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.delete' })}>
-            <Popconfirm placement="top" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
-              <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
-            </Popconfirm>
-          </Tooltip>
-        </div>
-      )
     }
+    // ,
+    // {
+    //   title: <ColumnTitle name={intl.formatMessage({ id: 'menu.table.columns.operating' })} />,
+    //   key: 'action',
+    //   align: 'center',
+    //   render: (_: string, record: MenuDto.MenuTable) => (
+    //     <div>
+    //       <Tooltip placement="bottom" title="查看菜单功能">
+    //         <SecurityScanFilled onClick={() => onViewClick(record.id)} />
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.add' })}>
+    //         <FileAddFilled onClick={() => onCreateChildrenClick(record)} />
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       {/* <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.modify' })}>
+    //         <EditOutlined onClick={() => onEditClick(record)} />
+    //       </Tooltip> */}
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.delete' })}>
+    //         <Popconfirm placement="top" title={intl.formatMessage({ id: 'menu.table.columns.tooltip.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
+    //           <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
+    //         </Popconfirm>
+    //       </Tooltip>
+    //     </div>
+    //   )
+    // }
   ];
   const menuFunctionColumns: Array<ColumnProps<MenuDto.MenuFunctionTable>> = [
     {
@@ -176,82 +198,134 @@ export default (): React.ReactNode => {
       align: 'center'
     }
   ];
-  const onDeleteClick = (id: string) => {
-    delMenu(id)
-      .then(() => {
-        message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-        getMenuList();
-      })
-      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+  /**
+   * 表格选择框事件
+   */
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      setSelectedRows(selectedRows);
+    }
   };
-  const onViewClick = (id: string) => {
-    console.log(id);
-    getMenuFunctionList(id);
-    setShowDrawer(true);
+  /***
+   * 获取选中的数据
+   */
+  const getTableSelected = (rows: any[], callback: any) => {
+    console.log(rows.length);
+    if (rows.length == 0) {
+      message.warning('请选择数据！！！');
+
+      return;
+    }
+    if (rows.length > 1) {
+      message.warning(`已选择${rows.length}行数据,请重选择！！！`);
+      return;
+    }
+
+    let fun = function () {
+      if (callback) {
+        callback(rows[0]);
+      }
+    };
+
+    fun();
   };
+  /**
+   * 删除菜单或按钮
+   * @param id
+   */
+  const onDeleteClick = () => {
+    // delMenu(id)
+    //   .then(() => {
+    //     message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
+    //     getMenuList();
+    //   })
+    //   .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+  };
+  /**
+   * 获取菜单功能
+   * @param id
+   */
+  const onViewClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      getMenuFunctionList(row.id);
+      setShowDrawer(true);
+    });
+  };
+  /**
+   * 关闭抽屉
+   */
   const onCloseDrawer = () => {
     setShowDrawer(false);
   };
 
   const [loadmenudata, setLoadMenuData] = useState<{ parentId?: string; parentNumber?: string; depth?: number }>({});
-  const onEditClick = (record: MenuDto.MenuTable) => {
+  /**
+   * 修改菜单或按钮
+   * @param record
+   */
+  const onEditClick = () => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
-    setItemId(record.id!);
-    getLoadMenu({
-      payload: { id: record.id },
-      callback: (result: any) => {
-        const {
-          data,
-          data: { parentId, parentNumber, depth }
-        } = result;
-        setLoadMenuData({ parentId, parentNumber, depth });
-        modalForm.setFieldsValue({
-          name: data?.name,
-          component: data?.component,
-          icon: data?.icon,
-          path: data?.path,
-          sort: data?.sort,
-          description: data?.description,
-          func: data?.functionIds,
-          parentId: data?.parentId,
-          parentNumber: data?.parentNumber,
-          depth: data?.depth,
-          type: data.type
-        });
-      }
-    });
-    setModalShow(true);
-  };
 
-  const handleReset = () => {
-    searchForm.resetFields();
-    handleSearch({});
-  };
-  const handleSearch = (values: Store) => { };
-  const onCreateChildrenClick = (record: MenuDto.MenuTable) => {
-    if (record.type == MenuTypeEnum.Button) {
-      notification.error({
-        message: intl.formatMessage({ id: 'function.add.user.menu.description' })
+    getTableSelected(getSelectedRows, (row: any) => {
+      getLoadMenu({
+        payload: { id: row.id },
+        callback: (result: any) => {
+          const {
+            data,
+            data: { parentId, parentNumber, depth }
+          } = result;
+          setItemId(row.id!);
+          setLoadMenuData({ parentId, parentNumber, depth });
+          modalForm.setFieldsValue({
+            name: data?.name,
+            component: data?.component,
+            icon: data?.icon,
+            path: data?.path,
+            sort: data?.sort,
+            description: data?.description,
+            func: data?.functionIds,
+            parentId: data?.parentId,
+            parentNumber: data?.parentNumber,
+            depth: data?.depth,
+            type: data.type
+          });
+        }
       });
-      return;
-    }
-
-    setMenuRow(record);
-    setModalModel('create');
-    setModalTitle('modal.title.create');
-    modalForm.setFieldsValue({
-      name: '',
-      component: '',
-      icon: '',
-      path: '',
-      sort: 0,
-      func: [],
-      description: ''
+      setModalShow(true);
     });
-    setItemId('');
-    setModalShow(true);
   };
+  /**
+   * 添加子级
+   * @param record
+   */
+  const onCreateChildrenClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      if (row.type == MenuTypeEnum.Button) {
+        notification.error({
+          message: intl.formatMessage({ id: 'function.add.user.menu.description' })
+        });
+        return;
+      }
+      setMenuRow(row);
+      setModalModel('create');
+      setModalTitle('modal.title.create');
+      modalForm.setFieldsValue({
+        name: '',
+        component: '',
+        icon: '',
+        path: '',
+        sort: 0,
+        func: [],
+        description: ''
+      });
+      setItemId('');
+      setModalShow(true);
+    });
+  };
+  /***
+   * 添加 父级
+   */
   const onCreateClick = () => {
     modalForm.setFieldsValue({
       name: '',
@@ -266,10 +340,12 @@ export default (): React.ReactNode => {
     setItemId('');
     setModalShow(true);
   };
+  /**
+   * 弹框保存
+   */
   const onModalOK = () => {
     modalForm.validateFields().then((values: Store) => {
       const { name, component, icon, path, sort, description, func, type } = values;
-      console.log(menuRow);
       let dep = 0;
       let parentNu = '';
       let parentId = Guid.EMPTY;
@@ -295,7 +371,6 @@ export default (): React.ReactNode => {
         parentId: parentId,
         functionId: func
       };
-      console.log(args);
       if (modalModel === 'create') {
         addMenu(args)
           .then(() => {
@@ -325,6 +400,9 @@ export default (): React.ReactNode => {
       }
     });
   };
+  /**
+   * 获取表格数据
+   */
   const getMenuList = () => {
     getMenuTable().catch((error: any) => {
       notification.error({
@@ -333,7 +411,10 @@ export default (): React.ReactNode => {
       });
     });
   };
-
+  /**
+   * 获取菜单功能
+   * @param id
+   */
   const getMenuFunctionList = (id: string) => {
     getMenuFunctionTable(id).catch((error: any) => {
       notification.error({
@@ -346,10 +427,22 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
+        {/* <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
-        </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} columns={columns}></Table>
+        </Button> */}
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={record => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          columns={columns}
+        ></Table>
       </Card>
       <Modal
         visible={modalShow}
@@ -446,7 +539,6 @@ export default (): React.ReactNode => {
           </Form.Item>
         </Form>
       </Modal>
-
       <Drawer title="查看菜单功能" width={520} visible={showDrawer} onClose={onCloseDrawer}>
         <Table pagination={false} loading={LoadingObject(menuFunctionLoading)} tableLayout="fixed" size="small" dataSource={menuFunctionItemList} columns={menuFunctionColumns}></Table>
       </Drawer>

@@ -23,7 +23,9 @@ export const MenuApi = {
   LoadMenu: 'Menu/LoadFormMenuAsync',
   getMenuFunction: 'Menu/GetMenuFunctionListAsync',
   getMenuAsync: 'Menu/GetMenuAsync',
-  GetMenuChildrenButtonAsync: 'Menu/GetMenuChildrenButtonAsync'
+  GetMenuChildrenButtonAsync: 'Menu/GetMenuChildrenButtonAsync',
+  getUserMenuTreeAsync: '',
+  GetMenuListAsync: 'Menu/GetMenuListAsync'
 };
 //#endregion
 
@@ -77,5 +79,4 @@ export const DataDictionaryApi = {
   getLoadDataDictionary: 'DataDictionary/GetDataDictionnnaryListAsync'
   //deleteDataDictionary: 'DataDictionary/DeleteAsyc',
   // getTreeDataDictionary: 'DataDictionary/GetTableAsync',
-}
-
+};

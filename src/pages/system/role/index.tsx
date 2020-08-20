@@ -17,7 +17,7 @@ import moment from 'moment';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
-  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getMenuTree } = useModel('roleList');
+  const { itemList, loading, total, current, pageSize, getRoleTable, addRole, deleteRole, updateRole, getMenuTree } = useModel('system.role.roleList');
   const [menuTree, setMenuTreeForm] = useState<Array<MenuDto.MenuTreeOutDto>>([]);
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
@@ -32,9 +32,27 @@ export default (): React.ReactNode => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [newCheckedKeys, setNewCheckedKeys] = useState<any>({ checked: [] });
+  const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
   useEffect(() => {
     getRoleTable({ pageIndex: 1, pageSize: 10 });
   }, []);
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onEditClick },
+      { name: 'delete', click1: onDeleteClick }
+    ];
+    console.log(butBarRef.current.itemclick);
+    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    console.log(index);
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  };
+  const add = () => {
+    console.log('的防晒是否');
+  };
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -61,25 +79,25 @@ export default (): React.ReactNode => {
       align: 'center',
       render: (text: string) => moment(text).format('YYYY-MM-DD HH:mm:ss')
     },
-    { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.operating' })} />,
-      key: 'operation',
-      align: 'center',
-      render: (_: string, record: Types.RoleTable) => (
-        <div>
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.delete' })}>
-            <Popconfirm placement="top" title={intl.formatMessage({ id: 'role.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
-              <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
-            </Popconfirm>
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.modify' })}>
-            <EditOutlined onClick={() => onEditClick(record)} />
-          </Tooltip>
-        </div>
-      )
-    }
+    { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.description' })} />, dataIndex: 'description', key: 'description', align: 'center' }
+    // {
+    //   title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.operating' })} />,
+    //   key: 'operation',
+    //   align: 'center',
+    //   render: (_: string, record: Types.RoleTable) => (
+    //     <div>
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.delete' })}>
+    //         <Popconfirm placement="top" title={intl.formatMessage({ id: 'role.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
+    //           <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
+    //         </Popconfirm>
+    //       </Tooltip>
+    //       <Divider type="vertical" />
+    //       <Tooltip placement="bottom" title={intl.formatMessage({ id: 'role.table.columns.tooltip.modify' })}>
+    //         <EditOutlined onClick={() => onEditClick(record)} />
+    //       </Tooltip>
+    //     </div>
+    //   )
+    // }
   ];
 
   const pagination: PaginationProps = {
@@ -98,7 +116,40 @@ export default (): React.ReactNode => {
       getRoleList(page, pageSize ?? 10, filter);
     }
   };
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      setSelectedRows(selectedRows);
+    }
+  };
+  /***
+   * 获取选中的数据
+   */
+  const getTableSelected = (rows: any[], callback: any) => {
+    console.log(rows.length);
+    if (rows.length == 0) {
+      message.warning('请选择数据！！！');
 
+      return;
+    }
+    if (rows.length > 1) {
+      message.warning(`已选择${rows.length}行数据,请重选择！！！`);
+      return;
+    }
+
+    let fun = function () {
+      if (callback) {
+        callback(rows[0]);
+      }
+    };
+
+    fun();
+  };
+  /**
+   * 获取表格分页
+   * @param current
+   * @param pageSize
+   * @param args
+   */
   const getRoleList = (current: number, pageSize: number, args: Conditions[] = []) => {
     let operationProps: Operation = {
       pageIndex: current,
@@ -117,6 +168,9 @@ export default (): React.ReactNode => {
       });
     });
   };
+  /**
+   * 添加一个角色
+   */
   const onCreateClick = () => {
     setModalModel('create');
     setModalTitle('role.modal.title.create');
@@ -136,26 +190,30 @@ export default (): React.ReactNode => {
     setModalShow(true);
   };
 
-  const onEditClick = (record: Types.RoleTable) => {
+  /**
+   * 修改一个角色
+   */
+  const onEditClick = () => {
     setModalModel('edit');
     setModalTitle('role.modal.title.modify');
-    setItemId(record.id!);
-    getMenuTree({
-      payload: { roleId: record.id },
-      callback: (result: any) => {
-        const data = result.data;
-        const selecteddata = result.selected;
-        setMenuTreeForm(data);
-        setTreeCheckedKeys(selecteddata);
-      }
+    getTableSelected(getSelectedRows, (row: any) => {
+      getMenuTree({
+        payload: { roleId: row.id },
+        callback: (result: any) => {
+          const data = result.data;
+          const selecteddata = result.selected;
+          setMenuTreeForm(data);
+          setTreeCheckedKeys(selecteddata);
+        }
+      });
+      modalForm.setFieldsValue({
+        name: row.name,
+        description: row.description,
+        isAdmin: row.isAdmin
+      });
+      setItemId(row.id);
+      setModalShow(true);
     });
-
-    modalForm.setFieldsValue({
-      name: record.name,
-      description: record.description,
-      isAdmin: record.isAdmin
-    });
-    setModalShow(true);
   };
   /**
    *
@@ -164,9 +222,12 @@ export default (): React.ReactNode => {
    */
   const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
     let concat = checkedKeys.concat(e.halfCheckedKeys);
-    // console.log('concat:', concat);
     setTreeCheckedKeys(checkedKeys);
   };
+  /**
+   * 删除一个角色
+   * @param id
+   */
   const onDeleteClick = (id: string) => {
     deleteRole(id)
       .then(() => {
@@ -175,7 +236,9 @@ export default (): React.ReactNode => {
       })
       .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'role.function.delete.click.fail' })}:${error}`));
   };
-
+  /**
+   * 点击弹框确定按钮保存
+   */
   const onModalOK = () => {
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
@@ -183,7 +246,8 @@ export default (): React.ReactNode => {
         let args = {
           name: name,
           isAdmin: isAdmin,
-          description: description
+          description: description,
+          menuIds: menucheckedKeys
         };
 
         addRole(args)
@@ -256,7 +320,6 @@ export default (): React.ReactNode => {
   //  */
   // const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
   //   let concat = checkedKeys.concat(e.halfCheckedKeys);
-  //   console.log('concat:', concat);
   //   setTreeCheckedKeys(checkedKeys);
   // };
   // const onCheck = (checkedKeys: any, e: any) => {
@@ -280,12 +343,18 @@ export default (): React.ReactNode => {
   //   }
   //   setCheckedKeys(newChecked);
   // };
-
+  /**
+   * 查询条件定义
+   */
   const getSearchFormInfo = () => {
     const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('isAdmin')];
 
     return conditions;
   };
+  /**
+   * 查询搜索框
+   * @param values
+   */
   const getSearchFilter = (values: any) => {
     const conditions = getSearchFormInfo();
     let newConditions: Conditions[] = [];
@@ -310,25 +379,11 @@ export default (): React.ReactNode => {
   };
 
   const onExpand = expandedKeys => {
-    console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
   };
-
-  const add = () => {
-    console.log('butBarRef.current.itemclick');
-  }
-  const fun = () => {
-    console.log('VV是个大佬');
-    console.log(butBarRef.current.itemclick)
-    switch (butBarRef.current.itemclick) {
-      case 'add':
-        add();
-        break;
-    }
-  }
   const butBarRef = useRef<any>(null);
   return (
     <PageContainer>
@@ -356,15 +411,35 @@ export default (): React.ReactNode => {
               </span>
             </Col>
           </Row>
-          <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
         </Form>
       </Card>
 
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
-          {intl.formatMessage({ id: 'role.button.create' })}
-        </Button>
-        <Table loading={LoadingObject(loading)} rowKey={record => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns}></Table>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={record => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          pagination={pagination}
+          columns={columns}
+          onRow={record => {
+            return {
+              onClick: event => {
+                console.log(record);
+              }, // 点击行
+              onDoubleClick: event => {},
+              onContextMenu: event => {},
+              onMouseEnter: event => {}, // 鼠标移入行
+              onMouseLeave: event => {}
+            };
+          }}
+        ></Table>
       </Card>
 
       <Modal

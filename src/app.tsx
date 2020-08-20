@@ -3,14 +3,16 @@
 import { AvatarGif, LogoPng } from '@/assets';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { ErrorShowType, RequestConfig, history } from 'umi';
+import { MenuAsyncAPI, MenuListAsync } from '@/services/menu';
 
 import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
 import { LoadUser } from '@/services/user';
-import { MenuAsyncAPI } from '@/services/menu';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
+
+// import menudata from './menudata'
 
 //#region InitialState
 /**
@@ -27,17 +29,33 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-      let menuRes: any = await MenuAsyncAPI();
-      console.log(menuRes);
-      const { itemList } = menuRes;
-      window.localStorage.setItem('menu', JSON.stringify(itemList));
+
+      const menustr = window.localStorage.getItem('menu');
+      let menu = [];
+      let menulist = [];
+      if (menustr != 'undefined') {
+        menu = menustr ? JSON.parse(menustr) : [];
+      }
+      const menuliststr = window.localStorage.getItem('menulist');
+      // if(menuliststr!="" || menuliststr!=null || menuliststr!="undefined")
+      // {
+      //   menu = menustr ? JSON.parse(menustr) : [];
+      // }
+      if (menu.length <= 0) {
+        let menuRes: any = await MenuAsyncAPI();
+        const { itemList } = menuRes;
+        menu = itemList;
+        window.localStorage.setItem('menu', JSON.stringify(menu));
+      }
+
+      if (menulist.length <= 0) {
+        let menulists: any = await MenuListAsync();
+        const { data } = menulists;
+        window.localStorage.setItem('menulist', JSON.stringify(data));
+      }
       return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: itemList },
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
         settings: defaultSettings
-        // settingDrawer: {
-        //   hideCopyButton: true,
-        //   hideHintAlert: true
-        // }
       };
     } catch (error) {
       history.push('/login');
