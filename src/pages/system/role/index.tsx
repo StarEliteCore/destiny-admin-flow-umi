@@ -14,6 +14,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
+import { Guid } from 'guid-typescript';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
@@ -42,9 +43,7 @@ export default (): React.ReactNode => {
       { name: 'update', click1: onEditClick },
       { name: 'delete', click1: onDeleteClick }
     ];
-    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
@@ -204,15 +203,15 @@ export default (): React.ReactNode => {
           const selecteddata = result.selected;
           setMenuTreeForm(data);
           setTreeCheckedKeys(selecteddata);
+          modalForm.setFieldsValue({
+            name: row.name,
+            description: row.description,
+            isAdmin: row.isAdmin
+          });
+          setItemId(row.id);
+          setModalShow(true);
         }
       });
-      modalForm.setFieldsValue({
-        name: row.name,
-        description: row.description,
-        isAdmin: row.isAdmin
-      });
-      setItemId(row.id);
-      setModalShow(true);
     });
   };
   /**
@@ -240,6 +239,10 @@ export default (): React.ReactNode => {
    * 点击弹框确定按钮保存
    */
   const onModalOK = () => {
+    menucheckedKeys.forEach(element => {
+      getParentIds(element, menuTree);
+    });
+    console.log(menucheckedKeys);
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
         const { name, isAdmin, description } = values;
@@ -249,7 +252,6 @@ export default (): React.ReactNode => {
           description: description,
           menuIds: menucheckedKeys
         };
-
         addRole(args)
           .then(() => {
             message.success(intl.formatMessage({ id: 'role.function.add.role.success' }));
@@ -288,15 +290,22 @@ export default (): React.ReactNode => {
     }
   };
 
-  const getParentIds = (id: string, allNodes: any): any => {
-    let parents = [];
-    let theNode = findTheNode(id, allNodes);
-    if (theNode?.parentId && theNode?.parentId !== '00000000-0000-0000-0000-000000000000') {
-      parents.push(theNode.parentId);
-      parents.push(...getParentIds(theNode.parentId, allNodes));
-    }
-
-    return parents;
+  const getParentIds = (id: string, arr: any): Promise<any> => {
+    arr.forEach(element => {
+      const index = element.children.findIndex((x: any) => x.id == id);
+      if (element.children.findIndex((x: any) => x.id == id).parentId == Guid.EMPTY) {
+        menucheckedKeys.push(element.id);
+        return;
+      }
+      if (index < 0) {
+        getParentIds(id, element.children);
+      } else {
+        if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
+          menucheckedKeys.push(element.children[index].parentId);
+          console.log(menucheckedKeys);
+        }
+      }
+    });
   };
 
   const getChildrenIds = (id: string, allNodes: any) => {
@@ -313,42 +322,11 @@ export default (): React.ReactNode => {
   const findTheNode = (id: string, allNodes: any) => {
     return allNodes.filter((item: any) => item.id == id)[0];
   };
-  // /**
-  //  *
-  //  * @param checkedKeys
-  //  * @param e
-  //  */
-  // const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
-  //   let concat = checkedKeys.concat(e.halfCheckedKeys);
-  //   setTreeCheckedKeys(checkedKeys);
-  // };
-  // const onCheck = (checkedKeys: any, e: any) => {
-  //   let newChecked: any = [];
-
-  //   let value = e.node.key;
-  //   let treeData = menuList;
-  //   if (e.checked) {
-  //     let parentIds = getParentIds(value, treeData);
-  //     if (!parentIds.includes(value)) {
-  //       parentIds.push(value);
-  //     }
-  //     let children = getChildrenIds(value, treeData);
-  //     let addNodes: any = parentIds.concat(children).filter((item: string) => !checkedKeys1.includes(item));
-  //     newChecked = checkedKeys1.concat(addNodes);
-  //   } else {
-  //     //取消勾选事件,取消勾选所有子节点
-  //     let children = getChildrenIds(value, treeData);
-  //     children.push(value);
-  //     newChecked = checkedKeys1.filter((item: string) => !children.includes(item));
-  //   }
-  //   setCheckedKeys(newChecked);
-  // };
   /**
    * 查询条件定义
    */
   const getSearchFormInfo = () => {
     const conditions: ConditionInfo[] = [new ConditionInfo('name', FilterOperator.LIKE), new ConditionInfo('isAdmin')];
-
     return conditions;
   };
   /**
@@ -382,7 +360,7 @@ export default (): React.ReactNode => {
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeys);
-    setAutoExpandParent(false);
+    setAutoExpandParent(true);
   };
   const butBarRef = useRef<any>(null);
   return (
