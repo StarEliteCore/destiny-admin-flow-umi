@@ -201,8 +201,13 @@ export default (): React.ReactNode => {
         callback: (result: any) => {
           const data = result.data;
           const selecteddata = result.selected;
-          setMenuTreeForm(data);
+          console.log(selecteddata);
           setTreeCheckedKeys(selecteddata);
+          setMenuTreeForm(data);
+          // --------------暂时有问题还未解决获取不到数据
+          console.log(menucheckedKeys);
+          return;
+          ReBuildTreeSelect(data);
           modalForm.setFieldsValue({
             name: row.name,
             description: row.description,
@@ -212,6 +217,26 @@ export default (): React.ReactNode => {
           setModalShow(true);
         }
       });
+    });
+  };
+  const ReBuildTreeSelect = (_tree: any) => {
+    let selechildrenarr = [];
+    _tree.forEach(element => {
+      if (element.children.length > 0) {
+        element.children.forEach(x => {
+          if (menucheckedKeys.indexOf(x.id) >= 0) {
+            debugger;
+            selechildrenarr.push(x.id);
+          }
+          if (selechildrenarr.length != element.children.length) {
+            let removeindex = menucheckedKeys.indexOf(element.id);
+            if (removeindex > -1) {
+              menucheckedKeys.splice(removeindex);
+            }
+          }
+        });
+      }
+      ReBuildTreeSelect(element.children);
     });
   };
   /**
@@ -421,6 +446,7 @@ export default (): React.ReactNode => {
       </Card>
 
       <Modal
+        maskClosable={false}
         visible={modalShow}
         title={intl.formatMessage({ id: modalTitle })}
         cancelText={intl.formatMessage({
