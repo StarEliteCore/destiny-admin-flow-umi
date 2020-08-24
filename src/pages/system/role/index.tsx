@@ -10,11 +10,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import ButtonBar from '@/components/ButtonBar';
 import ColumnTitle from '@/components/ColumnTitle';
+import { Guid } from 'guid-typescript';
 import { PageContainer } from '@ant-design/pro-layout';
 import { PaginationProps } from 'antd/lib/pagination';
 import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
-import { Guid } from 'guid-typescript';
 
 export default (): React.ReactNode => {
   const intl: IntlShape = useIntl();
@@ -200,14 +200,14 @@ export default (): React.ReactNode => {
         payload: { roleId: row.id },
         callback: (result: any) => {
           const data = result.data;
-          const selecteddata = result.selected;
-          console.log(selecteddata);
-          setTreeCheckedKeys(selecteddata);
+          let selecteddata = result.selected;
           setMenuTreeForm(data);
           // --------------暂时有问题还未解决获取不到数据
-          console.log(menucheckedKeys);
-          return;
-          ReBuildTreeSelect(data);
+
+          // setTreeCheckedKeys(selecteddata);
+
+          ReBuildTreeSelect(data, selecteddata);
+          setTreeCheckedKeys(selecteddata);
           modalForm.setFieldsValue({
             name: row.name,
             description: row.description,
@@ -219,24 +219,24 @@ export default (): React.ReactNode => {
       });
     });
   };
-  const ReBuildTreeSelect = (_tree: any) => {
+  const ReBuildTreeSelect = (_tree: any, _selecteddata: any) => {
     let selechildrenarr = [];
     _tree.forEach(element => {
       if (element.children.length > 0) {
         element.children.forEach(x => {
-          if (menucheckedKeys.indexOf(x.id) >= 0) {
-            debugger;
+          if (_selecteddata.indexOf(x.id) >= 0) {
             selechildrenarr.push(x.id);
           }
           if (selechildrenarr.length != element.children.length) {
-            let removeindex = menucheckedKeys.indexOf(element.id);
+            let removeindex = _selecteddata.indexOf(element.id);
             if (removeindex > -1) {
-              menucheckedKeys.splice(removeindex);
+              _selecteddata.splice(removeindex, 1);
+              console.log(_selecteddata);
             }
           }
         });
       }
-      ReBuildTreeSelect(element.children);
+      ReBuildTreeSelect(element.children, _selecteddata);
     });
   };
   /**
