@@ -49,9 +49,6 @@ export default (): React.ReactNode => {
       clickmodel.click1();
     }
   };
-  const add = () => {
-    console.log('的防晒是否');
-  };
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -124,7 +121,6 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -231,7 +227,6 @@ export default (): React.ReactNode => {
             let removeindex = _selecteddata.indexOf(element.id);
             if (removeindex > -1) {
               _selecteddata.splice(removeindex, 1);
-              console.log(_selecteddata);
             }
           }
         });
@@ -264,10 +259,7 @@ export default (): React.ReactNode => {
    * 点击弹框确定按钮保存
    */
   const onModalOK = () => {
-    menucheckedKeys.forEach(element => {
-      getParentIds(element, menuTree);
-    });
-    console.log(menucheckedKeys);
+    getParentIds(menuTree, menucheckedKeys);
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
         const { name, isAdmin, description } = values;
@@ -315,21 +307,22 @@ export default (): React.ReactNode => {
     }
   };
 
-  const getParentIds = (id: string, arr: any): Promise<any> => {
-    arr.forEach(element => {
-      const index = element.children.findIndex((x: any) => x.id == id);
-      if (element.children.findIndex((x: any) => x.id == id).parentId == Guid.EMPTY) {
-        menucheckedKeys.push(element.id);
-        return;
-      }
-      if (index < 0) {
-        getParentIds(id, element.children);
-      } else {
-        if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
-          menucheckedKeys.push(element.children[index].parentId);
-          console.log(menucheckedKeys);
+  const getParentIds = (arr: any, selectarr: any): Promise<any> => {
+    selectarr.forEach(xid => {
+      arr.forEach(element => {
+        const index = element.children.findIndex((x: any) => x.id == xid);
+        if (element.children.findIndex((x: any) => x.id == xid).parentId == Guid.EMPTY) {
+          menucheckedKeys.push(element.id);
+          return;
         }
-      }
+        if (index < 0) {
+          getParentIds(element.children, selectarr);
+        } else {
+          if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
+            menucheckedKeys.push(element.children[index].parentId);
+          }
+        }
+      });
     });
   };
 
@@ -433,9 +426,7 @@ export default (): React.ReactNode => {
           columns={columns}
           onRow={record => {
             return {
-              onClick: event => {
-                console.log(record);
-              }, // 点击行
+              onClick: event => {}, // 点击行
               onDoubleClick: event => {},
               onContextMenu: event => {},
               onMouseEnter: event => {}, // 鼠标移入行
