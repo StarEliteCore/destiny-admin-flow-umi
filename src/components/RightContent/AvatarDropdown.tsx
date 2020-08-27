@@ -20,7 +20,7 @@ const loginOut = async () => {
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/login' && !redirect) {
     window.localStorage.removeItem('menu');
-    debugger;
+    window.localStorage.removeItem('menulist');
     history.replace({ pathname: '/login' });
   }
 };

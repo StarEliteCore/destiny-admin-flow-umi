@@ -124,7 +124,6 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -231,7 +230,6 @@ export default (): React.ReactNode => {
             let removeindex = _selecteddata.indexOf(element.id);
             if (removeindex > -1) {
               _selecteddata.splice(removeindex, 1);
-              console.log(_selecteddata);
             }
           }
         });
@@ -267,7 +265,7 @@ export default (): React.ReactNode => {
     menucheckedKeys.forEach(element => {
       getParentIds(element, menuTree);
     });
-    console.log(menucheckedKeys);
+
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
         const { name, isAdmin, description } = values;
@@ -327,7 +325,7 @@ export default (): React.ReactNode => {
       } else {
         if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
           menucheckedKeys.push(element.children[index].parentId);
-          console.log(menucheckedKeys);
+          getParentIds(element.children[index].parentId, menuTree);
         }
       }
     });
