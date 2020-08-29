@@ -43,8 +43,8 @@ export const getInitialState = async (): Promise<{
       // }
       if (menu.length <= 0) {
         let menuRes: any = await MenuAsyncAPI();
-        const { itemList } = menuRes;
-        menu = itemList;
+        const { data } = menuRes;
+        menu = data;
         window.localStorage.setItem('menu', JSON.stringify(menu));
       }
 

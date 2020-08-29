@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, Modal, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Radio, Row, Select, Switch, Table, Tooltip, Transfer, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { IntlShape, useIntl, useModel } from 'umi';
@@ -27,6 +27,7 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
+  const [gettargetKeys, settargetKeys] = useState<string[]>([]);
   const butBarRef = useRef<any>(null);
   useEffect(() => {
     getRoles();
@@ -155,6 +156,7 @@ export default (): React.ReactNode => {
             roles: data?.roleIds,
             description: data?.description
           });
+          settargetKeys(data?.roleIds);
         }
       });
       setModalShow(true);
@@ -203,9 +205,10 @@ export default (): React.ReactNode => {
       sex: 0,
       isSystem: false,
       password: '',
-      roles: '',
+      roles: [],
       description: ''
     });
+    settargetKeys([]);
     setItemId('');
     setModalShow(true);
   };
@@ -215,13 +218,13 @@ export default (): React.ReactNode => {
       modalForm.validateFields().then((values: Store) => {
         const { username, nickname, sex, isSystem, password, roles, description } = values;
         let passwordTemp = password ? { passwordHash: password } : {};
-        let rolesIds: string[] = [];
-        console.log(rolesIds);
-        if (roles instanceof Array) {
-          rolesIds = roles;
-        } else {
-          rolesIds.push(roles);
-        }
+        // let rolesIds: string[] = [];
+        // console.log(roles);
+        // if (roles instanceof Array) {
+        //   rolesIds = roles;
+        // } else {
+        //   rolesIds.push(roles);
+        // }
         let args = {
           userName: username,
           nickName: nickname,
@@ -229,7 +232,7 @@ export default (): React.ReactNode => {
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: rolesIds,
+          roleIds: roles,
           ...passwordTemp
         };
         addUser(args)
@@ -260,7 +263,7 @@ export default (): React.ReactNode => {
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: rolesIds
+          roleIds: gettargetKeys
         };
         editUser({ ...args, id: itemId })
           .then(() => {
@@ -340,6 +343,12 @@ export default (): React.ReactNode => {
       let filter = getSearchFilter(args);
       getUserList(page, pageSize ?? 10, filter);
     }
+  };
+
+  const handleScroll = () => {};
+
+  const handleChange = (nextTargetKeys: any, direction: any, moveKeys: any) => {
+    settargetKeys(nextTargetKeys);
   };
   return (
     <PageContainer>
@@ -461,13 +470,23 @@ export default (): React.ReactNode => {
           )}
 
           <Form.Item name="roles" label={intl.formatMessage({ id: 'user.modal.form.item.roles.label' })}>
-            <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
+            {/* <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
               {roles?.map((item: Types.Role) => (
                 <Select.Option key={item.value} value={item.value!}>
                   {item.text}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
+            <Transfer
+              rowKey={record => record.value}
+              render={item => item.text}
+              onScroll={handleScroll}
+              onChange={handleChange}
+              targetKeys={gettargetKeys}
+              dataSource={roles}
+              titles={['源', '目标']}
+              oneWay
+            />
           </Form.Item>
           <Form.Item name="description" label={intl.formatMessage({ id: 'user.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.description.placeholder' })} />
