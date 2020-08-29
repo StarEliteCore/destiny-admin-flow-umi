@@ -49,9 +49,7 @@ export default (): React.ReactNode => {
       clickmodel.click1();
     }
   };
-  const add = () => {
-    console.log('的防晒是否');
-  };
+  const add = () => {};
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -177,15 +175,15 @@ export default (): React.ReactNode => {
         const data = result.data;
         setMenuTreeForm(data);
         setTreeCheckedKeys([]);
+        modalForm.setFieldsValue({
+          name: '',
+          isAdmin: false,
+          description: ''
+        });
+        setItemId('');
+        setModalShow(true);
       }
     });
-    modalForm.setFieldsValue({
-      name: '',
-      isAdmin: false,
-      description: ''
-    });
-    setItemId('');
-    setModalShow(true);
   };
 
   /**
@@ -205,7 +203,7 @@ export default (): React.ReactNode => {
 
           // setTreeCheckedKeys(selecteddata);
 
-          ReBuildTreeSelect(data, selecteddata);
+          // ReBuildTreeSelect(data, selecteddata);
           setTreeCheckedKeys(selecteddata);
           modalForm.setFieldsValue({
             name: row.name,
@@ -241,10 +239,16 @@ export default (): React.ReactNode => {
    *
    * @param checkedKeys
    * @param e
+   * , e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any
    */
-  const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
-    let concat = checkedKeys.concat(e.halfCheckedKeys);
-    setTreeCheckedKeys(checkedKeys);
+  const onCheck = (data: any) => {
+    // for (let index = 0,item:any;item=data[index++];) {
+    //   getParentIds(item, menuTree);
+    //   data.checked.push(item);
+    // }
+    // let concat = checkedKeys.concat(e.halfCheckedKeys);
+    // console.log(concat)
+    setTreeCheckedKeys(data.checked);
   };
   /**
    * 删除一个角色
@@ -262,9 +266,9 @@ export default (): React.ReactNode => {
    * 点击弹框确定按钮保存
    */
   const onModalOK = () => {
-    menucheckedKeys.forEach(element => {
-      getParentIds(element, menuTree);
-    });
+    // menucheckedKeys.forEach(element => {
+    //   getParentIds(element, menuTree);
+    // });
 
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
@@ -385,6 +389,22 @@ export default (): React.ReactNode => {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(true);
   };
+  // const renderTreeNodes = (data: any) => {
+  //   console.log(data)
+  //   data.map(item => {
+  //     if (item.children) {
+  //       //判断是否已经全选；
+  //       return (
+  //         <Tree.TreeNode title='gfdgf' key={item.key}  >
+  //           {renderTreeNodes(item.children)}
+  //         </Tree.TreeNode>
+  //       );
+  //     }
+  //     return <Tree.TreeNode {...item} />;
+  //   });
+
+  // }
+
   const butBarRef = useRef<any>(null);
   return (
     <PageContainer>
@@ -480,7 +500,10 @@ export default (): React.ReactNode => {
           </Form.Item>
         </Form>
         <Card>
-          <Tree checkable defaultExpandAll={true} onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} />
+          <Tree checkable defaultExpandAll={true} onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} checkStrictly>
+            {/* {console.log(menuTree)} */}
+            {/* {renderTreeNodes(menuTree)} */}
+          </Tree>
         </Card>
       </Modal>
     </PageContainer>
