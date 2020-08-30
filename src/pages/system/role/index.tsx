@@ -242,14 +242,32 @@ export default (): React.ReactNode => {
    * @param e
    * , e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any
    */
-  const onCheck = (data: any) => {
+  const onCheck = (data: any, e: any) => {
+    console.log(e);
     let checked = data.checked;
-    for (let index = 0, treeId; (treeId = checked[index++]); ) {
-      const element = getCurrentItem(menuTree, treeId);
-      if (isParent(element) && element.parentId !== '00000000-0000-0000-0000-000000000000') {
-        checked.push(element.parentId);
-      } else {
-        checked.push(element.parentId);
+    if (e.checked) {
+      for (let index = 0; index < checked.length; index++) {
+        const element = checked[index];
+        tree(menuTree, element);
+      }
+    } else {
+      var value = e.node;
+    }
+    /**
+     * 选中时的递归
+     * @param treearr
+     * @param id
+     */
+    function tree(treearr: any, id: any) {
+      let arr = treearr;
+      for (let index = 0; index < arr.length; index++) {
+        var isexitsindex = arr[index].children.findIndex((x: any) => x.id == id);
+        if (isexitsindex < 0) {
+          let chil = arr[index].children;
+          tree(chil, id);
+        } else {
+          checked.push(arr[index].id);
+        }
       }
     }
     setTreeCheckedKeys(checked);
@@ -270,8 +288,11 @@ export default (): React.ReactNode => {
    */
   const getCurrentItem = (items: Array<any>, id: string): any => {
     for (let index = 0, item: any; (item = items[index++]); ) {
-      if (item.id === id) return item;
-      else {
+      debugger;
+
+      if (item.id === id) {
+        return item;
+      } else {
         if (isParent(item)) {
           getCurrentItem(item.children, id);
         } else continue;
