@@ -170,7 +170,6 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 

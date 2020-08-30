@@ -49,9 +49,7 @@ export default (): React.ReactNode => {
       { name: 'addchildren', click1: onCreateChildrenClick },
       { name: 'select', click1: onViewClick }
     ];
-    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
@@ -210,7 +208,6 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 

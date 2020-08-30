@@ -1,6 +1,6 @@
 // 统一全局配置文件
 
-export const BaseUrl: string = 'http://localhost:50003/api/';
+export const BaseUrl: string = 'http://192.168.0.2:50003/api/';
 // export const BaseUrl: string = 'http://1065.cloud:9602/api/';
 // export const BaseUrl: string = 'http://localhost:50003/api/';
 
