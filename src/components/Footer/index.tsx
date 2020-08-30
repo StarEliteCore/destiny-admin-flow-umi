@@ -1,12 +1,12 @@
 import { AntDesignOutlined, GithubOutlined } from '@ant-design/icons';
-import { IntlShape, useIntl } from 'umi';
 
 import { DefaultFooter } from '@ant-design/pro-layout';
 import IconFont from '@/components/IconFont';
 import React from 'react';
+import { useIntl } from 'umi';
 
 export default (): React.ReactElement => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   return (
     <DefaultFooter
       copyright={intl.formatMessage({ id: 'components.footer.copyright' })}

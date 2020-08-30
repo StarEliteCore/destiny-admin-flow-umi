@@ -12,8 +12,6 @@ import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
 
-// import menudata from './menudata'
-
 //#region InitialState
 /**
  * 权限相关必须要用的东西,自己去改函数名
@@ -36,11 +34,6 @@ export const getInitialState = async (): Promise<{
       if (menustr != 'undefined') {
         menu = menustr ? JSON.parse(menustr) : [];
       }
-      const menuliststr = window.localStorage.getItem('menulist');
-      // if(menuliststr!="" || menuliststr!=null || menuliststr!="undefined")
-      // {
-      //   menu = menustr ? JSON.parse(menustr) : [];
-      // }
       if (menu.length <= 0) {
         let menuRes: any = await MenuAsyncAPI();
         const { data } = menuRes;

@@ -50,9 +50,7 @@ export const LoadingObject = (
 ): {
   spinning: boolean;
   indicator: JSX.Element;
-} => {
-  return {
-    spinning: loading,
-    indicator: <LoadingOutlined style={{ fontSize: 24 }} spin />
-  };
-};
+} => ({
+  spinning: loading,
+  indicator: <LoadingOutlined style={{ fontSize: 24 }} spin />
+});

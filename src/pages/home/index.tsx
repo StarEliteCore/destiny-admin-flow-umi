@@ -6,9 +6,8 @@ import { PageContainer } from '@ant-design/pro-layout';
 class Home extends Component {
   constructor(props: any) {
     super(props);
-    this.fun = this.fun.bind(this);
   }
-  fun() {}
+
   render() {
     return (
       <PageContainer>
@@ -45,11 +44,6 @@ class Home extends Component {
             </Timeline.Item>
           </Timeline>
         </Card>
-        {/* 
-          公共组件button按钮渲染
-        
-        */}
-        {/* <ButtonBar getFun={this.fun} ref={(ref) => { this.buttonbar = ref; }} ></ButtonBar>  */}
       </PageContainer>
     );
   }

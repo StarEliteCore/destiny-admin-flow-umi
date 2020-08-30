@@ -1,0 +1,44 @@
+[
+  {
+    "title": "系统管理",
+    "key": "fd8a36d4-d6d8-a6bb-2924-77455100a305",
+    "parentId": "00000000-0000-0000-0000-000000000000",
+    "children": [
+      {
+        "title": "角色管理",
+        "key": "08d815d8-868f-45cc-8fdf-0dff5acac7fc",
+        "parentId": "fd8a36d4-d6d8-a6bb-2924-77455100a305",
+        "children": [
+          {
+            "title": "添加",
+            "key": "08d81dd2-dc25-4ffa-8518-4b28558ba714",
+            "parentId": "08d815d8-868f-45cc-8fdf-0dff5acac7fc",
+            "id": "08d81dd2-dc25-4ffa-8518-4b28558ba714"
+          },
+          {
+            "title": "修改",
+            "key": "08d83c69-a522-4175-8e0c-5efc57fd6456",
+            "parentId": "08d815d8-868f-45cc-8fdf-0dff5acac7fc",
+            "id": "08d83c69-a522-4175-8e0c-5efc57fd6456"
+          }
+        ],
+        "id": "08d815d8-868f-45cc-8fdf-0dff5acac7fc"
+      },
+      {
+        "title": "菜单管理",
+        "key": "08d815d8-dae5-4891-83d3-38a134d63506",
+        "parentId": "fd8a36d4-d6d8-a6bb-2924-77455100a305",
+        "children": [
+          {
+            "title": "查看功能",
+            "key": "08d8437d-752a-4633-8ad9-f1e44f005b8d",
+            "parentId": "08d815d8-dae5-4891-83d3-38a134d63506",
+            "id": "08d8437d-752a-4633-8ad9-f1e44f005b8d"
+          }
+        ],
+        "id": "08d815d8-dae5-4891-83d3-38a134d63506"
+      }
+    ],
+    "id": "fd8a36d4-d6d8-a6bb-2924-77455100a305"
+  }
+]

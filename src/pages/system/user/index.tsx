@@ -1,9 +1,9 @@
-import { Button, Card, Col, Form, Input, Modal, Radio, Row, Select, Switch, Table, Tooltip, Transfer, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Radio, Row, Switch, Table, Tooltip, Transfer, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
 import { FilterConnect, FilterOperator } from '@/enumerate';
-import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
@@ -15,19 +15,19 @@ import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
   const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('system.user.userList');
-  const { loading: roleLoading, roles, getRoles } = useModel('role');
+  const { roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
-  const [gettargetKeys, settargetKeys] = useState<string[]>([]);
+  const [getTargetKeys, setTargetKeys] = useState<string[]>([]);
   const butBarRef = useRef<any>(null);
   useEffect(() => {
     getRoles();
@@ -44,7 +44,7 @@ export default (): React.ReactNode => {
       { name: 'delete', click1: onDeleteClick }
     ];
 
-    const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
+    const index = clickarr.findIndex((x: any) => x.name === butBarRef.current.itemclick);
 
     if (index >= 0) {
       let clickmodel = clickarr[index];
@@ -156,7 +156,7 @@ export default (): React.ReactNode => {
             roles: data?.roleIds,
             description: data?.description
           });
-          settargetKeys(data?.roleIds);
+          setTargetKeys(data?.roleIds);
         }
       });
       setModalShow(true);
@@ -208,7 +208,7 @@ export default (): React.ReactNode => {
       roles: [],
       description: ''
     });
-    settargetKeys([]);
+    setTargetKeys([]);
     setItemId('');
     setModalShow(true);
   };
@@ -263,7 +263,7 @@ export default (): React.ReactNode => {
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: gettargetKeys
+          roleIds: getTargetKeys
         };
         editUser({ ...args, id: itemId })
           .then(() => {
@@ -347,8 +347,8 @@ export default (): React.ReactNode => {
 
   const handleScroll = () => {};
 
-  const handleChange = (nextTargetKeys: any, direction: any, moveKeys: any) => {
-    settargetKeys(nextTargetKeys);
+  const handleChange = (nextTargetKeys: any) => {
+    setTargetKeys(nextTargetKeys);
   };
   return (
     <PageContainer>
@@ -482,7 +482,7 @@ export default (): React.ReactNode => {
               render={item => item.text}
               onScroll={handleScroll}
               onChange={handleChange}
-              targetKeys={gettargetKeys}
+              targetKeys={getTargetKeys}
               dataSource={roles}
               titles={['源', '目标']}
               oneWay

@@ -24,13 +24,12 @@ class ButtonBar extends Component<IButtonBar> {
         let model = menu[index];
         let buttonss = await MenuButtonAsyncAPI({ menuid: model.id });
         const { data } = buttonss;
-        console.log(data);
         button = data;
       }
     }
   };
   itemclick: any; //每次设定点击的那个方法
-  btnclick = (record: any) => {
+  btnClick = (record: any) => {
     this.itemclick = record;
     //调用父组件的方法，父组件内需要定义一个getFun
     this.props.getFun();
@@ -46,7 +45,7 @@ class ButtonBar extends Component<IButtonBar> {
               key={item.path}
               type={item.icon}
               onClick={() => {
-                this.btnclick(item.path);
+                this.btnClick(item.path);
               }}
             >
               {item.name}
