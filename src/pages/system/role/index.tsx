@@ -243,15 +243,21 @@ export default (): React.ReactNode => {
    * , e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any
    */
   const onCheck = (data: any, e: any) => {
-    console.log(e);
-    let checked = data.checked;
+    let checked: Array<string> = data.checked;
     if (e.checked) {
       for (let index = 0; index < checked.length; index++) {
         const element = checked[index];
         tree(menuTree, element);
       }
     } else {
-      var value = e.node;
+      let i: number = checked.findIndex((x: string) => x === e.node.parentId);
+      if (i >= 0) {
+        checked.splice(i, 1);
+        for (let index = 0; index < checked.length; index++) {
+          const element = checked[index];
+          tree(menuTree, element);
+        }
+      }
     }
     /**
      * 选中时的递归
@@ -261,18 +267,19 @@ export default (): React.ReactNode => {
     function tree(treearr: any, id: any) {
       let arr = treearr;
       for (let index = 0; index < arr.length; index++) {
-        var isexitsindex = arr[index].children.findIndex((x: any) => x.id == id);
+        let isexitsindex = arr[index].children.findIndex((x: any) => x.id === id);
         if (isexitsindex < 0) {
           let chil = arr[index].children;
           tree(chil, id);
         } else {
-          checked.push(arr[index].id);
+          if (checked.findIndex((x: string) => x === arr[index].id) < 0) checked.push(arr[index].id);
         }
       }
     }
     setTreeCheckedKeys(checked);
   };
 
+  let CurrentItem: any = {};
   /**
    * 是否是父级节点
    * @param item menuTreeItem
@@ -288,10 +295,8 @@ export default (): React.ReactNode => {
    */
   const getCurrentItem = (items: Array<any>, id: string): any => {
     for (let index = 0, item: any; (item = items[index++]); ) {
-      debugger;
-
       if (item.id === id) {
-        return item;
+        CurrentItem = item;
       } else {
         if (isParent(item)) {
           getCurrentItem(item.children, id);

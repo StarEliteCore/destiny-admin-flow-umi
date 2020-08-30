@@ -76,9 +76,7 @@ export default (): React.ReactNode => {
       { name: 'update', click1: onUpdateClick },
       { name: 'delete', click1: onDeleteClick }
     ];
-    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
