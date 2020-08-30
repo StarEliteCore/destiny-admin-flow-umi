@@ -8,6 +8,7 @@ import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { AdditionalPickerLocaleLangProps } from 'antd/lib/date-picker/generatePicker';
 import ButtonBar from '@/components/ButtonBar';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
@@ -242,14 +243,42 @@ export default (): React.ReactNode => {
    * , e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any
    */
   const onCheck = (data: any) => {
-    // for (let index = 0,item:any;item=data[index++];) {
-    //   getParentIds(item, menuTree);
-    //   data.checked.push(item);
-    // }
-    // let concat = checkedKeys.concat(e.halfCheckedKeys);
-    // console.log(concat)
-    setTreeCheckedKeys(data.checked);
+    let checked = data.checked;
+    for (let index = 0, treeId; (treeId = checked[index++]); ) {
+      const element = getCurrentItem(menuTree, treeId);
+      if (isParent(element) && element.parentId !== '00000000-0000-0000-0000-000000000000') {
+        checked.push(element.parentId);
+      } else {
+        checked.push(element.parentId);
+      }
+    }
+    setTreeCheckedKeys(checked);
   };
+
+  /**
+   * 是否是父级节点
+   * @param item menuTreeItem
+   */
+  const isParent = (item: any): boolean => {
+    if (!!item.children && item.children.length > 0) return true;
+    return false;
+  };
+  /**
+   * 获取当前id的对象节点
+   * @param items 查询的集合
+   * @param id 查询的id
+   */
+  const getCurrentItem = (items: Array<any>, id: string): any => {
+    for (let index = 0, item: any; (item = items[index++]); ) {
+      if (item.id === id) return item;
+      else {
+        if (isParent(item)) {
+          getCurrentItem(item.children, id);
+        } else continue;
+      }
+    }
+  };
+
   /**
    * 删除一个角色
    * @param id

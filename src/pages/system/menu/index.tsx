@@ -1,7 +1,7 @@
 import { Card, Drawer, Form, Input, InputNumber, Modal, Select, Table, Tag, message, notification } from 'antd';
-import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
@@ -13,7 +13,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   const [] = Form.useForm();
   const [modalForm] = Form.useForm();
 
