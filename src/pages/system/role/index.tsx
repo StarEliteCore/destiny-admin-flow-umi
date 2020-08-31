@@ -250,6 +250,12 @@ export default (): React.ReactNode => {
         tree(menuTree, element);
       }
     } else {
+      for (let index: number = 0, item: any; (item = menuTree[index++]); ) {
+        let i: number = checked.findIndex((x: string) => x === item.id);
+        if (i >= 0) {
+          checked.splice(i, 1);
+        }
+      }
       let children: Array<any> = e.node.children;
       for (let index = 0, item; (item = children[index++]); ) {
         let child_index: number = checked.findIndex((x: string) => x === item.id);
