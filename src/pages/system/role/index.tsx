@@ -250,6 +250,13 @@ export default (): React.ReactNode => {
         tree(menuTree, element);
       }
     } else {
+      let children: Array<any> = e.node.children;
+      for (let index = 0, item; (item = children[index++]); ) {
+        let child_index: number = checked.findIndex((x: string) => x === item.id);
+        if (child_index >= 0) {
+          checked.splice(child_index, 1);
+        }
+      }
       let i: number = checked.findIndex((x: string) => x === e.node.parentId);
       if (i >= 0) {
         checked.splice(i, 1);
@@ -277,32 +284,6 @@ export default (): React.ReactNode => {
       }
     }
     setTreeCheckedKeys(checked);
-  };
-
-  let CurrentItem: any = {};
-  /**
-   * 是否是父级节点
-   * @param item menuTreeItem
-   */
-  const isParent = (item: any): boolean => {
-    if (!!item.children && item.children.length > 0) return true;
-    return false;
-  };
-  /**
-   * 获取当前id的对象节点
-   * @param items 查询的集合
-   * @param id 查询的id
-   */
-  const getCurrentItem = (items: Array<any>, id: string): any => {
-    for (let index = 0, item: any; (item = items[index++]); ) {
-      if (item.id === id) {
-        CurrentItem = item;
-      } else {
-        if (isParent(item)) {
-          getCurrentItem(item.children, id);
-        } else continue;
-      }
-    }
   };
 
   /**
