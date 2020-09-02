@@ -250,16 +250,38 @@ export default (): React.ReactNode => {
         tree(menuTree, element);
       }
     } else {
+      /**
+       * 循环删除爷爷辈
+       */
+      for (let index: number = 0, item: any; (item = menuTree[index++]); ) {
+        let i: number = checked.findIndex((x: string) => x === item.id);
+        if (i >= 0) {
+          checked.splice(i, 1);
+        }
+      }
       let children: Array<any> = e.node.children;
+      /**
+       * 删除爸爸辈
+       */
       for (let index = 0, item; (item = children[index++]); ) {
         let child_index: number = checked.findIndex((x: string) => x === item.id);
         if (child_index >= 0) {
           checked.splice(child_index, 1);
         }
       }
+      /**
+       * 循环添加爷爷辈
+       */
+      for (let index = 0; index < checked.length; index++) {
+        const element = checked[index];
+        tree(menuTree, element);
+      }
       let i: number = checked.findIndex((x: string) => x === e.node.parentId);
       if (i >= 0) {
         checked.splice(i, 1);
+        /**
+         * 根据儿子寻找爸爸或者爷爷……
+         */
         for (let index = 0; index < checked.length; index++) {
           const element = checked[index];
           tree(menuTree, element);
