@@ -234,7 +234,7 @@ export default (): React.ReactNode => {
     // delMenu(id)
     //   .then(() => {
     //     message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-    //     getMenuList();
+    //     getMenuLi  st();
     //   })
     //   .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
