@@ -23,7 +23,40 @@ jobs:
     - uses: actions/checkout@v2
 
     # Runs a single command using the runners shell
-    - name: 安装npm包
-      run: |
-      	yarn install 
-      yarn build 
+    - name: install npm
+      run: yarn
+    - name: build dist
+      run: yarn build 
+    - name:  copy config to dist
+      run: cp nginx Dockerfile dist/
+    - name: build image
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: 18790997531/destinycoreweb
+        tags: latest
+        path: /home/runner/work/destiny-admin-flow-umi/destiny-admin-flow-umi/dist
+        dockerfile: /home/runner/work/destiny-admin-flow-umi/destiny-admin-flow-umi/Dockerfile
+    - name: deploy to portainer
+      uses: LGinC/portainer-stack-deploy
+      with: 
+        serverurl: http://1065.cloud:8862
+        username: ${{ secrets.PORTAINER_USERNAME }}
+        password: ${{ secrets.PORTAINER_PASSWORD }}
+        endpointId: 1
+        stackname: destinyweb
+        imagename: 18790997531/destinycore:latest
+        docker_compose: |
+          version: "2"
+          services:
+            destinyapi:
+              image:  18790997531/destinycoreweb
+              container_name: DestinyFlowWEB_From_GithubAction             
+              ports:
+              - 7762:80
+              environment: 
+                TZ: Asia/Shanghai
+              volumes:
+              - /home/wzw/DestinyCore/DestinyFlowWebSite/dist/nginx.conf:/etc/nginx/nginx.conf
+      
