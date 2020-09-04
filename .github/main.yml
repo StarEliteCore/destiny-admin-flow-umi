@@ -56,7 +56,4 @@ jobs:
               ports:
               - 7762:80
               environment: 
-                TZ: Asia/Shanghai
-              volumes:
-              - /home/wzw/DestinyCore/DestinyFlowWebSite/dist/nginx.conf:/etc/nginx/nginx.conf
-      
+                TZ: Asia/Shanghai      
