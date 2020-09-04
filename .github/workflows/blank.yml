@@ -39,7 +39,7 @@ jobs:
         path: /home/runner/work/destiny-admin-flow-umi/destiny-admin-flow-umi/dist
         dockerfile: /home/runner/work/destiny-admin-flow-umi/destiny-admin-flow-umi/Dockerfile
     - name: deploy to portainer
-      uses: LGinC/portainer-stack-deploy@0.1.1
+      uses: LGinC/portainer-stack-deploy@0.2
       with: 
         serverurl: http://1065.cloud:8862
         username: ${{ secrets.PORTAINER_USERNAME }}
