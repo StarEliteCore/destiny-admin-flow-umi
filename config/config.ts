@@ -22,6 +22,7 @@ export default defineConfig({
   dynamicImport: {
     loading: '@/components/PageLoading'
   },
+  history: { type: 'hash' },
   // umi routes: https://umijs.org/docs/routing
   routes: Route,
   theme: {
