@@ -1,3 +1,5 @@
+![CI](https://github.com/DestinyCore/destiny-admin-flow-umi/workflows/CI/badge.svg?branch=master)
+
 # destiny-admin-flow-umi
 
 🐕 [后端项目链接](https://github.com/GeorGeWzw/Destiny.Core.Flow)
