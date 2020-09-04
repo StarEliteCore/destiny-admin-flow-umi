@@ -24,11 +24,11 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: install npm
-      run: yarn
+      run: yarn install
     - name: build dist
       run: yarn build 
     - name:  copy config to dist
-      run: cp nginx Dockerfile dist/
+      run: cp nginx.conf Dockerfile dist/
     - name: build image
       uses: docker/build-push-action@v1
       with:
