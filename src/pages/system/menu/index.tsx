@@ -287,9 +287,9 @@ export default (): React.ReactNode => {
             depth: data?.depth,
             type: data.type
           });
+          setModalShow(true);
         }
       });
-      setModalShow(true);
     });
   };
   /**
