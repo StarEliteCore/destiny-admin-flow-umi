@@ -238,6 +238,7 @@ export default (): React.ReactNode => {
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
             getUserList(1, 10);
+            setModalShow(false);
           })
           .catch((error: Error) =>
             notification.error({
@@ -268,6 +269,7 @@ export default (): React.ReactNode => {
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
             getUserList(1, 10);
+            setModalShow(false);
           })
           .catch((error: Error) =>
             notification.error({
@@ -277,7 +279,6 @@ export default (): React.ReactNode => {
           );
       });
     }
-    setModalShow(false);
   };
 
   /**
