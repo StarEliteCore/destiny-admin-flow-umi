@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "@ant-design/pro-layout": "6.4.14",
-    "antd": "^4.6.2",
+    "@ant-design/pro-layout": "6.4.18",
+    "antd": "^4.6.4",
     "guid-typescript": "^1.0.9",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-infinite-scroller": "^1.2.4",
-    "umi": "^3.2.19"
+    "umi": "^3.2.20"
   },
   "devDependencies": {
     "@types/history": "^4.7.7",
@@ -57,7 +57,7 @@
     "@umijs/preset-ant-design-pro": "^1.2.2",
     "@umijs/yorkie": "^2.0.5",
     "cross-env": "^7.0.2",
-    "lint-staged": "^10.2.13",
+    "lint-staged": "^10.3.0",
     "prettier": "^2.1.1"
   },
   "engines": {
