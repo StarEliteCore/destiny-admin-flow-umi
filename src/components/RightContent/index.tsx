@@ -21,7 +21,7 @@ const GlobalHeaderRight: React.FC<{}> = () => {
   }
   return (
     <div className={className}>
-      <AvatarDropdown />
+      <AvatarDropdown menu />
       <SelectLang className={styles.action} />
     </div>
   );
