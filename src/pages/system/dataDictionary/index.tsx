@@ -1,8 +1,8 @@
 import { Button, Card, Divider, Form, Input, InputNumber, Modal, Popconfirm, Table, Tooltip, message, notification } from 'antd';
 import { DeleteOutlined, EditOutlined, FileAddFilled, WarningOutlined } from '@ant-design/icons';
-import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
@@ -11,7 +11,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   const [modalForm] = Form.useForm();
 
   const { loading, itemList, getDataDictionary, getDataDictionaryLoad, addDataDictionary, editDataDictonary, delDataDictionary } = useModel('system.dataDictionary.dataDictionaryServices');

@@ -76,9 +76,7 @@ export default (): React.ReactNode => {
       { name: 'update', click1: onUpdateClick },
       { name: 'delete', click1: onDeleteClick }
     ];
-    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
@@ -101,20 +99,17 @@ export default (): React.ReactNode => {
   const getTableSelected = (rows: any[], callback: any) => {
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
-
       return;
     }
     if (rows.length > 1) {
       message.warning(`已选择${rows.length}行数据,请重选择！！！`);
       return;
     }
-
     let fun = function () {
       if (callback) {
         callback(rows[0]);
       }
     };
-
     fun();
   };
   const onUpdateClick = () => {
@@ -270,7 +265,6 @@ export default (): React.ReactNode => {
                 <Input allowClear placeholder="请输入查询功能名字！！" />
               </Form.Item>
             </Col>
-
             <Col span={8}>
               <span style={{ float: 'right' }}>
                 <Button type="primary" htmlType="submit">
@@ -336,11 +330,9 @@ export default (): React.ReactNode => {
           >
             <Input allowClear placeholder="链接URL" />
           </Form.Item>
-
           <Form.Item name="isEnabled" label="是否可用" valuePropName="checked">
             <Switch checkedChildren="是" unCheckedChildren="否" />
           </Form.Item>
-
           <Form.Item name="description" label="描述" style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder="请输入描述！！" />
           </Form.Item>

@@ -1,8 +1,12 @@
+![CI](https://github.com/DestinyCore/destiny-admin-flow-umi/workflows/CI/badge.svg?branch=master)
+
 # destiny-admin-flow-umi
 
-🐕 [后端项目链接](https://github.com/GeorGeWzw/Destiny.Core.Flow)
+✔ [在线展示](http://admin.destinycore.club) ✔ [在线展示后端 API 链接](http://api.destinycore.club)
 
-✔ [后端 API 链接](http://1065.cloud:9602/index.html)
+- ## 关联后端
+
+✔ [后端项目链接](https://github.com/DestinyCore/Destiny.Core.Flow)
 
 ## 简要说明
 

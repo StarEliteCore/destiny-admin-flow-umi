@@ -1,7 +1,7 @@
 import { Card, Drawer, Form, Input, InputNumber, Modal, Select, Table, Tag, message, notification } from 'antd';
-import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
@@ -13,7 +13,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   const [] = Form.useForm();
   const [modalForm] = Form.useForm();
 
@@ -49,9 +49,7 @@ export default (): React.ReactNode => {
       { name: 'addchildren', click1: onCreateChildrenClick },
       { name: 'select', click1: onViewClick }
     ];
-    console.log(butBarRef.current.itemclick);
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index);
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
@@ -210,7 +208,6 @@ export default (): React.ReactNode => {
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length);
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -237,7 +234,7 @@ export default (): React.ReactNode => {
     // delMenu(id)
     //   .then(() => {
     //     message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-    //     getMenuList();
+    //     getMenuLi  st();
     //   })
     //   .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
@@ -290,9 +287,9 @@ export default (): React.ReactNode => {
             depth: data?.depth,
             type: data.type
           });
+          setModalShow(true);
         }
       });
-      setModalShow(true);
     });
   };
   /**

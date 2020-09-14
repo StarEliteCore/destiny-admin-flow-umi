@@ -8,6 +8,7 @@ import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { AdditionalPickerLocaleLangProps } from 'antd/lib/date-picker/generatePicker';
 import ButtonBar from '@/components/ButtonBar';
 import ColumnTitle from '@/components/ColumnTitle';
 import { Guid } from 'guid-typescript';
@@ -49,6 +50,7 @@ export default (): React.ReactNode => {
       clickmodel.click1();
     }
   };
+  const add = () => {};
   //表格
   const columns: Array<ColumnProps<Types.RoleTable>> = [
     { title: <ColumnTitle name={intl.formatMessage({ id: 'role.table.columns.name' })} />, dataIndex: 'name', key: 'name', align: 'center' },
@@ -174,15 +176,15 @@ export default (): React.ReactNode => {
         const data = result.data;
         setMenuTreeForm(data);
         setTreeCheckedKeys([]);
+        modalForm.setFieldsValue({
+          name: '',
+          isAdmin: false,
+          description: ''
+        });
+        setItemId('');
+        setModalShow(true);
       }
     });
-    modalForm.setFieldsValue({
-      name: '',
-      isAdmin: false,
-      description: ''
-    });
-    setItemId('');
-    setModalShow(true);
   };
 
   /**
@@ -202,7 +204,7 @@ export default (): React.ReactNode => {
 
           // setTreeCheckedKeys(selecteddata);
 
-          ReBuildTreeSelect(data, selecteddata);
+          // ReBuildTreeSelect(data, selecteddata);
           setTreeCheckedKeys(selecteddata);
           modalForm.setFieldsValue({
             name: row.name,
@@ -238,11 +240,74 @@ export default (): React.ReactNode => {
    *
    * @param checkedKeys
    * @param e
+   * , e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any
    */
-  const onCheck = (checkedKeys: any, e: { checked: boolean; checkedNodes: any; node: any; event: any; halfCheckedKeys: any }) => {
-    let concat = checkedKeys.concat(e.halfCheckedKeys);
-    setTreeCheckedKeys(checkedKeys);
+  const onCheck = (data: any, e: any) => {
+    let checked: Array<string> = data.checked;
+    if (e.checked) {
+      for (let index = 0; index < checked.length; index++) {
+        const element = checked[index];
+        tree(menuTree, element);
+      }
+    } else {
+      /**
+       * 循环删除爷爷辈
+       */
+      for (let index: number = 0, item: any; (item = menuTree[index++]); ) {
+        let i: number = checked.findIndex((x: string) => x === item.id);
+        if (i >= 0) {
+          checked.splice(i, 1);
+        }
+      }
+      let children: Array<any> = e.node.children;
+      /**
+       * 删除爸爸辈
+       */
+      for (let index = 0, item; (item = children[index++]); ) {
+        let child_index: number = checked.findIndex((x: string) => x === item.id);
+        if (child_index >= 0) {
+          checked.splice(child_index, 1);
+        }
+      }
+      /**
+       * 循环添加爷爷辈
+       */
+      for (let index = 0; index < checked.length; index++) {
+        const element = checked[index];
+        tree(menuTree, element);
+      }
+      let i: number = checked.findIndex((x: string) => x === e.node.parentId);
+      if (i >= 0) {
+        checked.splice(i, 1);
+        /**
+         * 根据儿子寻找爸爸或者爷爷……
+         */
+        for (let index = 0; index < checked.length; index++) {
+          const element = checked[index];
+          tree(menuTree, element);
+        }
+      }
+    }
+    /**
+     * 选中时的递归
+     * @param treearr
+     * @param id
+     */
+    function tree(treearr: any, id: any) {
+      let arr = treearr;
+      for (let index = 0; index < arr.length; index++) {
+        let isexitsindex = arr[index].children.findIndex((x: any) => x.id === id);
+        if (isexitsindex < 0) {
+          let chil = arr[index].children;
+          tree(chil, id);
+        } else {
+          if (checked.findIndex((x: string) => x === arr[index].id) < 0) checked.push(arr[index].id);
+        }
+      }
+    }
+    setTreeCheckedKeys(checked);
   };
+
   /**
    * 删除一个角色
    * @param id
@@ -259,7 +324,10 @@ export default (): React.ReactNode => {
    * 点击弹框确定按钮保存
    */
   const onModalOK = () => {
-    getParentIds(menuTree, menucheckedKeys);
+    // menucheckedKeys.forEach(element => {
+    //   getParentIds(element, menuTree);
+    // });
+
     if (modalModel === 'create') {
       modalForm.validateFields().then((values: Store) => {
         const { name, isAdmin, description } = values;
@@ -307,22 +375,21 @@ export default (): React.ReactNode => {
     }
   };
 
-  const getParentIds = (arr: any, selectarr: any): Promise<any> => {
-    selectarr.forEach(xid => {
-      arr.forEach(element => {
-        const index = element.children.findIndex((x: any) => x.id == xid);
-        if (element.children.findIndex((x: any) => x.id == xid).parentId == Guid.EMPTY) {
-          menucheckedKeys.push(element.id);
-          return;
+  const getParentIds = (id: string, arr: any): Promise<any> => {
+    arr.forEach(element => {
+      const index = element.children.findIndex((x: any) => x.id == id);
+      if (element.children.findIndex((x: any) => x.id == id).parentId == Guid.EMPTY) {
+        menucheckedKeys.push(element.id);
+        return;
+      }
+      if (index < 0) {
+        getParentIds(id, element.children);
+      } else {
+        if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
+          menucheckedKeys.push(element.children[index].parentId);
+          getParentIds(element.children[index].parentId, menuTree);
         }
-        if (index < 0) {
-          getParentIds(element.children, selectarr);
-        } else {
-          if (menucheckedKeys.indexOf(element.children[index].parentId) < 0) {
-            menucheckedKeys.push(element.children[index].parentId);
-          }
-        }
-      });
+      }
     });
   };
 
@@ -380,6 +447,22 @@ export default (): React.ReactNode => {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(true);
   };
+  // const renderTreeNodes = (data: any) => {
+  //   console.log(data)
+  //   data.map(item => {
+  //     if (item.children) {
+  //       //判断是否已经全选；
+  //       return (
+  //         <Tree.TreeNode title='gfdgf' key={item.key}  >
+  //           {renderTreeNodes(item.children)}
+  //         </Tree.TreeNode>
+  //       );
+  //     }
+  //     return <Tree.TreeNode {...item} />;
+  //   });
+
+  // }
+
   const butBarRef = useRef<any>(null);
   return (
     <PageContainer>
@@ -426,7 +509,9 @@ export default (): React.ReactNode => {
           columns={columns}
           onRow={record => {
             return {
-              onClick: event => {}, // 点击行
+              onClick: event => {
+                console.log(record);
+              }, // 点击行
               onDoubleClick: event => {},
               onContextMenu: event => {},
               onMouseEnter: event => {}, // 鼠标移入行
@@ -473,7 +558,10 @@ export default (): React.ReactNode => {
           </Form.Item>
         </Form>
         <Card>
-          <Tree checkable defaultExpandAll={true} onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} />
+          <Tree checkable defaultExpandAll={true} onCheck={onCheck} checkedKeys={menucheckedKeys} treeData={menuTree} checkStrictly>
+            {/* {console.log(menuTree)} */}
+            {/* {renderTreeNodes(menuTree)} */}
+          </Tree>
         </Card>
       </Modal>
     </PageContainer>

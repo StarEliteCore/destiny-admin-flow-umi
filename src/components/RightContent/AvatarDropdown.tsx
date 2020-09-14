@@ -1,7 +1,7 @@
 import { Avatar, Menu, Spin } from 'antd';
-import { IntlShape, history, useIntl, useModel } from 'umi';
 import { LoadingOutlined, LogoutOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
+import { history, useIntl, useModel } from 'umi';
 
 import HeaderDropdown from '@/components/HeaderDropdown';
 import { getPageQuery } from '@/utils/utils';
@@ -20,14 +20,14 @@ const loginOut = async () => {
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/login' && !redirect) {
     window.localStorage.removeItem('menu');
-    debugger;
+    window.localStorage.removeItem('menulist');
     history.replace({ pathname: '/login' });
   }
 };
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
 
   const onMenuClick = useCallback((event: any) => {
     const { key } = event;

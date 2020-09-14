@@ -4,7 +4,6 @@
 export default function access(initialState: { currentUser?: Types.CurrentUser | undefined }) {
   const { currentUser } = initialState || {};
 
-  console.log(currentUser?.access);
   return {
     ...currentUser?.access
   };
