@@ -1,5 +1,5 @@
 import { Button, Card, Form, Input, Modal, message } from 'antd';
-import { Helmet, IntlShape, SelectLang, useIntl, useModel } from 'umi';
+import { Helmet, SelectLang, useIntl, useModel } from 'umi';
 import { LockOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 
 import Footer from '@/components/Footer';
@@ -28,7 +28,7 @@ const replaceGoto = async (): Promise<void> => {
 };
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
 
   const { refresh } = useModel('@@initialState');
   const { loading, login } = useModel('login.auth');

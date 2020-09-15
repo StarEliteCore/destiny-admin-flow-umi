@@ -1,6 +1,5 @@
-import { Button, Card, Col, Collapse, Form, Input, Modal, Row, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Row, Switch, Table, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,10 +14,10 @@ import moment from 'moment';
 import { useModel } from 'umi';
 
 export default (): React.ReactNode => {
-  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('functionList');
+  const { itemList, loading, total, current, pageSize, getFunctionTable, addFunction, updateFunction, deleteFunction } = useModel('system.function.functionList');
   const [modalForm] = Form.useForm();
   const [modalShow, setModalShow] = useState<boolean>(false);
-  const [modalModel, setModalModel] = useState<boolean>(true);
+  const [, setModalModel] = useState<boolean>(true);
   const [modalTitle, setModalTitle] = useState<string>('新增功能');
   const [itemId, setItemId] = useState<string>('');
   const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
@@ -75,16 +74,14 @@ export default (): React.ReactNode => {
     const clickarr = [
       { name: 'add', click1: onCreateClick },
       { name: 'update', click1: onUpdateClick },
-      { name: 'delete', click1: onDeleteClick },
+      { name: 'delete', click1: onDeleteClick }
     ];
-    console.log(butBarRef.current.itemclick)
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index)
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
     }
-  }
+  };
 
   const onCreateClick = () => {
     setModalModel(true);
@@ -102,20 +99,17 @@ export default (): React.ReactNode => {
   const getTableSelected = (rows: any[], callback: any) => {
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
-
       return;
     }
     if (rows.length > 1) {
       message.warning(`已选择${rows.length}行数据,请重选择！！！`);
       return;
     }
-
     let fun = function () {
       if (callback) {
         callback(rows[0]);
       }
     };
-
     fun();
   };
   const onUpdateClick = () => {
@@ -271,7 +265,6 @@ export default (): React.ReactNode => {
                 <Input allowClear placeholder="请输入查询功能名字！！" />
               </Form.Item>
             </Col>
-
             <Col span={8}>
               <span style={{ float: 'right' }}>
                 <Button type="primary" htmlType="submit">
@@ -283,7 +276,7 @@ export default (): React.ReactNode => {
         </Form>
       </Card>
       <Card>
-      <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
         <Table
           rowSelection={{
             type: 'checkbox',
@@ -337,11 +330,9 @@ export default (): React.ReactNode => {
           >
             <Input allowClear placeholder="链接URL" />
           </Form.Item>
-
           <Form.Item name="isEnabled" label="是否可用" valuePropName="checked">
             <Switch checkedChildren="是" unCheckedChildren="否" />
           </Form.Item>
-
           <Form.Item name="description" label="描述" style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder="请输入描述！！" />
           </Form.Item>

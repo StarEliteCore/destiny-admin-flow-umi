@@ -1,8 +1,7 @@
-import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select, Table, Tag, Tooltip, message, notification } from 'antd';
-import { DeleteOutlined, EditOutlined, FileAddFilled, SecurityScanFilled, WarningOutlined } from '@ant-design/icons';
-import { IntlShape, useIntl, useModel } from 'umi';
+import { Card, Drawer, Form, Input, InputNumber, Modal, Select, Table, Tag, message, notification } from 'antd';
 import { LoadingObject, modalFormLayout } from '@/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
@@ -14,11 +13,11 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { Store } from 'antd/lib/form/interface';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
-  const [searchForm] = Form.useForm();
+  const intl = useIntl();
+  const [] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, getMenuTable, addMenu, delMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('menuServices');
+  const { itemList, loading, getMenuTable, addMenu, editMenu, getLoadMenu, getMenuFunctionTable, menuFunctionItemList, menuFunctionLoading } = useModel('system.menu.menuServices');
   const { functions, getFunctions } = useModel('function');
   const [menuRow, setMenuRow] = useState<MenuDto.MenuTable>();
 
@@ -27,7 +26,7 @@ export default (): React.ReactNode => {
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [menuType, setMenuType] = useState<Array<MenuDto.MenuType>>([
+  const [menuType] = useState<Array<MenuDto.MenuType>>([
     { key: MenuTypeEnum.Menu, value: '菜单' },
     { key: MenuTypeEnum.Button, value: '按钮' }
   ]);
@@ -48,15 +47,14 @@ export default (): React.ReactNode => {
       { name: 'update', click1: onEditClick },
       { name: 'delete', click1: onDeleteClick },
       { name: 'addchildren', click1: onCreateChildrenClick },
+      { name: 'select', click1: onViewClick }
     ];
-    console.log(butBarRef.current.itemclick)
     const index = clickarr.findIndex((x: any) => x.name == butBarRef.current.itemclick);
-    console.log(index)
     if (index >= 0) {
       let clickmodel = clickarr[index];
       clickmodel.click1();
     }
-  }
+  };
   const columns: Array<ColumnProps<MenuDto.MenuTable>> = [
     {
       title: (
@@ -206,11 +204,10 @@ export default (): React.ReactNode => {
       setSelectedRows(selectedRows);
     }
   };
-/***
+  /***
    * 获取选中的数据
    */
   const getTableSelected = (rows: any[], callback: any) => {
-    console.log(rows.length)
     if (rows.length == 0) {
       message.warning('请选择数据！！！');
 
@@ -231,23 +228,25 @@ export default (): React.ReactNode => {
   };
   /**
    * 删除菜单或按钮
-   * @param id 
+   * @param id
    */
   const onDeleteClick = () => {
     // delMenu(id)
     //   .then(() => {
     //     message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-    //     getMenuList();
+    //     getMenuLi  st();
     //   })
     //   .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
   };
   /**
    * 获取菜单功能
-   * @param id 
+   * @param id
    */
-  const onViewClick = (id: string) => {
-    getMenuFunctionList(id);
-    setShowDrawer(true);
+  const onViewClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      getMenuFunctionList(row.id);
+      setShowDrawer(true);
+    });
   };
   /**
    * 关闭抽屉
@@ -259,47 +258,45 @@ export default (): React.ReactNode => {
   const [loadmenudata, setLoadMenuData] = useState<{ parentId?: string; parentNumber?: string; depth?: number }>({});
   /**
    * 修改菜单或按钮
-   * @param record 
+   * @param record
    */
   const onEditClick = () => {
     setModalModel('edit');
     setModalTitle('modal.title.modify');
-    
-    getTableSelected(getSelectedRows, (row: any) => {
-    getLoadMenu({
-      payload: { id: row.id },
-      callback: (result: any) => {
-        const {
-          data,
-          data: { parentId, parentNumber, depth }
-        } = result;
-        setItemId(row.id!);
-        setLoadMenuData({ parentId, parentNumber, depth });
-        modalForm.setFieldsValue({
-          name: data?.name,
-          component: data?.component,
-          icon: data?.icon,
-          path: data?.path,
-          sort: data?.sort,
-          description: data?.description,
-          func: data?.functionIds,
-          parentId: data?.parentId,
-          parentNumber: data?.parentNumber,
-          depth: data?.depth,
-          type: data.type
-        });
-      }
 
+    getTableSelected(getSelectedRows, (row: any) => {
+      getLoadMenu({
+        payload: { id: row.id },
+        callback: (result: any) => {
+          const {
+            data,
+            data: { parentId, parentNumber, depth }
+          } = result;
+          setItemId(row.id!);
+          setLoadMenuData({ parentId, parentNumber, depth });
+          modalForm.setFieldsValue({
+            name: data?.name,
+            component: data?.component,
+            icon: data?.icon,
+            path: data?.path,
+            sort: data?.sort,
+            description: data?.description,
+            func: data?.functionIds,
+            parentId: data?.parentId,
+            parentNumber: data?.parentNumber,
+            depth: data?.depth,
+            type: data.type
+          });
+          setModalShow(true);
+        }
+      });
     });
-    setModalShow(true);
-  });
   };
   /**
    * 添加子级
-   * @param record 
+   * @param record
    */
   const onCreateChildrenClick = () => {
-    
     getTableSelected(getSelectedRows, (row: any) => {
       if (row.type == MenuTypeEnum.Button) {
         notification.error({
@@ -307,21 +304,21 @@ export default (): React.ReactNode => {
         });
         return;
       }
-    setMenuRow(row);
-    setModalModel('create');
-    setModalTitle('modal.title.create');
-    modalForm.setFieldsValue({
-      name: '',
-      component: '',
-      icon: '',
-      path: '',
-      sort: 0,
-      func: [],
-      description: ''
+      setMenuRow(row);
+      setModalModel('create');
+      setModalTitle('modal.title.create');
+      modalForm.setFieldsValue({
+        name: '',
+        component: '',
+        icon: '',
+        path: '',
+        sort: 0,
+        func: [],
+        description: ''
+      });
+      setItemId('');
+      setModalShow(true);
     });
-    setItemId('');
-    setModalShow(true);
-  })
   };
   /***
    * 添加 父级
@@ -411,10 +408,10 @@ export default (): React.ReactNode => {
       });
     });
   };
-/**
- * 获取菜单功能
- * @param id 
- */
+  /**
+   * 获取菜单功能
+   * @param id
+   */
   const getMenuFunctionList = (id: string) => {
     getMenuFunctionTable(id).catch((error: any) => {
       notification.error({
@@ -427,22 +424,21 @@ export default (): React.ReactNode => {
   return (
     <PageContainer>
       <Card>
-      <ButtonBar getFun={fun} ref={butBarRef} ></ButtonBar>
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
         {/* <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
           {intl.formatMessage({ id: 'user.button.create' })}
         </Button> */}
-        <Table 
-        rowSelection={{
-          type: 'checkbox',
-          ...rowSelection
-        }}
-        loading={LoadingObject(loading)} 
-        rowKey={(record) => record?.id!} 
-        tableLayout="fixed" 
-        size="small" 
-        dataSource={itemList} 
-        columns={columns}
-        
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={record => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          columns={columns}
         ></Table>
       </Card>
       <Modal

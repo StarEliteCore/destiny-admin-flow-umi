@@ -1,8 +1,14 @@
+![CI](https://github.com/DestinyCore/destiny-admin-flow-umi/workflows/CI/badge.svg?branch=master)
+
 # destiny-admin-flow-umi
 
-🐕 [后端项目链接](https://github.com/GeorGeWzw/Destiny.Core.Flow)
+✔ [在线展示](http://admin.destinycore.club) ✔ [在线展示后端 API 链接](http://api.destinycore.club)
 
-✔ [后端 API 链接](http://1065.cloud:9602/index.html)
+- ## 关联后端
+
+✔ [后端项目链接](https://github.com/DestinyCore/Destiny.Core.Flow)
+
+## 简要说明
 
 感兴趣的可以查看 API 并通过 PR 的方式贡献一些代码.尝试使用 V5 的特性来实现功能.
 
@@ -53,3 +59,33 @@ export const getInitialState = async (): Promise<{
   return { settings: defaultSettings };
 };
 ```
+
+### 脚本命令
+
+#### yarn install
+
+安装项目所需依赖包.
+
+#### yarn start
+
+启动项目,启动成功后打开浏览器,在[本地](http://localhost:8848)打开项目进行预览开发.
+
+#### yarn build
+
+构建项目,打包项目到静态资源文件.
+
+### yarn postinstall
+
+Umi 运行时导出构建,声明新的 Hooks 后,编辑器及 Umi 在编译前无法识别,会产生异常.使用该命令进行编译后即可解决.
+
+#### yarn analyze
+
+项目分析,用于分析项目各个资源占的大小,用于优化分析.
+
+#### yarn upgrade-interactive
+
+使用 yarn 更新项目依赖包.做开发建议经常更新依赖,这样不仅能解决一些 bug,特别是 antd 组件,每次更新都能修复大量 bug.
+
+#### yarn set version berry
+
+更新 yarn 2 自身

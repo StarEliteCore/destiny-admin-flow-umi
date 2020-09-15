@@ -1,11 +1,11 @@
-import { Button, Card, Col, Divider, Form, Input, Modal, Popconfirm, Radio, Row, Select, Switch, Table, Tooltip, message, notification } from 'antd';
+import { Button, Card, Col, Form, Input, Modal, Radio, Row, Switch, Table, Tooltip, Transfer, message, notification } from 'antd';
 import { ConditionInfo, Conditions, Operation } from '@/interface';
-import { DeleteOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import { FilterConnect, FilterOperator } from '@/enumerate';
-import { IntlShape, useIntl, useModel } from 'umi';
 import { LoadingObject, modalFormLayout, tacitPagingProps } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 
+import ButtonBar from '@/components/ButtonBar';
 import { ColumnProps } from 'antd/lib/table/Column';
 import ColumnTitle from '@/components/ColumnTitle';
 import IconFont from '@/components/IconFont';
@@ -15,18 +15,20 @@ import { Store } from 'antd/lib/form/interface';
 import moment from 'moment';
 
 export default (): React.ReactNode => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   const [searchForm] = Form.useForm();
   const [modalForm] = Form.useForm();
 
-  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('userList');
-  const { loading: roleLoading, roles, getRoles } = useModel('role');
+  const { itemList, loading, total, current, pageSize, getUserTable, addUser, editUser, deleteUser, getUserForm } = useModel('system.user.userList');
+  const { roles, getRoles } = useModel('role');
 
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [modalModel, setModalModel] = useState<string>('create');
   const [modalTitle, setModalTitle] = useState<string>('user.modal.title.create');
   const [itemId, setItemId] = useState<string>('');
-
+  const [getSelectedRows, setSelectedRows] = useState<any[]>([]);
+  const [getTargetKeys, setTargetKeys] = useState<string[]>([]);
+  const butBarRef = useRef<any>(null);
   useEffect(() => {
     getRoles();
   }, []);
@@ -34,6 +36,26 @@ export default (): React.ReactNode => {
   useEffect(() => {
     getUserTable({ pageIndex: 1, pageSize: 10 });
   }, []);
+
+  const fun = () => {
+    const clickarr = [
+      { name: 'add', click1: onCreateClick },
+      { name: 'update', click1: onEditClick },
+      { name: 'delete', click1: onDeleteClick }
+    ];
+
+    const index = clickarr.findIndex((x: any) => x.name === butBarRef.current.itemclick);
+
+    if (index >= 0) {
+      let clickmodel = clickarr[index];
+      clickmodel.click1();
+    }
+  };
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      setSelectedRows(selectedRows);
+    }
+  };
 
   const columns: Array<ColumnProps<Types.UserTable>> = [
     {
@@ -97,67 +119,75 @@ export default (): React.ReactNode => {
       dataIndex: 'description',
       key: 'description',
       align: 'center'
-    },
-    {
-      title: <ColumnTitle name={intl.formatMessage({ id: 'user.table.columns.operating' })} />,
-      key: 'operation',
-      align: 'center',
-      render: (_: string, record: Types.UserTable) => (
-        <div>
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.table.columns.tooltip.delete' })}>
-            <Popconfirm placement="top" title={intl.formatMessage({ id: 'user.table.columns.popconfirm.title' })} onConfirm={() => onDeleteClick(record.id!)} icon={<WarningOutlined />}>
-              <DeleteOutlined style={{ color: 'red', fontSize: 16 }} />
-            </Popconfirm>
-          </Tooltip>
-          <Divider type="vertical" />
-          <Tooltip placement="bottom" title={intl.formatMessage({ id: 'user.table.columns.tooltip.modify' })}>
-            <EditOutlined onClick={() => onEditClick(record)} />
-          </Tooltip>
-        </div>
-      )
     }
   ];
   /**
    *删除用户
    * @param id
    */
-  const onDeleteClick = (id: string) => {
-    deleteUser(id)
-      .then(() => {
-        message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
-        getUserList(1, 10);
-      })
-      .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+  const onDeleteClick = () => {
+    getTableSelected(getSelectedRows, (row: any) => {
+      deleteUser(row.id)
+        .then(() => {
+          message.success(intl.formatMessage({ id: 'user.function.delete.click.success' }));
+          getUserList(1, 10);
+        })
+        .catch((error: Error) => message.error(`${intl.formatMessage({ id: 'user.function.delete.click.fail' })}:${error}`));
+    });
   };
   /**
    *
    * @param record 修改用户
    */
-  const onEditClick = (record: Types.UserTable) => {
+  const onEditClick = () => {
     setModalModel('edit');
     setModalTitle('user.modal.title.modify');
-    setItemId(record.id!);
-    getUserForm({
-      payload: { id: record.id },
-      callback: (result: any) => {
-        const data = result.data;
-        modalForm.setFieldsValue({
-          username: data?.userName,
-          nickname: data?.nickName,
-          sex: data?.sex,
-          isSystem: data?.isSystem,
-          roles: data?.roleIds,
-          description: data?.description
-        });
-      }
+    getTableSelected(getSelectedRows, (row: any) => {
+      setItemId(row.id!);
+      getUserForm({
+        payload: { id: row.id },
+        callback: (result: any) => {
+          const data = result.data;
+          modalForm.setFieldsValue({
+            username: data?.userName,
+            nickname: data?.nickName,
+            sex: data?.sex,
+            isSystem: data?.isSystem,
+            roles: data?.roleIds,
+            description: data?.description
+          });
+          setTargetKeys(data?.roleIds);
+        }
+      });
+      setModalShow(true);
     });
-    setModalShow(true);
   };
   const handleReset = () => {
     searchForm.resetFields();
     getUserList(1, 10);
   };
+  /***
+   * 获取选中的数据
+   */
+  const getTableSelected = (rows: any[], callback: any) => {
+    if (rows.length == 0) {
+      message.warning('请选择数据！！！');
 
+      return;
+    }
+    if (rows.length > 1) {
+      message.warning(`已选择${rows.length}行数据,请重选择！！！`);
+      return;
+    }
+
+    let fun = function () {
+      if (callback) {
+        callback(rows[0]);
+      }
+    };
+
+    fun();
+  };
   const handleSearch = (values: Store) => {
     let filter = getSearchFilter(values);
     getUserList(1, 10, filter);
@@ -174,9 +204,10 @@ export default (): React.ReactNode => {
       sex: 0,
       isSystem: false,
       password: '',
-      roles: '',
+      roles: [],
       description: ''
     });
+    setTargetKeys([]);
     setItemId('');
     setModalShow(true);
   };
@@ -186,12 +217,13 @@ export default (): React.ReactNode => {
       modalForm.validateFields().then((values: Store) => {
         const { username, nickname, sex, isSystem, password, roles, description } = values;
         let passwordTemp = password ? { passwordHash: password } : {};
-        let rolesIds: string[] = [];
-        if (roles instanceof Array) {
-          rolesIds = roles;
-        } else {
-          rolesIds.push(roles);
-        }
+        // let rolesIds: string[] = [];
+        // console.log(roles);
+        // if (roles instanceof Array) {
+        //   rolesIds = roles;
+        // } else {
+        //   rolesIds.push(roles);
+        // }
         let args = {
           userName: username,
           nickName: nickname,
@@ -199,13 +231,14 @@ export default (): React.ReactNode => {
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: rolesIds,
+          roleIds: roles,
           ...passwordTemp
         };
         addUser(args)
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.add.user.success' }));
             getUserList(1, 10);
+            setModalShow(false);
           })
           .catch((error: Error) =>
             notification.error({
@@ -230,12 +263,13 @@ export default (): React.ReactNode => {
           isSystem: isSystem,
           description: description,
           sex: sex,
-          roleIds: rolesIds
+          roleIds: getTargetKeys
         };
         editUser({ ...args, id: itemId })
           .then(() => {
             message.success(intl.formatMessage({ id: 'user.function.modify.user.success' }));
             getUserList(1, 10);
+            setModalShow(false);
           })
           .catch((error: Error) =>
             notification.error({
@@ -245,7 +279,6 @@ export default (): React.ReactNode => {
           );
       });
     }
-    setModalShow(false);
   };
 
   /**
@@ -311,6 +344,12 @@ export default (): React.ReactNode => {
       getUserList(page, pageSize ?? 10, filter);
     }
   };
+
+  const handleScroll = () => {};
+
+  const handleChange = (nextTargetKeys: any) => {
+    setTargetKeys(nextTargetKeys);
+  };
   return (
     <PageContainer>
       <Card>
@@ -340,10 +379,20 @@ export default (): React.ReactNode => {
         </Form>
       </Card>
       <Card>
-        <Button type="primary" style={{ marginBottom: 15 }} onClick={onCreateClick}>
-          {intl.formatMessage({ id: 'user.button.create' })}
-        </Button>
-        <Table loading={LoadingObject(loading)} rowKey={(record: Types.UserTable) => record?.id!} tableLayout="fixed" size="small" dataSource={itemList} pagination={pagination} columns={columns} />
+        <ButtonBar getFun={fun} ref={butBarRef}></ButtonBar>
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            ...rowSelection
+          }}
+          loading={LoadingObject(loading)}
+          rowKey={(record: Types.UserTable) => record?.id!}
+          tableLayout="fixed"
+          size="small"
+          dataSource={itemList}
+          pagination={pagination}
+          columns={columns}
+        />
       </Card>
       <Modal
         visible={modalShow}
@@ -421,13 +470,23 @@ export default (): React.ReactNode => {
           )}
 
           <Form.Item name="roles" label={intl.formatMessage({ id: 'user.modal.form.item.roles.label' })}>
-            <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
+            {/* <Select loading={roleLoading} placeholder={intl.formatMessage({ id: 'user.modal.form.item.roles.select.placeholder' })}>
               {roles?.map((item: Types.Role) => (
                 <Select.Option key={item.value} value={item.value!}>
                   {item.text}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
+            <Transfer
+              rowKey={record => record.value}
+              render={item => item.text}
+              onScroll={handleScroll}
+              onChange={handleChange}
+              targetKeys={getTargetKeys}
+              dataSource={roles}
+              titles={['源', '目标']}
+              oneWay
+            />
           </Form.Item>
           <Form.Item name="description" label={intl.formatMessage({ id: 'user.modal.form.item.description.label' })} style={{ marginBottom: 0 }}>
             <Input.TextArea allowClear placeholder={intl.formatMessage({ id: 'user.modal.form.item.description.placeholder' })} />

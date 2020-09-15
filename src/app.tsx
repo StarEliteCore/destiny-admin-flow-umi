@@ -12,8 +12,6 @@ import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
 
-// import menudata from './menudata'
-
 //#region InitialState
 /**
  * 权限相关必须要用的东西,自己去改函数名
@@ -29,30 +27,24 @@ export const getInitialState = async (): Promise<{
       let response: Types.AjaxResult = await LoadUser({ id: userid });
       const userInfo: Types.UserTable = response.data;
       const { nickName } = userInfo;
-      
-      const menustr = window.localStorage.getItem("menu")
+
+      const menustr = window.localStorage.getItem('menu');
       let menu = [];
-      let menulist=[];
-      if(menustr!="undefined")
-      {
+      let menulist = [];
+      if (menustr != 'undefined') {
         menu = menustr ? JSON.parse(menustr) : [];
       }
-      const menuliststr = window.localStorage.getItem("menulist")
-      // if(menuliststr!="" || menuliststr!=null || menuliststr!="undefined")
-      // {
-      //   menu = menustr ? JSON.parse(menustr) : [];
-      // }
       if (menu.length <= 0) {
         let menuRes: any = await MenuAsyncAPI();
-        const { itemList } = menuRes;
-        menu = itemList;
-        window.localStorage.setItem("menu", JSON.stringify(menu))
+        const { data } = menuRes;
+        menu = data;
+        window.localStorage.setItem('menu', JSON.stringify(menu));
       }
 
       if (menulist.length <= 0) {
         let menulists: any = await MenuListAsync();
-        const {data} =menulists;
-        window.localStorage.setItem("menulist", JSON.stringify(data))
+        const { data } = menulists;
+        window.localStorage.setItem('menulist', JSON.stringify(data));
       }
       return {
         currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },

@@ -198,10 +198,10 @@ const umi = require('umi-request');
 const extendRequest = umi.extend({ timeout: 10000 });
 
 extendRequest('/api/user')
-  .then((res) => {
+  .then(res => {
     console.log(res);
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(err);
   });
 ```
@@ -639,7 +639,7 @@ request.interceptors.response.use((response, options) => {
 });
 
 // 提前对响应做异常处理
-request.interceptors.response.use((response) => {
+request.interceptors.response.use(response => {
   const codeMaps = {
     502: '网关错误。',
     503: '服务不可用，服务器暂时过载或维护。',
@@ -650,7 +650,7 @@ request.interceptors.response.use((response) => {
 });
 
 // 克隆响应对象做解析处理
-request.interceptors.response.use(async (response) => {
+request.interceptors.response.use(async response => {
   const data = await response.clone().json();
   if (data && data.NOT_LOGIN) {
     location.href = '登录url';

@@ -1,12 +1,12 @@
 import { AntDesignOutlined, GithubOutlined } from '@ant-design/icons';
-import { IntlShape, useIntl } from 'umi';
 
 import { DefaultFooter } from '@ant-design/pro-layout';
 import IconFont from '@/components/IconFont';
 import React from 'react';
+import { useIntl } from 'umi';
 
 export default (): React.ReactElement => {
-  const intl: IntlShape = useIntl();
+  const intl = useIntl();
   return (
     <DefaultFooter
       copyright={intl.formatMessage({ id: 'components.footer.copyright' })}
@@ -27,6 +27,12 @@ export default (): React.ReactElement => {
           key: 'Bing',
           title: <IconFont type="icon-Bing" />,
           href: 'https://cn.bing.com',
+          blankTarget: true
+        },
+        {
+          key: '豫ICP备19040084号-1',
+          title: '豫ICP备19040084号-1',
+          href: 'https://beian.miit.gov.cn',
           blankTarget: true
         }
       ]}
