@@ -12,4 +12,9 @@ export const LoadUser = (param: { id: string }): Promise<Types.AjaxResult> =>
  * @param data 修改密码参数
  */
 // TODO 调整修改密码的API
-export const ChangePasswordAPI = async (data: { oldPassword: string; newPassword: string }): Promise<any> => request('user/updateUserPassword', { data });
+export const ChangePasswordAPI = async (data: { oldPassword: string; newPassword: string }): Promise<any> => {
+  request('Identity/ChangePassword', {
+    data: data,
+    method: 'POST'
+  });
+};
