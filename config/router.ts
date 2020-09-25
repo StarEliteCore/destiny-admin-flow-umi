@@ -9,6 +9,11 @@ const Route: IRoute[] = [
     path: '/login'
   },
   {
+    layout: false,
+    component: './login',
+    path: '/callback'
+  },
+  {
     path: '/',
     redirect: '/home'
   },

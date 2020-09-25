@@ -11,6 +11,9 @@ import { LoadUser } from '@/services/user';
 import React from 'react';
 import RightContent from '@/components/RightContent';
 import defaultSettings from '../config/default';
+import Oidc from 'oidc-client';
+import tokenFonfig from '@/configs/IdentityServer4Config';
+const loginmgr = new Oidc.UserManager(tokenFonfig);
 
 //#region InitialState
 /**
@@ -21,6 +24,7 @@ export const getInitialState = async (): Promise<{
   settings?: LayoutSettings;
   // settingDrawer?: SettingDrawerProps;
 }> => {
+  console.log(history.location);
   if (history.location.pathname !== '/login') {
     try {
       let userid: string = Cookies.get('userId') ?? '';
@@ -54,6 +58,10 @@ export const getInitialState = async (): Promise<{
       history.push('/login');
       throw error;
     }
+  } else if (history.location.pathname == '/login') {
+    console.log(tokenFonfig);
+    loginmgr.signinRedirect(tokenFonfig);
+    return { settings: defaultSettings };
   } else return { settings: defaultSettings };
 };
 
