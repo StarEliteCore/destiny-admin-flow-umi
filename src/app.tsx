@@ -2,9 +2,8 @@
 
 import { AvatarGif, LogoPng } from '@/assets';
 import { BasicLayoutProps, Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { ErrorShowType, RequestConfig, history } from 'umi';
+import { ErrorShowType, RequestConfig, history, useRouteMatch } from 'umi';
 import { MenuAsyncAPI, MenuListAsync } from '@/services/menu';
-
 import { BaseUrl } from '@/configs';
 import Cookies from 'js-cookie';
 import { LoadUser } from '@/services/user';
@@ -24,45 +23,52 @@ export const getInitialState = async (): Promise<{
   settings?: LayoutSettings;
   // settingDrawer?: SettingDrawerProps;
 }> => {
-  console.log(history.location);
-  if (history.location.pathname !== '/login') {
-    try {
-      let userid: string = Cookies.get('userId') ?? '';
-      let response: Types.AjaxResult = await LoadUser({ id: userid });
-      const userInfo: Types.UserTable = response.data;
-      const { nickName } = userInfo;
+  var path = useRouteMatch();
+  debugger;
+  console.log(path.path);
+  debugger;
+  console.log(1234567981234567 / 89);
+  switch (history.location.pathname) {
+    case '/login':
+      console.log(tokenFonfig);
+      loginmgr.signinRedirect(tokenFonfig);
+      return { settings: defaultSettings };
+    case '/callback':
+      try {
+        debugger;
+        let userid: string = Cookies.get('userId') ?? '';
+        let response: Types.AjaxResult = await LoadUser({ id: userid });
+        const userInfo: Types.UserTable = response.data;
+        const { nickName } = userInfo;
 
-      const menustr = window.localStorage.getItem('menu');
-      let menu = [];
-      let menulist = [];
-      if (menustr != 'undefined') {
-        menu = menustr ? JSON.parse(menustr) : [];
-      }
-      if (menu.length <= 0) {
-        let menuRes: any = await MenuAsyncAPI();
-        const { data } = menuRes;
-        menu = data;
-        window.localStorage.setItem('menu', JSON.stringify(menu));
-      }
+        const menustr = window.localStorage.getItem('menu');
+        let menu = [];
+        let menulist = [];
+        if (menustr != 'undefined') {
+          menu = menustr ? JSON.parse(menustr) : [];
+        }
+        if (menu.length <= 0) {
+          let menuRes: any = await MenuAsyncAPI();
+          const { data } = menuRes;
+          menu = data;
+          window.localStorage.setItem('menu', JSON.stringify(menu));
+        }
 
-      if (menulist.length <= 0) {
-        let menulists: any = await MenuListAsync();
-        const { data } = menulists;
-        window.localStorage.setItem('menulist', JSON.stringify(data));
+        if (menulist.length <= 0) {
+          let menulists: any = await MenuListAsync();
+          const { data } = menulists;
+          window.localStorage.setItem('menulist', JSON.stringify(data));
+        }
+        return {
+          currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
+          settings: defaultSettings
+        };
+      } catch (error) {
+        history.push('/login');
+        throw error;
       }
-      return {
-        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
-        settings: defaultSettings
-      };
-    } catch (error) {
-      history.push('/login');
-      throw error;
-    }
-  } else if (history.location.pathname == '/login') {
-    console.log(tokenFonfig);
-    loginmgr.signinRedirect(tokenFonfig);
-    return { settings: defaultSettings };
-  } else return { settings: defaultSettings };
+  }
+  return { settings: defaultSettings };
 };
 
 //#endregion
