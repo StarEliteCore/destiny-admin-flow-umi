@@ -23,50 +23,47 @@ export const getInitialState = async (): Promise<{
   settings?: LayoutSettings;
   // settingDrawer?: SettingDrawerProps;
 }> => {
-  var path = useRouteMatch();
+  console.log(history.location);
+  console.log(history.location.pathname);
   debugger;
-  console.log(path.path);
-  debugger;
-  console.log(1234567981234567 / 89);
-  switch (history.location.pathname) {
-    case '/login':
-      console.log(tokenFonfig);
-      loginmgr.signinRedirect(tokenFonfig);
-      return { settings: defaultSettings };
-    case '/callback':
-      try {
-        debugger;
-        let userid: string = Cookies.get('userId') ?? '';
-        let response: Types.AjaxResult = await LoadUser({ id: userid });
-        const userInfo: Types.UserTable = response.data;
-        const { nickName } = userInfo;
 
-        const menustr = window.localStorage.getItem('menu');
-        let menu = [];
-        let menulist = [];
-        if (menustr != 'undefined') {
-          menu = menustr ? JSON.parse(menustr) : [];
-        }
-        if (menu.length <= 0) {
-          let menuRes: any = await MenuAsyncAPI();
-          const { data } = menuRes;
-          menu = data;
-          window.localStorage.setItem('menu', JSON.stringify(menu));
-        }
+  if (history.location.pathname.search('/login') != -1) {
+    console.log(tokenFonfig);
+    loginmgr.signinRedirect(tokenFonfig);
+    return { settings: defaultSettings };
+  } else if (history.location.pathname.search('/callback') != -1) {
+    try {
+      debugger;
+      let userid: string = Cookies.get('userId') ?? '';
+      let response: Types.AjaxResult = await LoadUser({ id: userid });
+      const userInfo: Types.UserTable = response.data;
+      const { nickName } = userInfo;
 
-        if (menulist.length <= 0) {
-          let menulists: any = await MenuListAsync();
-          const { data } = menulists;
-          window.localStorage.setItem('menulist', JSON.stringify(data));
-        }
-        return {
-          currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
-          settings: defaultSettings
-        };
-      } catch (error) {
-        history.push('/login');
-        throw error;
+      const menustr = window.localStorage.getItem('menu');
+      let menu = [];
+      let menulist = [];
+      if (menustr != 'undefined') {
+        menu = menustr ? JSON.parse(menustr) : [];
       }
+      if (menu.length <= 0) {
+        let menuRes: any = await MenuAsyncAPI();
+        const { data } = menuRes;
+        menu = data;
+        window.localStorage.setItem('menu', JSON.stringify(menu));
+      }
+      if (menulist.length <= 0) {
+        let menulists: any = await MenuListAsync();
+        const { data } = menulists;
+        window.localStorage.setItem('menulist', JSON.stringify(data));
+      }
+      return {
+        currentUser: { name: nickName ?? '默认用户名', userid, avatar: AvatarGif, access: menu },
+        settings: defaultSettings
+      };
+    } catch (error) {
+      history.push('/login');
+      throw error;
+    }
   }
   return { settings: defaultSettings };
 };
